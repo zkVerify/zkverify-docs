@@ -22,7 +22,11 @@ From higher to lower priority:
 * Stone
     * Objective: Support verification of Starkware zkRollup’s proofs as well as generic proofs generated via Cairo programs
 * SP1
+    * Compressed STARK; PLONK 
+* ZKM
+    * Plonky2; STARK
 * Jolt
+    * Lasso
 * Kimchi + Pickle
     * Objective: Support verification of Mina’s succinct state proofs as well as proofs generated via O1-JS
 * Nova
