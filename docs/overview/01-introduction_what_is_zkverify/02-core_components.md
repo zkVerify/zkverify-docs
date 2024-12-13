@@ -12,6 +12,10 @@ This is an L1 Proof of Stake blockchain implemented as a Substrate Solo Chain. I
 
 This is the interface (i.e. transactions and RPC calls) used by clients (zk rollups and zkapps) to submit proofs to zkVerify for verification.
 
+## Proof Aggregation Engine
+
+The aggregation proofs system is designed to be permission less and everyone can participate in this step by publishing the aggregation and get some fee by doing this job. It's possible to define several aggregation domains and each domain has its own aggregation size: when a user needs to verify a proof can choose in which domain he would his proof should be aggregated.
+
 ## Attestation Mechanism
 
 The protocol that publishes on-chain an attestation that a given set of proofs have been verified by the Mainchain. In particular, this is a Merkle root of a Merkle Tree of proofs, published onto the zkVerify smart contract once a given publication policy is met. Currently the contract is deployed on the following chains:
