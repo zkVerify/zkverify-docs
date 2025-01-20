@@ -17,25 +17,25 @@ The flow will be the following:
       - how to hash the verification key
       - how to get the hash version of the verifier to use if any
       - how to extract a byte sequence from public inputs
-2. If the proof is valid a [`<VerifierPallet>::ProofVerified`](../02-mainchain/05-mainchain_api.md#proofverified) event that contains the statement value is emitted; otherwise the transaction emit an error.
-3. The failing transaction will be included in the block anyway, and the user will pay fees for it. This is due to prevent DoS attacks.
+2. If the proof is valid a [`<VerifierPallet>::ProofVerified`](../02-mainchain/05-mainchain_api.md#proofverified) event that contains the statement value is emitted; otherwise the transaction emits an error.
+3. The failing transaction will be included in the block anyway, and the user will pay fees for it. This is to prevent DoS attacks.
 
-Now two different kinds of aggregation mechanism are provided, and they work in parallel:
+Now two different kinds of aggregation mechanisms are provided, and they work in parallel:
 
 1. Domain separated and incentivized permission-less aggregation
 2. **(Deprecated)** time driven global aggregation
 
 ### Domain Separated Aggregation
 
-First perform the follow checks:
+First perform the following checks:
 
-1. If no domain's identifier provided do nothing
+1. If no domain's identifier is provided, do nothing
 2. If the pointed domain exists but cannot accept a new proof emits a [`CannotAggregate`](../02-mainchain/05-mainchain_api.md#cannotaggregate) event
-3. If the submitter user has not enough funds to pay his own aggregation cost quote emits again [`CannotAggregate`](../02-mainchain/05-mainchain_api.md#cannotaggregate) event
+3. If the submitter user has not enough funds to pay for his own aggregation cost share, emits again [`CannotAggregate`](../02-mainchain/05-mainchain_api.md#cannotaggregate) event
 
 If all these checks pass then:
 
-1. Hold from submitter's wallet his aggregation cost quote
+1. Hold from submitter's wallet his aggregation cost share
 2. Emit [`Aggregate::NewProof`](../02-mainchain/05-mainchain_api.md#newproof) event, containing the digest of the proof `statement`, the domain's identifier `domainId` and the aggregation's identifier in which the proof will be included `aggregationId`.
 3. If the current aggregation is complete emits [`Aggregate::AggregationComplete`](../02-mainchain/05-mainchain_api.md#aggregationcomplete) event
 
@@ -49,7 +49,7 @@ If all these checks pass then:
 
 Some pallets have been developed to accommodate the requirements:
 
-- ***Verifiers*** where each one defines the proof, verification key and public inputs types, implements the verification logic and defines how to compute the 3 hashes that compose the final statement hash that represent the proof leaf `value`:
+- ***Verifiers*** where each one defines the proof, verification key and public inputs types, implements the verification logic and defines how to compute the 3 hashes that compose the final statement hash that represents the proof leaf `value`:
   - [**fflonk**](../07-verification_pallets/01-fflonk.md)
   - [**zksync**](../07-verification_pallets/02-zksync_era.md)
   - [**risc0**](../07-verification_pallets/03-risc0.md)

@@ -45,7 +45,7 @@ In addition to these, nodes expose the following custom commands:
 
 When a [`NewAggregationReceipt`](#newaggregationreceipt) event is emitted the aggregation pointed
 by this event is published on the [`Published`](#published) storage. This RPC can be used to get
-the Merkle proof of your proof by query the [`Published`](#published) storage, retrieve the aggregation 
+the Merkle proof of your proof by querying the [`Published`](#published) storage, retrieve the aggregation 
 and generate the proof:
 
 **Parameters**
@@ -205,10 +205,10 @@ Publish the aggregation. This call is used to publish a new aggregation that is 
 the domain both in to be published queue or is still not completed. If everything is fine,
 move the held funds for this publication to the caller account.
 
-In the case of everything is fine a [`Event::NewAggregationReceipt`](#newaggregationreceipt) is emitted.
+In case everything is fine a [`Event::NewAggregationReceipt`](#newaggregationreceipt) is emitted.
 
-If the aggregation coordinate are not valid and don't indicate an existing aggregation,
-the call fail, but the weight cost charged to the caller is just the one needed to do the checks.
+If the aggregation coordinates are not valid and don't indicate an existing aggregation,
+the call will fail, but the weight cost charged to the caller is just the one needed to do the checks.
 
 Arguments:
 
@@ -217,15 +217,15 @@ Arguments:
 
 #### [registerDomain](#registerdomain)
 
-Register a new domain. It holds a deposit to cover the cost of all the storage that the domain need.
-The account that requested this domain will be the owner and is the only one that will can unregister it.
-[Unregister the domain](#unregisterdomain) will free the hold funds and remove the domain from the system.
+Register a new domain. It holds a deposit to cover the cost of all the storage that the domain needs.
+The account that requested this domain will be the owner and is the only one that can unregister it.
+[Unregister the domain](#unregisterdomain) will free the held funds and remove the domain from the system.
 
 If everything is fine a [`Event::NewDomain`](#newdomain) is emitted.
 
 Arguments:
 
-- `aggregation_size`: The size of the aggregation, in other words how many statements any aggregation have.
+- `aggregation_size`: The size of the aggregation, in other words how many statements any aggregation has.
 - `queue_size`: The maximum number of aggregations that can be in the queue for this domain.
 
 #### [holdDomain](#holddomain)
@@ -242,7 +242,7 @@ state again.
 **Only when the domain is in `Removable` state** you can call [`unregisterDomain`](#unregisterdomain) extrinsic
 to remove it definitely.
 
-The [`DomainStateChanged`](#domainstatechanged) event is emitted when the domain change its state. This call fails
+The [`DomainStateChanged`](#domainstatechanged) event is emitted when the domain changes its state. This call fails
 if the domain is not in `Ready` state or if the caller is not the domain's owner.
 
 Arguments
@@ -252,7 +252,7 @@ Arguments
 #### [unregisterDomain](#unregisterdomain)
 
 Unregister a domain in `Removable` [state](#domainstatechanged). Only the domain owner can call it. All funds that the
-domain owner hold on this domain are unlocked.
+domain owner holds on this domain are unlocked.
 
 Arguments
 
@@ -452,12 +452,12 @@ A new aggregation for the domain `domainId` was generated and published.
 
 #### [CannotAggregate](#newaggregationreceipt)
 
-The given valid proof cannot aggregate for some reason
+The given valid proof cannot be aggregated for some reason
 
 ##### Fields
 
 - `statement: H256` The proof statement hash
-- `cause: CannotAggregateCause` The reason because it was not possible to add this proof
+- `cause: CannotAggregateCause` The reason for which it was not possible to add this proof
 
 ```rust
 /// The cause of a missed aggregation.
@@ -488,7 +488,7 @@ pub enum CannotAggregateCause {
 
 #### [DomainFull](#domainfull)
 
-The Domain `domainId` is full, no new other proofs can be aggregate in this domain
+The Domain `domainId` is full, no new other proofs can be aggregated in this domain
 till at least one aggregation is published
 
 ##### Fields
@@ -549,7 +549,7 @@ The provided aggregation coordinate doesn't refer to any available aggregation.
 
 #### [InvalidDomainParams](#invaliddomainparams)
 
-The give domain parameters are invalid.
+The given domain parameters are invalid.
 
 #### [InvalidDomainState](#invaliddomainstate)
 

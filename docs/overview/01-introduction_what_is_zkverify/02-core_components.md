@@ -14,7 +14,7 @@ This is the interface (i.e. transactions and RPC calls) used by clients (zk roll
 
 ## Proof Aggregation Engine
 
-The aggregation proofs system is designed to be permission less and everyone can participate in this step by publishing the aggregation and get some fee by doing this job. It's possible to define several aggregation domains and each domain has its own aggregation size: when a user needs to verify a proof can choose in which domain he would his proof should be aggregated.
+The aggregation proofs system is designed to be permission less and everyone can participate in this step by publishing the aggregation and get some fee by doing this job. It's possible to define several aggregation domains and each domain has its own aggregation size: when a user needs to verify a proof can choose in which domain his proof should be aggregated.
 
 ## Attestation Mechanism
 
