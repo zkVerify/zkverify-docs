@@ -1,6 +1,6 @@
 # zkVerify Architecture
 
-![alt_text](./img/zkVerify-workflow.png)
+![alt_text](./img/zkVerify-workflow.jpg)
 
 ## Core Blockchain
 

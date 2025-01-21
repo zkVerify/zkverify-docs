@@ -1,6 +1,6 @@
 # User Workflow with zkVerify
 
-![alt_text](./img/zkVerify-userflow.png)
+![alt_text](./img/zkVerify-userflow.jpg)
 
 1. The user submits a zk proof using our submitProof extrinsic for respective supported verification pallets. We need to create a leaf value for our proof, to do so we need to find the following:- 
     ```rust
