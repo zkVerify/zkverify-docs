@@ -38,6 +38,12 @@ If all these checks pass then:
 1. Hold from submitter's wallet his aggregation cost share
 2. Emit [`Aggregate::NewProof`](../02-mainchain/05-mainchain_api.md#newproof) event, containing the digest of the proof `statement`, the domain's identifier `domainId` and the aggregation's identifier in which the proof will be included `aggregationId`.
 3. If the current aggregation is complete emits [`Aggregate::AggregationComplete`](../02-mainchain/05-mainchain_api.md#aggregationcomplete) event
+4. The Proof Submitter should wait for the[`Aggregate::NewAggregationReceipt`](../02-mainchain/05-mainchain_api.md#newaggregationreceipt) with the `domainId`, `aggregationId`: is important to know the block `B` where this event is emitted.
+5. The Proof Submitter can retrieve the Merkle Path of the submitted proof via the [`aggregate_statementPath`](../02-mainchain/05-mainchain_api.md#aggregate_statementpath) RPC call supplying the
+    - `at`: the block `B` where the `Aggregate::NewAggregationReceipt` is emitted
+    - `domain_id`
+    - `attestation_id`
+    - `statement`
 
 ### **(Deprecated)** Global Aggregation
 
@@ -54,5 +60,5 @@ Some pallets have been developed to accommodate the requirements:
   - [**zksync**](../07-verification_pallets/02-zksync_era.md)
   - [**risc0**](../07-verification_pallets/03-risc0.md)
   - [**groth16**](../07-verification_pallets/04-groth16.md)
-- **proof_of_existence:** The attestation pallet that defines the logic to generate new attestations and the corresponding events once that the conditions of a given policy are met.
-- **proof_of_existence_rpc:** Defines the interface and the logic of the `proofPath` RPC call.
+  - [**ultraplonk**](../07-verification_pallets/05-ultraplonk.md)
+  - [**proofofsql**](../07-verification_pallets/06-proofofsql.md)

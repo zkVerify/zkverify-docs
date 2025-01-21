@@ -280,7 +280,7 @@ in the next attestation. The extrinsic fails in the case of an invalid proof.
 - `vkOrHash: VkOrHash` indicates the verification key (the pallet's `Vk`) or the hash (`H256`) of a preregistered one.
 - `proof: Proof` the proof to be verified.
 - `Pubs: [u8;32]` The byte array representing the public inputs.
-- `domainId: Option<u32>` the domain's identifier where aggregating the proof
+- `domainId: Option<u32>` if is not `None` the domain's identifier where aggregating the proof, otherwise the proof is just verified.
 
 #### [registerVk](#registervk)
 
