@@ -3,7 +3,7 @@ slug: /
 ---
 # What is zkVerify
 
-zkVerify is a high-performant, public, and decentralized blockchain dedicated to zero-knowledge proof verification. It provides a very modular and composable approach for your ZK apps to verify proofs. 
+zkVerify is a high-performant, public, and decentralized blockchain dedicated to zero-knowledge proof verification. It provides a modular and composable approach for ZK apps to verify proofs. 
 
 ## Goals of zkVerify
 
@@ -22,9 +22,9 @@ zkVerify solves this by accepting proofs, verifying them, and recording both the
 
 ### Proof verification costs
 
-Verification of a groth16 zero-knowledge proof on Ethereum takes around 200k - 300k gas units, which is not scalable if we really want to build real-world zk apps that would continuously submit proofs onto Ethereum. Through zkVerify developers verify proofs on our chain directly(which is specialized to verify zk proofs) and get the corresponding proof receipts on Ethereum. This approach would lead to lower verification costs as well as more scalability through batched proofs.
+Verification of a groth16 zero-knowledge proof on Ethereum takes around 200k - 300k gas units, which is not scalable if we really want to build real-world zk apps that would continuously submit proofs onto Ethereum. Through zkVerify, developers verify proofs on our chain directly (which is specialized to verify zk proofs) and get the corresponding proof receipts (proof verification result) on Ethereum. This approach leads to lower verification costs as well as more scalability.
 
 ### Not all ZK proofs are verifiable on EVM
 
-Verification of multiple proving backends specifically STARK proofs are not supported on Ethereum because of large proof size and other various computational boundations. Most of the zkVMs are currently based on STARK-proving backends, which recursively verify their STARK proofs through a SNARK circuit to get a groth16 proof to verify on Ethereum. This approach adds a lot of latency to the proving time. With zkVerify, you can directly verify STARK proofs on our chain without the need to convert to groth16 proofs.
+Verification of multiple proving backends, specifically STARK proofs, are very costly on Ethereum because of large proof size and other EVM constraints. Most of the zkVMs are currently based on STARK-proving backends, which recursively "wrap" their STARK proofs in a SNARK (groth16) proof to verify on Ethereum, adding a lot of latency to the proving time. With zkVerify, you can natively verify STARK proofs on our chain without the need to convert to groth16 proofs.
 
