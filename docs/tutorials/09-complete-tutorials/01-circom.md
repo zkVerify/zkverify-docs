@@ -10,7 +10,7 @@ In this tutorial, we will be implementing a simple hash verification circuit wit
 - Verifying our zk proof and getting proof receipts
 - Verifying the proof receipts on Ethereum
 
-To start this tutorial, we will create our circuits using ZkRepl, which is very beginner-friendly. We won’t be diving deep into Circom DSL, but we will explore all the required code snippets.
+To start this tutorial, we will create our circuits using [zkRepl](https://zkrepl.dev/), which is very beginner-friendly. We won’t be diving deep into Circom DSL, but we will explore all the required code snippets.
 As explained earlier, we will be having two inputs for our zk circuit in which one will be public and one will be private. And we will be using Poseidon Hash as our hash function in our circuit. To implement Poseidon Hash, we need to import corresponding libraries from circomlib.
 
 Here’s the snippet of the implemented circuit :- 
@@ -21,18 +21,20 @@ pragma circom 2.1.6;
 
 include "circomlib/poseidon.circom";
 template Example () {
-   signal input a;
-   signal input b;
+
+   // Getting the inputs needed for our circuit
+   signal input a; // Actual Message
+   signal input b; // Poseidon hash of the message
   
-   component hash = Poseidon(1);
+   component hash = Poseidon(1); // Creating our Poseidon component with one input
    hash.inputs[0] <== a;
    log(hash.out);
-   assert(b == hash.out);
+   assert(b == hash.out); // Checking if the input hash is same as calculated hash
 }
 component main { public [ b ] } = Example();
 ```
 
-Over in ZkRepl, we can generate our circuit artifacts as well which will be used to generate proofs for our circuit. We also need to pass our initial set of inputs to compile the circuits and generate the arctifacts. To do this, after the circuit we have a separate input code commented out, just change is as per our circuit.
+Over in zkRepl, we can generate our circuit artifacts as well which will be used to generate proofs for our circuit. We also need to pass our initial set of inputs to compile the circuits and generate the arctifacts. To do this, after the circuit we have a separate input code commented out, just change is as per our circuit.
 
 ```circom
 /* INPUT = {
@@ -41,15 +43,15 @@ Over in ZkRepl, we can generate our circuit artifacts as well which will be used
 } */
 ```
 
-Then compile this circuit with ZkRepl and get the required arctifacts. Next to generate proofs, click on the groth16 option given on the results tab. This will generate the required snarkjs embeddings to generate a zk proof for given inputs. Click on the main.groth16.html option to download the proof generator using which we can generate our groth16 proofs. Once downloaded, open it with any browser.
+Then compile this circuit with zkRepl and get the required arctifacts. Next to generate proofs, click on the groth16 option given on the results tab. This will generate the required snarkjs embeddings to generate a zk proof for given inputs. Click on the main.groth16.html option to download the proof generator using which we can generate our groth16 proofs. Once downloaded, open it with any browser.
 
-![alt_text](./img/circom-tutorial-zkrepl.png)
+![alt_text](./img/circom-tutorial-zkRepl.png)
 
-Specify your inputs and generate proof on this page. Then save the proof in proof.json file and public signals in public.json file. These files will be helpful while submitting our proofs for verification using zkVerify. Also, make sure to download main.groth16.vkey.json from ZkRepl as well. 
+Specify your inputs and generate proof on this page. Then save the proof in proof.json file and public signals in public.json file. These files will be helpful while submitting our proofs for verification using zkVerify. Also, make sure to download main.groth16.vkey.json from zkRepl as well. 
 
 ![alt_text](./img/circom-tutorial-proof-generate.png)
 
-Once we have all these files ready, we are ready to submit our proofs for verification to zkVerify. To do so, we will be using zkVerifyJS which is a NPM module which makes it very easy to submit proofs, listen events and get attestation proofs. Create a new folder, instantiate a NPM package and install zkVerifyJS. Use the following commands :- 
+Once we have all these files ready, we are ready to submit our proofs for verification to zkVerify. To do so, we will be using [zkVerifyJS](https://docs.zkverify.io/tutorials/submit-proofs/typescript-example) which is a NPM module which makes it very easy to submit proofs, listen events and get attestation proofs. Create a new folder, instantiate a NPM package and install zkVerifyJS. Use the following commands :- 
 
 - mkdir proof-submission
 - cd proof-submission
@@ -69,26 +71,30 @@ Once you have all the requirements installed, we will start by instantiating a s
     const session = await zkVerifySession.start().Testnet().withAccount("seed-phrase")
 ```
 
-Before submitting the proof for verification, we need to register our verification key we downloaded from ZkRepl. We can register our key using zkVerifyJS itself with the code snippet given below and it will also save your vkey hash to vkey.json file which we can use during proof verification. 
+Before submitting the proof for verification, we need to register our verification key we downloaded from zkRepl. We can register our key using zkVerifyJS itself with the code snippet given below and it will also save your vkey hash to vkey.json file which we can use during proof verification. 
 
 ```js
 const {events, regResult} = await session.registerVerificationKey().groth16(Library.snarkjs, CurveType.bn128).execute(key);
 
     events.on(ZkVerifyEvents.Finalized, (eventData) => {
-        console.log('Verification finalized:', eventData);
+        console.log('Registration finalized:', eventData);
         fs.writeFileSync("vkey.json", JSON.stringify({"vkey": eventData.statementHash}, null, 2));
         return eventData.statementHash
     });
 
 ```
 
- Next we will send a proof verification request to the testnet, with all the details like which proving schema, proof, public signals and the key. We will also add a condition to wait till attestation is published.
+ Next we will send a proof verification request to the testnet, with all the details like which proving schema, proof, public signals and the key. We will also add a condition to wait till attestation is published. As we have already registered our vkey with zkVerify, we can import it and use it for our proof verification :- 
+
+```js
+const vkey = require("./vkey.json")
+```
 
 ```js
 const {events, txResults} = await session.verify()
-        .groth16(Library.snarkjs, CurveType.bn128).waitForPublishedAttestation()
+        .groth16(Library.snarkjs, CurveType.bn128).waitForPublishedAttestation().withRegisteredVk()
         .execute({proofData: {
-            vk: key,
+            vk: vkey.vkey,
             proof: proof,
             publicSignals: public
         }});
@@ -170,7 +176,7 @@ We also need to store the address of zkVerifier contract and vkey hash we got af
     }
 ```
 
-There are certain things we need to consider before moving forward, as all the public inputs in a circom circuit are field elements which can be considered as uint256 in Solidity’s context. But zkVerify’s verifier pallets uses big endian encoding but EVM uses little endian encoding, so we need a helper function to convert it. To make it easier, we have provided the required code snippet below :- 
+There are certain things we need to consider before moving forward, as all the public inputs in a circom circuit are field elements which can be considered as uint256 in Solidity’s context. But zkVerify’s verifier pallets uses big endian encoding but EVM uses little endian encoding, so we need a helper function to convert it. This is only needed for groth16 proofs. To make it easier, we have provided the required code snippet below :- 
 
 ```solidity
 function _changeEndianess(uint256 input) internal pure returns (uint256 v) {
