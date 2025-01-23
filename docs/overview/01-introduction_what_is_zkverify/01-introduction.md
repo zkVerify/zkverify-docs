@@ -22,7 +22,11 @@ zkVerify solves this by accepting proofs, verifying them, and recording both the
 
 ### Proof verification costs
 
-Verification of a groth16 zero-knowledge proof on Ethereum takes around 200k - 300k gas units, which is not scalable if we really want to build real-world zk apps that would continuously submit proofs onto Ethereum. Through zkVerify, developers verify proofs on our chain directly (which is specialized to verify zk proofs) and get the corresponding proof receipts (proof verification result) on Ethereum. This approach leads to lower verification costs as well as more scalability.
+From a macro cost perspective, the proof verification market is estimated to incur $100+ million in security expenses alone for zkRollups in 2024, extending to $1.5 billion by 2028 when including ZK applications.
+
+On a more granular level, the verification of a single ZK proof on Ethereum can consume upwards of 200,000 to 300,000 gas units, depending on the proof type. Beyond nominal fees today, the variability of future fees inhibits product adoption. Offloading proof verification from L1s, such as Ethereum, serves to both drastically lower nominal costs, but also to stabilize costs over time in a way that segregates fees from gas volatility.
+
+For instance, in times of network congestion, gas prices have reached over 100 Gwei, which means that verifying a single proof could cost between $20 to $60 or even more.
 
 ### Not all ZK proofs are verifiable on EVM
 
