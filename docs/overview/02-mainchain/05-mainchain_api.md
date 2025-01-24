@@ -39,6 +39,26 @@ Mainchain nodes currently expose only a subset of the Substrate RPC methods, in 
 
 In addition to these, nodes expose the following custom commands:
 
+### aggregate
+
+#### [aggregate_statementPath](#aggregate_statementpath)
+
+When a [`NewAggregationReceipt`](#newaggregationreceipt) event is emitted the aggregation pointed
+by this event is published on the [`Published`](#published) storage. This RPC can be used to get
+the Merkle proof of your proof by querying the [`Published`](#published) storage, retrieve the aggregation 
+and generate the proof:
+
+**Parameters**
+
+- `at`: the block hash where the [`NewAggregationReceipt`](#newaggregationreceipt) event was emitted
+- `domainId`: the domain's identifier
+- `aggregationId`: the aggregation's identifier
+- `statement`: the statement hash of your proof
+
+**Returns**
+
+`MerkleProof`
+
 ### poe
 
 #### [poe_proofPath](#poe_proofpath)
@@ -48,15 +68,12 @@ In case the proof is not found, an error is returned.
 
 **Parameters**
 
-`attestation_id: u64`
-
-`proof_hash: H256`
+- `attestation_id: u64`
+- `proof_hash: H256`
 
 **Returns**
 
-`
-MerkleProof
-`
+`MerkleProof`
 
 ## [Constants](#constants)
 
@@ -93,6 +110,24 @@ Mainchain nodes currently use only a subset of these methods, in particular, the
 - *transactionPayment*
 
 In addition to them, the following custom methods are available:
+
+### aggregate
+
+#### [nextDomainId](#nextdomainid)
+
+The value of the next valid free domain's identifier.
+
+#### [domains](#domains)
+
+The map from domain identifiers to the domain data.
+
+#### [published](#published)
+
+Contains a vector of tuple `(domainId, Aggregation)` of all aggregations
+published in a block. This storage is cleaned **every** new block, that means every
+aggregation is present in this storage for **just one block**: the one where it
+has been aggregated. In order to create the aggregation proof you should inspect the storage
+value at the block where it has been published.
 
 ### poe
 
@@ -162,6 +197,67 @@ The pallet currently included in the runtime are:
 
 In addition to them, the following custom extrinsics are available:
 
+### aggregate
+
+#### [aggregate](#aggregate_3)
+
+Publish the aggregation. This call is used to publish a new aggregation that is in
+the domain both in to be published queue or is still not completed. If everything is fine,
+move the held funds for this publication to the caller account.
+
+In case everything is fine a [`Event::NewAggregationReceipt`](#newaggregationreceipt) is emitted.
+
+If the aggregation coordinates are not valid and don't indicate an existing aggregation,
+the call will fail, but the weight cost charged to the caller is just the one needed to do the checks.
+
+Arguments:
+
+- `domainId`: The domain's identifier.
+- `id`: The aggregation's identifier.
+
+#### [registerDomain](#registerdomain)
+
+Register a new domain. It holds a deposit to cover the cost of all the storage that the domain needs.
+The account that requested this domain will be the owner and is the only one that can unregister it.
+[Unregister the domain](#unregisterdomain) will free the held funds and remove the domain from the system.
+
+If everything is fine a [`Event::NewDomain`](#newdomain) is emitted.
+
+Arguments:
+
+- `aggregation_size`: The size of the aggregation, in other words how many statements any aggregation has.
+- `queue_size`: The maximum number of aggregations that can be in the queue for this domain.
+
+#### [holdDomain](#holddomain)
+
+Hold a domain. Put the domain in `Hold` or `Removable` [state](#domainstatechanged). Only the domain owner can call it.
+Once you call this function the domain state could be:
+
+- `Hold`: If there are some aggregations in this domain that are not aggregated yet.
+- `Removable`: If the domain is ready to be removed because there are no more aggregations to be aggregated.
+
+Once the domain go in `Hold` or `Removabe` state cannot receive new proofs at all and cannot become in the `Ready`
+state again.
+
+**Only when the domain is in `Removable` state** you can call [`unregisterDomain`](#unregisterdomain) extrinsic
+to remove it definitely.
+
+The [`DomainStateChanged`](#domainstatechanged) event is emitted when the domain changes its state. This call fails
+if the domain is not in `Ready` state or if the caller is not the domain's owner.
+
+Arguments
+
+- `domainId`: The domain's identifier.
+
+#### [unregisterDomain](#unregisterdomain)
+
+Unregister a domain in `Removable` [state](#domainstatechanged). Only the domain owner can call it. All funds that the
+domain owner holds on this domain are unlocked.
+
+Arguments
+
+- `domainId`: The domain's identifier.
+
 ### poe
 
 #### [publishAttestation](#publishattestation)
@@ -181,11 +277,10 @@ in the next attestation. The extrinsic fails in the case of an invalid proof.
 
 **Parameters**
 
-`vkOrHash: VkOrHash` indicates the verification key (the pallet's `Vk`) or the hash (`H256`) of a preregistered one.
-
-`proof: Proof` the proof to be verified.
-
-`Pubs: [u8;32]` The byte array representing the public inputs.
+- `vkOrHash: VkOrHash` indicates the verification key (the pallet's `Vk`) or the hash (`H256`) of a preregistered one.
+- `proof: Proof` the proof to be verified.
+- `Pubs: [u8;32]` The byte array representing the public inputs.
+- `domainId: Option<u32>` if is not `None` the domain's identifier where aggregating the proof, otherwise the proof is just verified.
 
 #### [registerVk](#registervk)
 
@@ -193,7 +288,7 @@ Register a verification key that can be used later in submit proof calls and emi
 
 **Parameters**
 
-`vk: Vk` the verification key that should be registered.
+- `vk: Vk` the verification key that should be registered.
 
 #### [Available Verifier Pallets](#available-verifier-pallets)
 
@@ -207,7 +302,7 @@ Register a verification key that can be used later in submit proof calls and emi
 
 Support is provided for both the *BN254* curve used in Ethereum, and the *BLS12-381* curve. The details about how `G1`/`G2` elliptic
 curve points and scalars are actually encoded can be found in the 
-[Groth16 pallet documentation](../06-verification_pallets/04-groth16.md#encodings)
+[Groth16 pallet documentation](../07-verification_pallets/04-groth16.md#encodings)
 
 ```rust
 pub enum Curve {
@@ -292,6 +387,114 @@ pub type Pubs = [u8; 32];
 The Mainchain leverages the standard Events provided by Substrate (see the [official documentation](https://polkadot.js.org/docs/substrate/events)).
 In addition to them, the following custom events are available:
 
+### aggregate
+
+#### [NewDomain](#newdomain)
+
+A new domain was registered.
+
+##### Fields
+
+- `id: u32` The new domain unique identifier
+
+#### [DomainStateChanged](#domainstatechanged)
+
+The domain state is changed
+
+##### Fields
+
+- `id: u32` domain id
+- `state: DomainState` The new state
+
+```rust
+pub enum DomainState {
+    /// Active and can receive new statements.
+    Ready,
+    /// Cannot receive new statements. Can just publish the aggregation that are
+    /// already to be published queue.
+    Hold,
+    /// This Hold domain can be removed. There are no statements in this domain
+    /// and it can be removed.
+    Removable,
+    /// This domain is removed.
+    Removed,
+}
+```
+
+#### [NewProof](#newproof)
+
+New valid proof submitted for a domain.
+
+##### Fields
+
+- `statement: H256` The proof statement hash
+- `domainId: u32` Domain identifier
+- `aggregationId: u64` The unique aggregation identifier for the domain
+
+#### [AggregationComplete](#aggregationcomplete)
+
+Aggregation `aggregationId` in domain `domainId` is ready to be published.
+
+##### Fields
+
+- `domainId: u32` Domain identifier
+- `aggregationId: u64` The unique aggregation identifier for the domain
+
+#### [NewAggregationReceipt](#newaggregationreceipt)
+
+A new aggregation for the domain `domainId` was generated and published.
+
+##### Fields
+
+- `domainId: u32` Domain identifier
+- `aggregationId: u64` The unique aggregation identifier for the domain
+- `receipt: H256` The aggregation receipt
+
+#### [CannotAggregate](#newaggregationreceipt)
+
+The given valid proof cannot be aggregated for some reason
+
+##### Fields
+
+- `statement: H256` The proof statement hash
+- `cause: CannotAggregateCause` The reason for which it was not possible to add this proof
+
+```rust
+/// The cause of a missed aggregation.
+pub enum CannotAggregateCause {
+    /// No account
+    NoAccount,
+    /// The requested domain doesn't exist.
+    DomainNotRegistered {
+        /// The domain identifier.
+        domain_id: u32,
+    },
+    /// The domain's should publish queue is full.
+    DomainStorageFull {
+        /// The domain identifier.
+        domain_id: u32,
+    },
+    /// The user doesn't have enough founds to hold balance for publication.
+    InsufficientFunds,
+    /// The domain's state is not valid.
+    InvalidDomainState {
+        /// The domain identifier.
+        domain_id: u32,
+        /// The domain state.
+        state: DomainState,
+    },
+}
+```
+
+#### [DomainFull](#domainfull)
+
+The Domain `domainId` is full, no new other proofs can be aggregated in this domain
+till at least one aggregation is published
+
+##### Fields
+
+- `domainId: u32` Domain identifier
+
 ### poe
 
 #### [NewElement](#newelement)
@@ -321,12 +524,36 @@ Emitted when a new attestation is finalized and published. It may contain 0 or m
 - `hash: H256` The hash of the registered verification key that can be used later in the `submitProof`
 exstrinsic calls of the same verifier pallet
 
+#### [ProofVerified](#proofverified)
+
+##### Fields
+
+- `statement: H256` The [statement](../03-proof_submission_interface/02-proof_submitter_flow.md#proof-submitter-flow)
+  hash of the verified proof
 
 ## [Errors](#errors)
 
 The Mainchain nodes throw the standard errors provided by Substrate (see the [official documentation](https://polkadot.js.org/docs/substrate/errors)).
 
 In addition to them, the following custom errors have been defined:
+
+### aggregate
+
+#### [UnknownDomainId](#unknowndomainid)
+
+It doesn't exist any domain with this identifier.
+
+#### [InvalidAggregationId](#invalidaggregationid)
+
+The provided aggregation coordinate doesn't refer to any available aggregation.
+
+#### [InvalidDomainParams](#invaliddomainparams)
+
+The given domain parameters are invalid.
+
+#### [InvalidDomainState](#invaliddomainstate)
+
+Try to remove or put on hold a domain from an invalid state.
 
 ### poe
 
