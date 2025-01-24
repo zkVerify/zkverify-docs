@@ -8,9 +8,7 @@ In this tutorial, we will walk through the process of submitting a Ultraplonk pr
 
 ## Requirements
 
-Before starting, ensure you have the following tools installed:
-
-- [`noir-cli`](https://github.com/zkVerify/ultraplonk_verifier/tree/lg/update-cli/src/bin/noir_cli) tool.
+Before starting, ensure you have the [`noir-cli`](https://github.com/zkVerify/ultraplonk_verifier/tree/main/src/bin/noir_cli) tool installed.
 
   ```bash
     git clone https://github.com/zkVerify/ultraplonk_verifier
