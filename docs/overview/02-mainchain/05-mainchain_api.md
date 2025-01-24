@@ -243,7 +243,11 @@ pub type Pubs = Vec<Scalar>;
 ##### settlementRisc0Pallet Types
 
 ```rust
-pub type Proof = Vec<u8>; // Limited on a configurable max size
+pub enum Proof {
+    V1_0(Vec<u8>),
+    V1_1(Vec<u8>),
+    V1_2(Vec<u8>),
+}; // Limited on a configurable max size
 pub type Pubs = Vec<u8>;  // Limited on a configurable max size
 pub type Vk = H256;
 ```

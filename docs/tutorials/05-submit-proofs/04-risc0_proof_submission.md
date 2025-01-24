@@ -17,7 +17,7 @@ In order to do this you can use [PolkadotJs](https://polkadot.js.org/apps/?rpc=w
 - Select your account (you must have some ACME).
 - Choose the `settlementRisc0Pallet` and the call `submitProof`.
 - Inside the field `vkOrHash` select `Vk` and paste the verification key (i.e. the image id of the code whose execution you want to verify), making sure to prepend it with hexadecimal prefix `0x`.
-- Inside the field `proof` paste the proof, making sure to prepend it with hexadecimal prefix `0x`.
+- Inside the field `proof` choose the risc0 version used to generate the proof and load the binary file or paste the proof bytes, making sure to prepend it with hexadecimal prefix `0x`.
 - Inside the field `pubs` paste the public inputs, making sure to prepend it with hexadecimal prefix `0x`.
 - Click on `submitTransaction`.
 
