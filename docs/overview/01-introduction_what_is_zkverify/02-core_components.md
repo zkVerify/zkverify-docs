@@ -23,6 +23,8 @@ The protocol that publishes on-chain an attestation that a given set of proofs h
 - Sepolia (Ethereum testnet).
 - Curtis (ApeChain testnet).
 - Gobi (EON testnet).
+- Arbitrum Sepolia testnet.
+- EDU Chain testnet.
 
 ## zkVerify Smart Contract
 
