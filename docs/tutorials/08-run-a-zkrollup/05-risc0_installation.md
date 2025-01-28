@@ -18,7 +18,7 @@ Check out [this section](https://dev.risczero.com/api/zkvm/) of Risc0 documentat
 
 :::tip[**Toolchain version**]
 
-Note this tutorial is based on version `1.0.1` of Risc0 toolchain. Very likely you should be able to follow it using a more recent version, but in case you encounter any issue you can explicitly target that version with command `rzup --version 1.0.1`.
+Note this tutorial is based on version `1.2.1` of Risc0 toolchain. Very likely you should be able to follow it using a more recent version, but in case you encounter any issue you can explicitly target that version with command `rzup --version 1.2.1`.
 
 :::
 
@@ -47,9 +47,9 @@ In order to build the application, go through the following steps:
   - Open the file `hasher/host/Cargo.toml` with a text editor and add at the bottom the following lines:
 
     ```rust
-    serde_json = "1.0"
-    bincode = "1.3"
-    hex = "0.4"
+    serde_json = "1.0.137"
+    ciborium = "0.2.2"
+    hex = "0.4.3"
     ```
 
   - Open the file `hasher/host/src/main.rs` and replace the lines:
@@ -77,32 +77,38 @@ In order to build the application, go through the following steps:
     with the following code:
 
     ```rust
-    let receipt_inner_bytes_array = bincode::serialize(&receipt.inner).unwrap();
+    let mut bin_receipt = Vec::new();
+    ciborium::into_writer(&receipt, &mut bin_receipt).unwrap();
+    let out = std::fs::File::create("proof.bin").unwrap();
+    ciborium::into_writer(&receipt, out).unwrap();
+
     println!(
-        "Serialized bytes array (hex) INNER: {:?}\n",
-        hex::encode(&receipt_inner_bytes_array)
+        "Serialized bytes array (hex) INNER: {}\n",
+        hex::encode(&bin_receipt)
     );
-    let receipt_journal_bytes_array = bincode::serialize(&receipt.journal).unwrap();
+    let receipt_journal_bytes_array = &receipt.journal.bytes.as_slice();
     println!(
-        "Serialized bytes array (hex) JOURNAL: {:?}\n",
+        "Journal bytes array (hex): {}\n",
         hex::encode(&receipt_journal_bytes_array)
     );
-    let mut image_id_hex = String::new();
-    for &value in &HASHER_GUEST_ID {
-        image_id_hex.push_str(&format!("{:08x}", value.to_be()));
-    }
-    println!("Serialized bytes array (hex) IMAGE_ID: {:?}\n", image_id_hex);
+    let image_id_hex = hex::encode(
+        HASHER_GUEST_ID
+            .into_iter()
+            .flat_map(|v| v.to_le_bytes().into_iter())
+            .collect::<Vec<_>>(),
+    );
+    println!("Serialized bytes array (hex) IMAGE_ID: {}\n", image_id_hex);
     let output: String = receipt.journal.decode().unwrap();
     println!("Output is: {}", output);
     ```
 
-  In this way you have prepared the host to easily receive command-line argument and to print out to the terminal the proof (`receipt_inner_bytes_array`), the outputs (`receipt_journal_bytes_array`) and the image id (`image_id_hex`); these will be useful in a later step when you need to submit them on the zkVerify Mainchain.
+  In this way you have prepared the host to easily receive command-line argument and to save the proof binary data in `proof.bin`, print out also to the terminal the proof (`bin_receipt`), the outputs (`receipt_journal_bytes_array`) and the image id (`image_id_hex`); these will be useful in a later step when you need to submit them on the zkVerify Mainchain.
 
 - Modify the guest program (just consider it as the code whose execution you want to prove and you want other to verify):
   - Open the file `hasher/methods/guest/Cargo.toml` with a text editor and add at the bottom the following line:
 
     ```rust
-    sha2 = "0.9"
+    sha2 = "0.10"
     ```
 
   - Open the file `hasher/methods/guest/src/main.rs` with a text editor and overwrite its content with the following code:
@@ -155,12 +161,12 @@ In summary, the above command will:
 
 Finally you need to save the following items:
 
-- The serialized proof (`receipt_inner_bytes_array`).
+- The serialized proof (`receipt_inner_bytes_array` string or the `proof.bin` file).
 - The serialized outputs (`receipt_journal_bytes_array`).
 - The guest program fingerprint, known as image id (`image_id_hex`).
 
 They will be used respectively as proof, public inputs and verification key during the verification phase.
 
-Now that you have learnt how to setup and run your Risc0 zkVM application you can play a bit with the guest program code and modify the execution logic.
+Now that you have learnt how to set up and run your Risc0 zkVM application you can play a bit with the guest program code and modify the execution logic.
 
-The next step is now submitting the proof on the zkVerify Mainchain; jump to [this tutorial](../submit-proofs/risc0_proof_submission) to see how you can achieve this!
+The next step is now submitting the proof on the zkVerify Mainchain; jump to [this tutorial](../05-submit-proofs/04-risc0_proof_submission.md) to see how you can achieve this!

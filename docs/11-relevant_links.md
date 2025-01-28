@@ -21,6 +21,7 @@ title: zkVerify Hub
 | zkVerify Attestation Contract on Curtis (ApeChain testnet) | [`0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5`](https://curtis.explorer.caldera.xyz/address/0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5) |
 | zkVerify Attestation Contract on Gobi (EON testnet) | [`0x6A51D573Bf6fcFdb5D4E394645647304bb9FAb5B`](https://gobi-explorer.horizenlabs.io/address/0x6A51D573Bf6fcFdb5D4E394645647304bb9FAb5B) |
 | zkVerify Attestation Contract on Arbitrum (Sepolia testnet) | [`0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5`](https://sepolia.arbiscan.io/address/0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5) |
+| zkVerify Attestation Contract on EDU Chain testnet | [`0x147AD899D1773f5De5e064C33088b58c7acb7acf`](https://edu-chain-testnet.blockscout.com/address/0x147AD899D1773f5De5e064C33088b58c7acb7acf) |
 
 
 ## Recommended Wallets

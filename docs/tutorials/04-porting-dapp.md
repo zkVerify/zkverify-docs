@@ -119,6 +119,10 @@ Arbitrum Sepolia Testnet
 
 [0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5](https://sepolia.arbiscan.io/address/0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5)
 
+EDU Chain Testnet
+
+[0x147AD899D1773f5De5e064C33088b58c7acb7acf](https://edu-chain-testnet.blockscout.com/address/0x147AD899D1773f5De5e064C33088b58c7acb7acf)
+
 ## Code Examples and References
 
 - E2E tests in zkVerify [repository](https://github.com/HorizenLabs/zkVerify):
