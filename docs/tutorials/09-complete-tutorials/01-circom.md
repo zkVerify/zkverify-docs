@@ -128,7 +128,7 @@ events.on(ZkVerifyEvents.AttestationConfirmed, async(eventData) => {
 ```
 
 
-By running the above code snippet, your attestation proof will be saved at attestation.json file. After completing this process, we have successfully verified our proof with zkVerify and the next steps will be to use this attestation proof for our business logic onchain. We will be developing a smart contract which verifies the attestation proof by calling the zkVerify contract. We will be using Remix toolkit to develop the smart contract which will have the interface to verify our attestations. Also we have a [foundry template](https://github.com/zkVerify/zkverify-evm-dapp-example) you can check out.
+By running the above code snippet, your attestation proof will be saved at attestation.json file. After completing this process, we have successfully verified our proof with zkVerify and the next steps will be to use this attestation proof for our business logic onchain. We will be developing a smart contract which verifies the attestation proof by calling the zkVerify contract. We will be using Remix toolkit to develop the smart contract which will have the interface to verify our attestations. Also we have an [example codebase](https://github.com/zkVerify/circom-zkVerify-tutorial) you can check out.
 
 Before moving to the main logic, you can just copy paste the below code to create an interface to zkVerify contract. Create a new file called as IZKVerify.sol and paste the following :- 
 
