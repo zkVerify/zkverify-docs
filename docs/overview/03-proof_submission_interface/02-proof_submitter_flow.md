@@ -62,4 +62,3 @@ Some pallets have been developed to accommodate the requirements:
   - [**groth16**](../07-verification_pallets/04-groth16.md)
   - [**ultraplonk**](../07-verification_pallets/05-ultraplonk.md)
   - [**proofofsql**](../07-verification_pallets/06-proofofsql.md)
-  - [**plonky2**](../07-verification_pallets/07-plonky2.md)
