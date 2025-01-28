@@ -20,7 +20,7 @@ The aggregation proofs system is designed to be permission less and everyone can
 
 ## OnChain Verification
 
-User submits Merkle proof for their attestation to the contract where the attestations were published. These Merkle proofs are then verified to check if the given proof was actually verified through zkVerify. Currently, our contracts are deployed on the following chains:
+Users submits a Merkle Proof to the zkVerify contract on-chain in order to verify that their proof was indeed verified in the zkVerify Blockchain. Currently, our contracts are deployed on the following chains:
 
 - Sepolia Testnet
 - Arbitrum Sepolia Testnet
