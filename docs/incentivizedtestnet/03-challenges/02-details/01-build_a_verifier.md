@@ -49,7 +49,7 @@ From higher to lower priority:
     * Correct inclusion of the pallet in the runtime.
     * Unit tests with mock runtime.
     * Weight tests.
-    * Modifications to e2e tests which already tests the other already included verifiers
+    * Modifications to `zombienet` tests which already tests the other already included verifiers
 
 
 * Documentation for the newly added verification pallet must be added to zkverify-docs [repository](https://github.com/HorizenLabs/zkverify-docs). Please, follow the same pattern as the [ones](https://docs.zkverify.io/overview/verification_pallets/abstract/) already present.
