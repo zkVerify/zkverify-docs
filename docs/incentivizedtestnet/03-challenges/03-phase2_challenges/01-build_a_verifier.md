@@ -3,32 +3,27 @@ title: Build a Verification Pallet
 ---
 
 ### Overview
-The goal is to have incentivized testnet participants to build additional verifiers for zkVerify. You can follow the "[Add a New Verifier tutorial](https://docs.zkverify.io/tutorials/add-new-verifier/introduction)" from the zkVerify docs, that covers the basics to add a new verifier to the zkVerify blockchain. 
+Following the initial response to our verifier-building initiative, we're proud to announce that several verifiers are already under active development! But there's still plenty of opportunity to contribute - we have an updated list of verifiers that need to be built, which you can find below. 
 
-Also, make sure to take a look at the verifiers we’ve already [integrated](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers), in case you need to include more “exotic” logic (for instance, the possibility to verify on two different elliptic-curves or having runtime benchmarks for different input size categories). For any additional help, feel free to contact the zkVerify team.  
+To get started, check out our "[Add a New Verifier tutorial](https://docs.zkverify.io/tutorials/add-new-verifier/introduction)" in the zkVerify docs, which walks you through the basics of adding a new verifier to the zkVerify blockchain.
+
+Also, before you begin, we recommend reviewing our [existing verifier implementations](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers), especially if you need to incorporate advanced functionality like verification across multiple elliptic curves or runtime benchmarking for different input sizes. 
+
+The zkVerify team is always here to help if you need guidance along the way. Find us on [Discord](https://discord.com/invite/zkverify).
 
 ### Scope
 From higher to lower priority:
 
-* Halo 2 - KZG & IPA
-    * Over bn254 (for Ethereum support) (mandatory) and pasta/bls12381/secp256k1 elliptic curves
-    * Objective: verify proofs coming from zkEVMs using Halo 2 as proving system (such as Scroll zkEVM) or zkApps leveraging Halo2
-* Plonky2
-* Starky
-* Gnark
-    * Over Bn254 and BLS12-381 curves
 * Stwo (Starkware, Cairo)
     * Objective: Support verification of Starkware zkRollup’s proofs as well as generic proofs generated via Cairo programs
 * Stone
     * Objective: Support verification of Starkware zkRollup’s proofs as well as generic proofs generated via Cairo programs
-* SP1
 * Jolt
 * Kimchi + Pickle
     * Objective: Support verification of Mina’s succinct state proofs as well as proofs generated via O1-JS
-* Nova
-    * Over “pasta” cycle of elliptic curves
 * Supernova 
     * Over “pasta” cycle of elliptic curves
+* Starky
 
 ### Requirements and Best Practices
 
@@ -88,7 +83,7 @@ From higher to lower priority:
 
 
 ### Application process
-To participate in this challenge we kindly ask you to complete an application [form](https://forms.gle/idYKZ8n7T21embgLA). We're looking for developers with a strong background in cryptography, blockchain technology, and preferably experience with zero-knowledge proofs. Please provide detailed information about your relevant past projects and any specific verifier implementations you're interested in or have expertise with. 
+To participate in this challenge we kindly ask you to complete an [application form](https://forms.gle/idYKZ8n7T21embgLA). We're looking for developers with a strong background in cryptography, blockchain technology, and preferably experience with zero-knowledge proofs. Please provide detailed information about your relevant past projects and any specific verifier implementations you're interested in or have expertise with. 
 
 Our team will carefully review all applications to ensure a fair and efficient distribution of tasks. This vetting process allows us to avoid duplication of work and ensures that we don't have multiple participants working on the same verifier, as we will only award one implementation per verifier type. 
 
