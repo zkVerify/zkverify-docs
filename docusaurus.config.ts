@@ -59,7 +59,7 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/meta-image.jpg',
+    image: 'img/meta-image.png',
     navbar: {
       // title: 'zkVerify',
       logo: {
