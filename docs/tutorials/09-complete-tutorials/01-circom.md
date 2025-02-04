@@ -45,7 +45,7 @@ Over in zkRepl, we can generate our circuit artifacts as well which will be used
 
 Then compile this circuit with zkRepl and get the required arctifacts. Next to generate proofs, click on the groth16 option given on the results tab. This will generate the required snarkjs embeddings to generate a zk proof for given inputs. Click on the main.groth16.html option to download the proof generator using which we can generate our groth16 proofs. Once downloaded, open it with any browser.
 
-![alt_text](img/circom-tutorial-zkRepl.png)
+![alt_text](img/circom-tutorial-zkrepl.png)
 
 Specify your inputs and generate proof on this page. Then save the proof in proof.json file and public signals in public.json file. These files will be helpful while submitting our proofs for verification using zkVerify. Also, make sure to download main.groth16.vkey.json from zkRepl as well. 
 
