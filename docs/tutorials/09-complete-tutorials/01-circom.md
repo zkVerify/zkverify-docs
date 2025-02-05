@@ -53,4 +53,4 @@ Specify your inputs and generate proof on this page. Then save the proof in proo
 
 Once we have all these files ready, we are ready to submit our proofs for verification to zkVerify. We will be using ```zkverify JS``` package to verify our proofs with zkVerify and will check on-chain through the proof receipts.
 
-You can check this [tutorial](./04-zkVerifyjs.mdx) to verify proofs with zkVerifyJS. After getting proof receipts from our testnet, you can verify it onchain by calling the zkVerify contract. Checkout this [tutorial](./05-smart-contract.md) to verify proof receipts onchain.
+You can check this [tutorial](./04-zkVerifyjs.md) to verify proofs with zkVerifyJS. After getting proof receipts from our testnet, you can verify it onchain by calling the zkVerify contract. Checkout this [tutorial](./05-smart-contract.md) to verify proof receipts onchain.
