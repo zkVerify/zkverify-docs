@@ -99,7 +99,7 @@ Secret phrase:       demise trumpet minor soup worth airport minor height sauce 
   SS58 Address:      5GRSEFpxJ8rU4LLiGrsnvkk7s1hdJXFZzx1T41KhECzTn7ot
 ```
 
-Where the `Public key (hex)` represents the Babe key and the ImOnline key.
+Where the `Public key (hex)` represents the `Babe key` and the `ImOnline key`.
 
 Repeat the command but change the last parameter:
 
@@ -107,7 +107,7 @@ Repeat the command but change the last parameter:
 docker run --rm -ti --entrypoint zkv-node horizenlabs/zkverify:latest key inspect --scheme ed25519
 ```
 
-and provide same secret phrase when prompted for (`URI:`), then hit enter.  You should get the following response:
+and provide same secret phrase when prompted for (`URI:`), then hit enter. You should get the following response:
 
 ```bash
 Secret phrase:       demise trumpet minor soup worth airport minor height sauce legend flag timber
@@ -119,19 +119,13 @@ Secret phrase:       demise trumpet minor soup worth airport minor height sauce 
   SS58 Address:      5CNiZaphDhE8gT7cCDNZrXkd6vFfsuPjNQqdS8eEEw8mroHp
 ```
 
-where here, the `Public key (hex)` represents the Grandpa key.
-
-Now you just need to concatenate the three keys respecting this order: Babe, Grandpa and ImOnline. In the example above this would result in: `0xc0c07abce7879c09231fcbd07165cfaabc4a634636850578a914b08b87cf99140dbccabf681188116e642c1dbc9332a2bbec7fbef1792196879a3cba6c52464bc0c07abce7879c09231fcbd07165cfaabc4a634636850578a914b08b87cf9914`
-
-:::note
-The hexadecimal prefix `0x` is written just once.
-:::
+where here, the `Public key (hex)` represents the `Grandpa key`.
 
 This is the set of session public keys of your validator.
 
-After generating the set of keys, you have to register them in the blockchain, so that they are available to all the nodes in network. You can achieve this by submitting a specific extrinsic through PolkadotJS. Navigate to the section `Developer` then to the subsection `Extrinsics` and select `session`, `setKeys` in the two dropdown panels. Remember to select your validator account as `using the selected account`.   Then fill in the textboxes `keys: NhRuntimeSessionKeys` and `proof: Bytes` respectively with the set of session public keys you just prepared and with empty value `0x`, finally click on `Submit Transaction` button:
+After generating the set of keys, you have to register them in the blockchain, so that they are available to all the nodes in network. You can achieve this by submitting a specific extrinsic through PolkadotJS. Navigate to the section `Developer` then to the subsection `Extrinsics` and select `session`, `setKeys` in the two dropdown panels. Remember to select your validator account as `using the selected account`.   Then fill in the textboxes `keys: ZkvRuntimeSessionKeysBase` and `proof: Bytes` respectively with the set of session public keys you just prepared and with empty value `0x`, finally click on `Submit Transaction` button:
 
-![alt_text](./img/polkadotjs_setkeys.png)
+![alt_text](./img/validator_set_session_keys.png)
 
 Insert your account password and confirm by clicking on button `Sign and Submit`:
 
