@@ -71,7 +71,7 @@ After downloading, we need to build the toolkit so make sure you have rust insta
 cargo install --features bins --path .
 ```
 
-Now run the follwing commands to convert the generated files to required hex formats:
+Now run the following commands to convert the generated files to required hex formats:
 ```bash
 # noir-cli proof-data -n <num_public_inputs> --input-proof <bb_proof path> --output-proof <zkv_proof path> --output-pubs <zkv_pubs path>
 noir-cli proof-data -n 1 --input-proof ./target/proof --output-proof proof.hex --output-pubs pub.hex
