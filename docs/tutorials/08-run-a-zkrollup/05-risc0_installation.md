@@ -66,7 +66,7 @@ In order to build the application, go through the following steps:
     println!("Input argument is: {}", input);
     ```
 
-    and the the lines:
+    and the lines:
 
     ```rust
     // TODO: Implement code for retrieving receipt journal here.
