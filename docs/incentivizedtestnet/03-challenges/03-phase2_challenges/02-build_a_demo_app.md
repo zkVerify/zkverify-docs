@@ -13,6 +13,3 @@ Finally, submit your proposal using the [provided form](https://forms.gle/Pfs2Hu
 Our team will follow up on Telegram to learn more about your ideas!
 
 <b>Important:</b> points rewards will be granted based on the quality, complexity, and distinctiveness of your submission.
-
-### Coming soon: proof verification program
-In the coming weeks, we'll launch an exciting program that rewards the actual usage of zkVerify. The more proofs you submit for verification, the more points you'll earn. This will not only reward active projects but also help us stress-test and optimize our network as we prepare for mainnet.
