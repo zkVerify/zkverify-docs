@@ -31,6 +31,17 @@ From higher to lower priority:
 
 * Try to leverage as much as possible already existing and possibly well audited/battle-tested solutions, in case you plan to adopt third party libraries, and make sure that such libraries have some kind of open-source license.
 
+* Implementations with “no-std” (thus compilable in WASM and directly includible in the runtime) are <u>required</u>
+    * The rationale behind this is that we want to keep the flexibility to upgrade the verifiers without having to fork the chain. If you can’t get away with “no-std” you can try to put only low-level libraries in the node (Rust), and keep the business logic in the runtime (WASM, no-std).
+        * This is the rationale we adopted, for instance, for our [Risc0](https://github.com/zkVerify/zkVerify/blob/main/native/src/risc0.rs) and [Ultraplonk-Noir](https://github.com/zkVerify/zkVerify/blob/main/native/src/ultraplonk.rs) verifiers.
+    * If nothing else works, another acceptable (though with more effort) solution, is rewriting the verifier from scratch and making sure it supports no-std.
+
+* Proper benchmarks are extremely important. If the execution time of your verifier is not fixed and dependent on some parameters (e.g. size of the circuit, proving system configuration, etc.) be sure to capture it properly in the benchmarks. See some examples of such a situation for [Risc0](https://github.com/zkVerify/zkVerify/blob/main/verifiers/risc0/src/benchmarking.rs) verifier and [Ultraplonk-Noir](https://github.com/zkVerify/zkVerify/blob/main/verifiers/ultraplonk/src/benchmarking.rs) verifier.
+
+* We don’t want to depend on forks of external repositories so if, for any reason, you are not able to work with a given original repository (e.g. because it doesn’t have support for no_std for the verifier), and thus you are forced to fork it, we require you to be able to open a PR to the original repo integrating the changes you’ve made.
+
+* Please keep in mind that we have 5MB maximum block space and 1.5s of maximum execution time per block. If you think your verifier artifacts will take more space and the verification will be higher than 1.5 seconds please reach us immediately.
+
 * Add tests for the Verification Library:
     * Tests should cover happy/unhappy paths for proof verification and serialization/deserialization of vk/proof/public inputs. 
     * Include some tests with hardcoded data ideally taken from third-party on-chain/official sources, depending on the use case for which we wish the verifier to be integrated.
@@ -40,7 +51,7 @@ From higher to lower priority:
     * Correct inclusion of the pallet in the runtime.
     * Unit tests with mock runtime.
     * Weight tests.
-    * Modifications to `zombienet` tests which already tests the other already included verifiers
+    * Modifications to e2e tests which already tests the other already included verifiers.
 
 
 * Documentation for the newly added verification pallet must be added to zkverify-docs [repository](https://github.com/HorizenLabs/zkverify-docs). Please, follow the same pattern as the [ones](https://docs.zkverify.io/overview/verification_pallets/abstract/) already present.
@@ -59,15 +70,10 @@ From higher to lower priority:
 
 ### Acceptance Criteria and Submission
 
-
-* Implementations with “no-std” (thus compilable in WASM and directly includible in the runtime) are preferred over “native” ones.
-
-
 * Code must compile and CI must pass. Take a look at the [instructions](https://github.com/HorizenLabs/zkVerify?tab=readme-ov-file#running-github-workflows-on-local-environment) on how to run the CI locally for more information. If you require the CI to install some dependencies, feel free to modify it. Otherwise reach the team for further support.
 
-
 * Try to make sure that compilation time is not “highly impacted” by the inclusion of your verifier (e.g. if you are including heavy dependencies). The zkVerify team, upon review, might decide to reject your implementation.
-
+    * Be sure to pin the version of your dependencies as to avoid unwanted updates of the Cargo.lock
 
 * Branch from the “<i>main</i>” branch for your implementation. Give the branch a meaningful name, ideally "<i>\<verifier_name>-verifier</i>".
 
