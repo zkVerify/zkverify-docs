@@ -144,13 +144,19 @@ const {events, txResults} = await session.verify().ultraplonk().waitForPublished
 </TabItem>
 </Tabs>
 
-We can listen to events to get the current status of our submitted proof, we have various options like if proof is included in block, proof is finalized or attestations for the proof have been published. You can listen to them using our events.on() function like :- 
+We can listen to events to get the current status of our submitted proof, and collect important data required for future Proof of Existence (poe) calls. We have custom events for block inclusion, transaction finalization or attestations for the proof have been published. You can listen to them using our events.on() function like :- 
 ```js
+let txHash;
+let blockHash;
 events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
+    txHash = eventData.txHash;
+    blockHash = eventData.blockHash;
     console.log('Transaction included in block:', eventData);
 });
 
+let leafDigest; // This is required for session.poe() call
 events.on(ZkVerifyEvents.Finalized, (eventData) => {
+    leafDigest = eventData.leafDigest;
     console.log('Transaction finalized:', eventData);
 });
 ```
@@ -158,10 +164,11 @@ events.on(ZkVerifyEvents.Finalized, (eventData) => {
 To proceed further, we would require attestation proofs which can be verified onchain on Ethereum that the proof was verified by zkVerify, these proofs can only be generated once the proofs attestation is published on Ethereum. To get the proof we implement :- 
 
 ```js
-events.on(ZkVerifyEvents.AttestationConfirmed, async(eventData) => {
+    events.on(ZkVerifyEvents.AttestationConfirmed, async(eventData) => {
     console.log('Attestation Confirmed', eventData);
-    const proofDetails = await session.poe(attestationId, leafDigest);
-    proofDetails.attestationId = eventData.id;
+    // eventData.id is the attestationId contained within ZkVerifyEvents.AttestationConfirmed
+    // leafDigest is obtained from ZkVerifyEvents.Finalized
+    const proofDetails = await session.poe(eventData.id, leafDigest);
     fs.writeFileSync("attestation.json", JSON.stringify(proofDetails, null, 2));
     console.log("proofDetails", proofDetails);
 })
