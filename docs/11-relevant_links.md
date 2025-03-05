@@ -16,7 +16,7 @@ title: zkVerify Hub
 | Monitoring                                                  | https://testnet-telemetry.zkverify.io |
 | Documentation                                               | https://docs.zkverify.io |
 | RPC Gateway                                                 | https://testnet-rpc.zkverify.io, wss://testnet-rpc.zkverify.io |
-| zkVerify Proof Explorer                                     | https://zkverify-testnet.subscan.io/ |
+| zkVerify Proof Explorer                                     | https://proofs.zkverify.io/ |
 | Proof Submission via PolkadotJS                             | [polkadotjs](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io%2Fwss#/explorer) |
 | zkVerify Attestation Contract on Sepolia (Ethereum testnet) | [`0x209f82A06172a8d96CF2c95aD8c42316E80695c1`](https://sepolia.etherscan.io/address/0x209f82A06172a8d96CF2c95aD8c42316E80695c1) | 
 | zkVerify Attestation Contract on Curtis (ApeChain testnet)  | [`0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5`](https://curtis.explorer.caldera.xyz/address/0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5) |
