@@ -49,7 +49,7 @@ Below are the zkVerify Testnet RPC URL and zkVerify Testnet Explorer URL, allowi
 
 **zkVerify Testnet RPC URL:** `wss://testnet-rpc.zkverify.io`
 
-**zkVerify Testnet Explorer:** `https://testnet-explorer.zkverify.io/v0`
+**zkVerify Testnet Explorer:** `https://zkverify-testnet.subscan.io/`
 
 There are different ways through which your client can interact with our chain:
 

@@ -25,4 +25,4 @@ In order to do this you can use [PolkadotJs](https://polkadot.js.org/apps/?rpc=w
 
 ## Step 2
 
-Check your transaction on the [zkVerify Block Explorer](https://testnet-explorer.zkverify.io/v0)!
+Check your transaction on the [zkVerify Block Explorer](https://zkverify-testnet.subscan.io/)!
