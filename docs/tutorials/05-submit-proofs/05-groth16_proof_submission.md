@@ -76,4 +76,4 @@ At the end of this step you should have the three files `proof_zkv.json`, `verif
 
 ## Step 4
 
-Check your transaction on the [zkVerify Block Explorer](https://testnet-explorer.zkverify.io/v0)!
+Check your transaction on the [zkVerify Block Explorer](https://zkverify-testnet.subscan.io/)!

@@ -174,7 +174,7 @@ To proceed further, we would require attestation proofs which can be verified on
 })
 ```
 
-You can check details about the verified proofs using our [zkVerify explorer](https://zkverify-explorer.zkverify.io/).
+You can check details about the verified proofs using our [zkVerify explorer](https://zkverify-testnet.subscan.io/).
 
 <Tabs groupId="explorer">
 <TabItem value="circom" label="Circom">
