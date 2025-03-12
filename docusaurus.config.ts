@@ -88,13 +88,6 @@ const config: Config = {
         },
         {
           type: 'doc',
-          position: 'left',
-          to: 'docs/roadmap.md',
-          docId: 'roadmap',
-          label: 'Roadmap',
-        },
-        {
-          type: 'doc',
           docId: 'relevant_links',
           to: 'docs/relevant_links.md',
           position: 'left',
