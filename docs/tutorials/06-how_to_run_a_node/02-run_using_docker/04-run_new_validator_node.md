@@ -2,27 +2,36 @@
 title: Run a New Validator Node
 ---
 
-## Prepare the Environment
+## Who are Validators ?
 
-To run a new validator node (refer to [this page](../01-getting_started.md#node-types.md) for node types) open the terminal and navigate to the root directory of project `compose-zkverify-simplified`:
+zkVerify is a blockchain developed using the Substrate framework, operating on the Nominated Proof-of-Stake (NPoS) consensus mechanism. This system involves two key entities: Validators and Nominators.
+
+1. Validators are responsible for running the validator software on their machines, participating in block production on zkVerify, and earning rewards in return.
+2. Nominators, on the other hand, delegate their stake to a selected group of reliable validators and receive a portion of the rewards earned by those validators. Unlike validators, nominators do not need to run any software.
+
+## Steps Involved
+- Bootstrapping the validator node
+- Register your node with the network
+- Stake ACME
+- Start validating
+
+## Bootstrapping the validator node
+
+We have created a comprehensive bash script to help you with bootstrapping up your validator nodes. You will just need to run the bash script to start the process. Follow this [tutorial](../02-run_using_docker/01-getting_started_docker.md) to have all the prerequisites installed. After that you can run the scripts using the following commands:  
 
 ```bash
 cd compose-zkverify-simplified
-```
 
-then launch the initialization script by typing:
-
-```bash
 scripts/init.sh
 ```
 
-The interactive session run by the script asks you to provide the following inputs:
+You will be asked a few questions, regarding your node details. Choose as described:
+- Node Type - Validator
+- Network - Testnet
+- Node Name - any custom name you want
+- Node Key - let the script randomly generate a new key
+- Secret Phrase - you can import your existing wallet or create a new one(preferably create a new one, to have distinctions)
 
-- Node type: you need to select validator node,
-- Network: currently only testnet is available,
-- Node name: just a human readable identifier,
-- Node key (`node_key.dat` file): you can import an already existing key or let the script to randomly generate one for you (refer to [this page](./01-getting_started_docker.md) for node keys),
-- Secret phrase (`secret_phrase.dat` file): you can import an already existing secret phrase or let the script to randomly generate one for you (refer to [this page](./01-getting_started_docker.md) for secret phrases).
 
 At the end of the session the script will populate directory `deployments/validator-node/`*`network`* with the proper files and you will get the following message:
 
@@ -34,55 +43,34 @@ docker compose -f /home/your_user/compose-zkverify-simplified/deployments/valida
 ========================
 ```
 
-Before actually launching the node, you can further inspect and customize the execution by manually editing `deployments/boot-node/`*`network`*`/.env` file. Entries under `# Node miscellaneous` section are related to the Docker container, while those under `# Node config` section are related to the Substrate node instance.
-
-:::warning
-Ensure that you fully understand the implications of customizing the execution manually if you choose to do so.
-:::
-
-## Run the Node
-
-**Now we'll start running the node.**
-
-Within the terminal type the command below which runs the Docker container:
-
+Run the given command to start your validator node,
 ```bash
 docker compose -f /home/your_user/compose-zkverify-simplified/deployments/validator-node/testnet/docker-compose.yml up -d
 ```
 
-Once this command is complete, your node will begin running in the background.  To ensure that it is running properly, type:
-
+After running this command, you can check if the container is running successfully, by running
 ```bash
-docker container ls
+docker ls
 ```
 
-and you should get something similar to:
+You should get an output similar to this:
 
 ```bash
 CONTAINER ID   IMAGE                            COMMAND                CREATED              STATUS              NAMES
 ca4bdf2c6f05   horizenlabs/zkverify:0.2.0-rc1   "/app/entrypoint.sh"   About a minute ago   Up About a minute   validator-node
 ```
 
-This shows your node has started correctly.
+## Register your node with the network
 
-In order to make it eligible for authoring new blocks, you need to follow the below additional steps.
+In this section you can learn how to register a new validator on the blockchain. The operations described below must be performed just once.  They consist of the submission of some extrinsics (transactions, in Substrate terminology) resulting in your node being able to author new blocks and consequently earn new tokens through staking mechanism. We will require the public keys for your validator to register it with the network. We need three keys: Babe, Grandpa, and ImOnline public keys. Babe and ImOnline keys can be generated with the sr25519 scheme while the Grandpa key can be generated using the ed25519 scheme.
 
-## Next Steps
-
-In this section you can learn how to register a new validator on the blockchain. The operations described below must be performed just once.  They consist of the submission of some extrinsics (transactions, in Substrate terminology) resulting in your node being able to author new blocks and consequently earn new tokens through staking mechanism.
 
 :::note
 Since you are going to submit extrinsics which change the blockchain state, you need sufficient funds in the account (uniquely identified by your secret phrase) associated with your validator so that you can pay transaction fees.  
 :::
 
-For security reasons, your validator node does not expose an RPC interface but you need a user friendly way for submitting the extrinsics, so the first thing to do is to connect to the public RPC endpoint at this [link to Polkadotjs](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/explorer).  Refer to [this section](./02-run_new_rpc_node.md#explore-and-interact-with-the-node) for a brief walkthrough.
 
-In order to use PolkadotJS with your validator account, you need to import it within the application.
-
-From here, you can choose any extrinsic you submit with PolkadotJS to use your validator account.
-
-Next, you need to define the session public keys your validator node will use for participation in the consensus (i.e. authoring new blocks and selecting the best chain). This can be achieved by concatenating the three Babe, Grandpa and ImOnline public keys you can derive from your secret phrase. Inside a terminal type this command:
-
+Run the following command to generate the Babe and ImOnline keys:
 ```bash
 docker run --rm -ti --entrypoint zkv-node horizenlabs/zkverify:latest key inspect --scheme sr25519
 ```
@@ -99,9 +87,7 @@ Secret phrase:       demise trumpet minor soup worth airport minor height sauce 
   SS58 Address:      5GRSEFpxJ8rU4LLiGrsnvkk7s1hdJXFZzx1T41KhECzTn7ot
 ```
 
-Where the `Public key (hex)` represents the `Babe key` and the `ImOnline key`.
-
-Repeat the command but change the last parameter:
+The public key(hex) field is the required Babe and ImOnline keys. We will execute the same command but this time with ed25519 scheme.
 
 ```bash
 docker run --rm -ti --entrypoint zkv-node horizenlabs/zkverify:latest key inspect --scheme ed25519
@@ -119,27 +105,18 @@ Secret phrase:       demise trumpet minor soup worth airport minor height sauce 
   SS58 Address:      5CNiZaphDhE8gT7cCDNZrXkd6vFfsuPjNQqdS8eEEw8mroHp
 ```
 
-where here, the `Public key (hex)` represents the `Grandpa key`.
-
-This is the set of session public keys of your validator.
-
-After generating the set of keys, you have to register them in the blockchain, so that they are available to all the nodes in network. You can achieve this by submitting a specific extrinsic through PolkadotJS. Navigate to the section `Developer` then to the subsection `Extrinsics` and select `session`, `setKeys` in the two dropdown panels. Remember to select your validator account as `using the selected account`.   Then fill in the textboxes `keys: ZkvRuntimeSessionKeysBase` and `proof: Bytes` respectively with the set of session public keys you just prepared and with empty value `0x`, finally click on `Submit Transaction` button:
+The public key(hex) field is the required Grandpa key. Once we have these three keys, we are ready to register our node. Next you need to visit [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/explorer) and call the ``setKeys`` extrinsic under ``sessions`` module. Use the public keys we have generated in the previous step in their required fields, set proof field as ``0x`` and sign the transaction.
 
 ![alt_text](./img/validator_set_session_keys.png)
 
-Insert your account password and confirm by clicking on button `Sign and Submit`:
-
-![alt_text](./img/polkadotjs_setkeys_s1.png)
-
 In few seconds you should receive a green pop-up message on the top-right corner confirming the extrinsic has been succesfully submitted.
 
-Now that the blockchain knows those public session keys are associated with your validator account, you can proceed by staking some of the tokens you own in order to have a chance to be elected as a validator for the next sessions. To achieve this you have to submit another type of extrinsic.
+## Staking ACME
 
-:::tip
-Before doing this, you may want to know what is the current stake of other validators so you can stake a sufficient number of tokens to become an active validator.  The current **zkVerify** implementation requires to be in the **top 10 stakers** in order to be included in the active validators set.
-:::
+Next step would be to stake ACME for our registered validator node. In the current zkVerify implementation you need be in the top 10 stakers to be a part of active validators set. So, we will check how much ACME we need to stake to be in the top 10 and then we will proceed to stake our ACME tokens. 
 
-Navigate to the section `Developer` then to the subsection `Chain state`, select `staking`, `erasStakersOverview` in the two dropdown panels, insert current era number (can be obtained querying `currentEra` in the same page) and make sure to disable `include option` flag.  Finally click on `+` button:
+We can check the active validators set in the current era in the same PolkadotJS, we used before for registering our validator. Navigate to ``Developers`` > ``ChainState``, and choose the ``staking`` module. Select the ``currentEra`` extrinsic and click on the ``+`` button to get the current era number. We will be using this number to get the active set of validators. Select the ``eraStakersOverview`` extrinsic and give the era number we got previously. Disable the include option button and click on ``+`` to get the information about active validators set.
+
 
 ![alt_text](./img/polkadotjs_stakers.png)
 
@@ -185,26 +162,20 @@ The response you get should have a payload similar to this:
   ]
 ]
 ```
+In this particular structure, each of the validator’s information like address, total ACME staked and total nominations can be found. As per the example shared above, the third active validator (sorting them from highest to lowest stake) has staked `139,999,999,999,999,999,971,572,664` (unit of measure is `ACME*10^18`) so you are required to stake at least that amount for participating actively.
 
-In the example above, the third active validator (sorting them from highest to lowest stake) has staked `139,999,999,999,999,999,971,572,664` (unit of measure is `ACME*10^18`) so you are required to stake at least that amount for participating actively.
+Now your take would be to stake more than the lowest in the top 10 validators list. Next visit to ``Developer`` > ``Extrinsics`` section and choose the ``staking`` module. Now, choose the ``bond`` extrinsic and fill in the value field with the amount of ACME you would like to stake. Finally, choose the account type in payee option and sign your transaction. 
 
-### Staking
-
-To submit the staking extrinsic, navigate back to the section `Developer` then to the subsection `Extrinsics` and select `staking`, `bond` in the two dropdown panels.  Remember to select your validator account as `using the selected account`, then fill in the textboxes `value: Compact<u128> (BalanceOf)` and `payee: PalletStakingRewardDestination` respectively with the amount of tokens you want to stake (note here unit of measure is `ACME`, not `ACME*10^18`) and the value `Account` followed by selection of your validator account.  Finally, click on `Submit Transaction` button:
 
 ![alt_text](./img/polkadotjs_staking_bond.png)
 
-Insert your account password and confirm by clicking on button `Sign and Submit`. Wait for a green pop-up message confirming successful submission. As an additional double check you can navigate to the section `Network` then to the subsection `Staking`, click on `Waiting` tab and verify that your validator is within the list:
+## Start validating
 
-![alt_text](./img/polkadotjs_staking.png)
-
-### Becoming a validator
-
-Now that the blockchain knows you have staked your tokens it's time for the last step.  This involves declaring that you are ready to act as a validator. Navigate again to the section `Developer` then to the subsection `Extrinsics` and select `staking`, `validate` in the two dropdown panels. Remember to select your validator account as `using the selected account`, then fill in the textbox `commission: Compact<Perbill>` with the fraction of the commission you keep if other users delegate their tokens to you by nomination (parts per billion, if you don't know which value to set use `100000000`).  Select `No` in the dropdown panel `blocked: bool` and finally click on `Submit Transaction` button:
+Once we have staked ACME, now we are ready to start validating on the zkVerify network. We need to execute an extrinsic called as ``validate(prefs)`` under ``staking`` module which takes an input of how much commission your validator would take from the nominations.(If you are not sure, you can put ``100000000`` as the default value). Also set the ``blocked`` field to ``no`` and sign the transaction.
 
 ![alt_text](./img/polkadotjs_staking_validate.png)
 
-Insert your account password and confirm by clicking on button `Sign and Submit`. Wait for a green pop-up message confirming successful submission. As an additional double check you can navigate to the section `Network` then to the subsection `Staking`, click on `Active` tab and verify that your validator is within the list.
+Wait for a green pop-up message confirming successful submission. As an additional double check you can navigate to the section `Network` then to the subsection `Staking`, click on `Active` tab and verify that your validator is within the list.
 
 ## Conclusion
 
