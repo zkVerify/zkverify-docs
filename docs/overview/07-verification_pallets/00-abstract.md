@@ -15,7 +15,7 @@ implements the logic to generate the statements hash. Every verifier should impl
 - `fn hash_context_data()` the unique context that identify the verifier (i.e., `b"fflonk"`)
 - `fn pubs_bytes()` how to get the bytes from public inputs that will be hashed by `keccak256` in the final statement
 - `fn validate_vk()` the extrinsic input type are encodable types and often is not possible to enforce type validity,
-so you must provide how to check if the key is valid or not (default implementation accepts all verification key as valid).
+so you must provide how to check if the key is valid or not (default implementation accepts all verification keys as valid).
 - `fn vk_bytes()` how to get the bytes from verification key that will be hashed with `Self::vk_hash()` function (default
 use scale encoded data).
 - `fn vk_hash()` how to hash the verification key, this is useful to bypass the standard mechanism when the verification key is
