@@ -12,7 +12,7 @@ implements the logic to generate the statements hash. Every verifier should impl
 - `Vk`: The verification key data
 - `Pubs`: The public inputs data.
 - `fn verify_proof()` the main verifier logic.
-- `fn hash_context_data()` the unique context that identifies the verifier (e.g., `b"ultraplonk"`)
+- `fn hash_context_data()` the unique context that identifies the verifier (e.g., `b"ultraplonk"`, `b"risc0"`, etc.)
 - `fn pubs_bytes()` how to get the bytes from public inputs that will be hashed by `keccak256` in the final statement.
 - `fn validate_vk()` the extrinsic input type are encodable types and often is not possible to enforce type validity,
 so you must provide how to check if the key is valid or not (default implementation accepts all verification keys as valid).
