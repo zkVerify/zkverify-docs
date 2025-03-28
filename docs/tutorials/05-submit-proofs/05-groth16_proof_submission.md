@@ -11,7 +11,7 @@ In this tutorial we'll go through the process of submitting and verifying a Grot
 
 ## Step 1: Proof generation with snarkJS
 
-Follow this [this snarkJS guide](https://github.com/iden3/snarkjs?tab=readme-ov-file#guide) to generate a Groth16 proof, along with the corresponding verification key, and public inputs. The tutorial works with any Groth16 proof generated with snarkJs, as long as its number of public inputs does not exceed 16. Both bn128 and bls12381 curves are supported. So, if you already happen to have a snarkJS Groth16 proof at hand, then you can skip this step.
+Follow [this snarkJS guide](https://github.com/iden3/snarkjs?tab=readme-ov-file#guide) to generate a Groth16 proof, along with the corresponding verification key, and public inputs. The tutorial works with any Groth16 proof generated with snarkJs, as long as its number of public inputs does not exceed 16. Both bn128 and bls12381 curves are supported. So, if you already happen to have a snarkJS Groth16 proof at hand, then you can skip this step.
 
 In any, case, at the end of this step you should have three json files `proof.json`, `verification_key.json`, and `public.json` (their actual names are not important).
 
