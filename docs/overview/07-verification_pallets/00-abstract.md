@@ -2,7 +2,7 @@
 title: Abstract Verifier
 ---
 
-## [`Abstract Verifier`](https://github.com/HorizenLabs/zkVerify/tree/main/pallets/verifiers)
+## [`Abstract Verifier`](https://github.com/zkVerify/zkVerify/tree/main/pallets/verifiers)
 
 The generic verifier abstraction that defines the extrinsic, events and errors for all verifiers. It also
 implements the logic to generate the statements hash. Every verifier should implement the

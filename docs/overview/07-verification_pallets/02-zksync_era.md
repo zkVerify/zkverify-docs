@@ -2,7 +2,7 @@
 title: ZkSync Era Verifier
 ---
 
-## [`settlementZksyncPallet`](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers/zksync)
+## [`settlementZksyncPallet`](https://github.com/zkVerify/zkVerify/tree/main/verifiers/zksync)
 
 ### Statement hash components
 
