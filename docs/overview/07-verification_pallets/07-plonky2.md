@@ -64,7 +64,7 @@ Therefore, we use custom format for representing `Vk` - particularly, JSON of th
 
 Here `bytes` is hex-encoded representation of `vk_bytes` we computed earlier, and `config` is merely either `Keccak` or `Poseidon`.
 
-You can leverage our `CLI` tool in order to transform your `Vk` into the one acceptable by `zkVerify` format - please see [plonky2-converter](https://github.com/distributed-lab/plonky2-verifier/tree/main?tab=readme-ov-file#plonky2-converter).
+You can leverage our `CLI` tool in order to transform your `Vk` into the one acceptable by `zkVerify` format - please see [plonky2-converter](https://github.com/zkVerify/plonky2-verifier/tree/main?tab=readme-ov-file#plonky2-converter).
 
 ### Result
 
