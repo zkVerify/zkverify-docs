@@ -2,7 +2,7 @@
 title: Plonky2 Verifier
 ---
 
-## [`settlementPlonky2Pallet`](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers/plonky2)
+## [`settlementPlonky2Pallet`](https://github.com/zkVerify/zkVerify/tree/main/verifiers/plonky2)
 
 ### Statement hash components
 
