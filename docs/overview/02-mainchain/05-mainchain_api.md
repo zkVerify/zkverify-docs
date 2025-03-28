@@ -297,7 +297,7 @@ Register a verification key that can be used later in submit proof calls and emi
 - [settlementFFlonkPallet](#settlementfflonkpallet-types)
 - [settlementZksyncPallet](#settlementzksyncpallet-types)
 - [settlementUltraplonkPallet](#settlementultraplonkpallet-types)
-- [settlementPlonky2Pallet](#settlementproofofsqlpallet-types)
+- [settlementProofOfSQLPallet](#settlementproofofsqlpallet-types)
 - [settlementPlonky2Pallet](#settlementplonky2pallet-types)
 
 ##### settlementGroth16Pallet Types
