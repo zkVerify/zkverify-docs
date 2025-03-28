@@ -28,7 +28,7 @@ and maybe a smart contract should be able to compute this digest too on chain an
 This is way `Verifier` trait give the option to the developer to define his preferred encoding with `pubs_bytes()` to eventually
 simplify the on-chain work. Also, for the verification key the developer can define how to encode it with the `vk_bytes()` but in
 this case we can assume that a ZkRollup or ZkApp can set the value at deployment stage. Finally, there are some cases where the
-verification key is already a hash (i.e. risc0 proofs) and here we provide to the developer the capability to not hash it
+verification key is already a hash (i.e., risc0 proofs) and here we provide to the developer the capability to not hash it
 again via `vk_hash()`.
 
 ### How the statement digest is computed
