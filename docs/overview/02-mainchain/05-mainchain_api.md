@@ -297,6 +297,8 @@ Register a verification key that can be used later in submit proof calls and emi
 - [settlementFFlonkPallet](#settlementfflonkpallet-types)
 - [settlementZksyncPallet](#settlementzksyncpallet-types)
 - [settlementUltraplonkPallet](#settlementultraplonkpallet-types)
+- [settlementProofOfSQLPallet](#settlementproofofsqlpallet-types)
+- [settlementPlonky2Pallet](#settlementplonky2pallet-types)
 
 ##### settlementGroth16Pallet Types
 
@@ -320,6 +322,10 @@ pub struct ProofInner {
     pub c: G1,
 }
 
+pub struct Proof {
+    pub curve: Curve,
+    pub proof: ProofInner,
+}
 pub struct Vk {
     pub curve: Curve,
     pub alpha_g1: G1,
@@ -327,10 +333,6 @@ pub struct Vk {
     pub gamma_g2: G2,
     pub delta_g2: G2,
     pub gamma_abc_g1: Vec<G1>,
-}
-pub struct Proof {
-    pub curve: Curve,
-    pub proof: ProofInner,
 }
 pub type Pubs = Vec<Scalar>;
 ```
@@ -342,14 +344,15 @@ pub enum Proof {
     V1_0(Vec<u8>),
     V1_1(Vec<u8>),
     V1_2(Vec<u8>),
-}; // Limited on a configurable max size
-pub type Pubs = Vec<u8>;  // Limited on a configurable max size
+} // Limited on a configurable max size
 pub type Vk = H256;
+pub type Pubs = Vec<u8>;  // Limited on a configurable max size
 ```
 
 ##### settlementFFlonkPallet Types
 
 ```rust
+pub type Proof = [u8; 768];
 pub struct Vk {
     power: u8,
     k1: Fr,
@@ -361,25 +364,54 @@ pub struct Vk {
     wr: Fr,
     x2: G2,
     c0: G1, 
-}
-pub type Proof = [u8; 768]
-pub type Pubs = [u8; 32]
+};
+pub type Pubs = [u8; 32];
 ```
 
 ##### settlementzksyncPallet Types
 
 ```rust
+pub type Proof = [u8; 1408];
 pub type Vk = (); // zksync verifier doesn't have any verification key
-pub type Proof = [u8; 1408]
-pub type Pubs = [u8; 32]
+pub type Pubs = [u8; 32];
 ```
 
 #### settlementUltraplonkPallet Types
 
 ```rust
-pub type Vk = [u8; 1719];
 pub type Proof = Vec<u8>;
+pub type Vk = [u8; 1719];
 pub type Pubs = [u8; 32];
+```
+
+#### settlementProofOfSQLPallet Types
+
+```rust
+pub type Proof = Vec<u8>;
+pub struct Vk<T>(Vec<u8>, PhantomData<T>);
+pub type Pubs = Vec<u8>;
+```
+
+#### settlementPlonky2Pallet Types
+
+```rust
+pub enum Plonky2Config {
+    Keccak,
+    #[default]
+    Poseidon,
+}
+
+pub struct Proof<T> {
+    pub compressed: bool,
+    pub bytes: Vec<u8>,
+    _marker: PhantomData<T>,
+}
+pub struct Vk<T> {
+    pub config: Plonky2Config,
+    pub bytes: Vec<u8>,
+    _marker: PhantomData<T>,
+}
+pub type Pubs = Vec<u8>;
 ```
 
 ## [Events](#events)

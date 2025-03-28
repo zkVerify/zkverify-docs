@@ -2,7 +2,7 @@
 title: Fflonk Verifier
 ---
 
-## [`settlementFflonkPallet`](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers/fflonk)
+## [`settlementFflonkPallet`](https://github.com/zkVerify/zkVerify/tree/main/verifiers/fflonk)
 
 ### Statement hash components
 

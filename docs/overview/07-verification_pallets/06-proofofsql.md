@@ -2,7 +2,7 @@
 title: Space and Time Proof of Sql Verifier
 ---
 
-## [`settlementProofOfSqlPallet`](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers/proofofsql)
+## [`settlementProofOfSqlPallet`](https://github.com/zkVerify/zkVerify/tree/main/verifiers/proofofsql)
 
 ### Statement hash components
 

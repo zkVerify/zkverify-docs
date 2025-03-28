@@ -2,7 +2,7 @@
 title: Groth16 Verifier
 ---
 
-## [`settlementGroth16Pallet`](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers/groth16)
+## [`settlementGroth16Pallet`](https://github.com/zkVerify/zkVerify/tree/main/verifiers/groth16)
 
 ### Statement hash components
 
