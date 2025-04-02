@@ -9,7 +9,7 @@ title: Get Testnet ($tVFY) Tokens
 ## Next Steps
 After you receive your $tVFY zkVerify testnet token, we have a few different user activities you can try out!  You can explore our tutorials including:
 * Walkthroughs on how to submit and verify proofs:
-   - [Grooth16](submit-proofs/groth16_proof_submission)
+   - [Groth16](submit-proofs/groth16_proof_submission)
    - [Noir](submit-proofs/noir-ultraplonk-example)
 * Walkthroughs on how to spin up your own zkRollup
    - [Risc0](run-a-zkrollup/risc0_installation)
