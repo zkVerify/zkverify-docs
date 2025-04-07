@@ -16,7 +16,7 @@ After the proof verification requests are fulfilled by our chain and added to it
 
 ## Aggregation Engine
 
-The aggregation proofs system is designed to be permission less and everyone can participate in this step by publishing the aggregation and get some fee by doing this job. It's possible to define several aggregation domains and each domain has its own aggregation size: when a user needs to verify a proof can choose in which domain his proof should be aggregated.
+The aggregation proofs system is designed to be permissionless and everyone can participate in this step by publishing the aggregation and get some fee by doing this job. It's possible to define several aggregation domains and each domain has its own aggregation size: when a user needs to verify a proof can choose in which domain his proof should be aggregated.
 
 ## OnChain Verification
 
