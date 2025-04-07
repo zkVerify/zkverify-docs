@@ -8,11 +8,11 @@ Our chain is an L1 proof of stake blockchain built on the Substrate framework. T
 
 ## Proof Submission Interface
 
-This is the entry point for our blockchain, where users will be submitting transactions and making RPC calls. Similar to any other blockchain we have our SDK implementation called [zkVerifyJS](https://docs.zkverify.io/tutorials/submit-proofs/typescript-example) that you can use to interact with the chain. This library makes it very easy for developers to interact with the mainchain with simple code snippets to register a verification key, submit a zk proof, listen to events, get attestation details, etc.
+This is the entry point for our blockchain, where users will be submitting transactions and making RPC calls. Similar to any other blockchain we have our SDK implementation called [zkVerifyJS](https://docs.zkverify.io/tutorials/submit-proofs/typescript-example) that you can use to interact with the chain. This library makes it very easy for developers to interact with the blockchain with simple code snippets to register a verification key, submit a zk proof, listen to events, get aggregation details, etc.
 
 ## Proof Receipt Mechanism
 
-After the proof verification requests are fulfilled by our chain and added to its block, it passes through the attestation mechanism to generate a proof receipt for the verified proof. These proof receipts are the Merkle root of all the verified proofs for the given batch. These proof receipts are published on a smart contract on Ethereum through relayers.
+After the proof verification requests are fulfilled by our chain and added to its block, it passes through the aggregation mechanism to generate a proof receipt for the verified proof. These proof receipts are the Merkle root of all the verified proofs for a given batch. These proof receipts are published on a smart contract on a given destination chain (e.g. Ethereum) through relayers.
 
 ## Aggregation Engine
 
@@ -25,11 +25,6 @@ Users submits a Merkle Proof to the zkVerify contract on-chain in order to verif
 - Sepolia Testnet
 - Base Sepolia Testnet
 - Arbitrum Sepolia Testnet
-- Curtis (ApeChain Testnet)
-- Gobi (EON Testnet)
-- EDU Chain Testnet
-- Flow Testnet
-- BNB Testnet
 - Optimism Sepolia Testnet
 
 ## Verifier Pallets

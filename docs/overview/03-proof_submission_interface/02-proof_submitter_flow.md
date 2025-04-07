@@ -23,11 +23,6 @@ The flow will be the following:
 2. If the proof is valid a [`<VerifierPallet>::ProofVerified`](../02-mainchain/05-mainchain_api.md#proofverified) event that contains the statement value is emitted; otherwise the transaction emits an error.
 3. The failing transaction will be included in the block anyway, and the user will pay fees for it. This is to prevent DoS attacks.
 
-Now two different kinds of aggregation mechanisms are provided, and they work in parallel:
-
-1. Domain separated and incentivized permission-less aggregation
-2. **(Deprecated)** time driven global aggregation
-
 ### Domain Separated Aggregation
 
 First perform the following checks:
@@ -48,19 +43,11 @@ If all these checks pass then:
     - `attestation_id`
     - `statement`
 
-### **(Deprecated)** Global Aggregation
-
-1. A [`Poe::NewElement`](../02-mainchain/05-mainchain_api.md#newelement) event is emitted, containing the digest of the proof `value` and the id of the attestation in which the proof will be included `attestation_id`.
-2. When a predefined policy is met, a Merkle tree for the `attestation_id` is generated and a [`Poe::NewAttestation`](../02-mainchain/05-mainchain_api.md#newattestation) event is emitted with `id` and `attestation` fields.
-3. The Proof Submitter can retrieve the Merkle Path of the submitted proof via the [`poe_proofPath`](../02-mainchain/05-mainchain_api.md#poe_proofpath) extrinsic of the PoE pallet, supplying the `attestation_id` and a digest of the proof `proof_hash`
-
 ## Pallets
 
 Some pallets have been developed to accommodate the requirements:
 
 - ***Verifiers*** where each one defines the proof, verification key and public inputs types, implements the verification logic and defines how to compute the 3 hashes that compose the final statement hash that represents the proof leaf `value`:
-  - [**fflonk**](../07-verification_pallets/01-fflonk.md)
-  - [**zksync**](../07-verification_pallets/02-zksync_era.md)
   - [**risc0**](../07-verification_pallets/03-risc0.md)
   - [**groth16**](../07-verification_pallets/04-groth16.md)
   - [**ultraplonk**](../07-verification_pallets/05-ultraplonk.md)
