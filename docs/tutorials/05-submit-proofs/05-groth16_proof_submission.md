@@ -6,7 +6,7 @@ In this tutorial we'll go through the process of submitting and verifying a Grot
 
 ## Requirements
 
-- A Substrate compatible wallet with funds (ACME) connected to the network.
+- A Substrate compatible wallet with funds (tVFY) connected to the network.
 - NodeJS and npm installed on your system.
 
 ## Step 1: Proof generation with snarkJS
@@ -68,7 +68,7 @@ At the end of this step you should have the three files `proof_zkv.json`, `verif
 ## Step 3: Sending the proof to zkVerify for verification
 
 1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
-2. Select your account (you must have some ACME).
+2. Select your account (you must have some tVFY).
 3. Choose the `settlementGroth16Pallet`, and the `submitProof` extrinsic.
 4. Inside the field `vkOrHash` select `Vk`
 5. Fill in all the required fields by copy-pasting them from the json files obtained in the previous step. All the fields should be pasted without quotes. For the `gammaAbcG1` field and the `input` field you may need to click on the `Add Item` button a certain number of times, depending on the number of corresponding entries in your json files.

@@ -10,7 +10,7 @@ Before you begin, ensure you have:
 
 - Familiarity with your existing dApp architecture, ZK proof processing flow, and codebase.
 
-- A [wallet](connect-a-wallet) with [funds](get_testnet_tokens) ($ACME) connected to the network.
+- A [wallet](connect-a-wallet) with [funds](get_testnet_tokens) ($tVFY) connected to the network.
 
 ## High-Level dApp Architecture
 

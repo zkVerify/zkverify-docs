@@ -14,7 +14,7 @@ You will need to visit [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%
 
 ![alt_text](./img/nominators.png)
 
-After that you will get a pop-up to select the nominator account you want to use, the amount of ACME you want to stake and the payment destination(basically which wallet the rewards will be distributed to). After filling these fields you can click on the ``next`` button.
+After that you will get a pop-up to select the nominator account you want to use, the amount of tVFY you want to stake and the payment destination(basically which wallet the rewards will be distributed to). After filling these fields you can click on the ``next`` button.
 
 ![alt_text](./img/step_1.png)
 

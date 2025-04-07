@@ -4,7 +4,7 @@
 
 ## Core Blockchain
 
-Our chain is an L1 proof of stake blockchain built on the Substrate framework. This chain is specialized in zk proofs verification, with built-in verifier pallets, each for a different type of zk proofs. ACME is the token for our chain, and to verify proofs on our chain you will need ACME.
+Our chain is an L1 proof of stake blockchain built on the Substrate framework. This chain is specialized in zk proofs verification, with built-in verifier pallets, each for a different type of zk proofs. tVFY is the token for our chain, and to verify proofs on our chain you will need tVFY.
 
 ## Proof Submission Interface
 

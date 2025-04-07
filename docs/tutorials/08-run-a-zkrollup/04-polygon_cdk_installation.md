@@ -22,7 +22,7 @@ Prover tested requirements:
 
 Miscellaneous requirements:
 - Infura API key
-- At least 10 ACME on zkVerify Mainchain
+- At least 10 tVFY on zkVerify Mainchain
 - At least 5 ETH on Sepolia (faucet [here](https://www.alchemy.com/faucets/ethereum-sepolia) or you can buy [here](https://www.sepoliaeth.com/buy-sepolia-eth))
 
 ## CDK Smart Contracts deployment

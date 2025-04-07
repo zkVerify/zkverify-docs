@@ -15,7 +15,7 @@ zkSync-era requirements:
 - https://github.com/HorizenLabs/zksync-era/blob/main-hl/docs/guides/setup-dev.md
 
 Miscellaneous requirements:
-- Some ACME token
+- Some tVFY token
 
 ## zkSync local deployment
 
