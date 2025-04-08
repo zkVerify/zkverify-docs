@@ -2,7 +2,7 @@
 title: Ultraplonk Verifier
 ---
 
-## [`settlementUltraplonkPallet`](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers/ultraplonk)
+## [`settlementUltraplonkPallet`](https://github.com/zkVerify/zkVerify/tree/main/verifiers/ultraplonk)
 
 ### Statement hash components
 

@@ -2,7 +2,7 @@
 title: risc0 Verifier
 ---
 
-## [`settlementRisc0Pallet`](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers/risc0)
+## [`settlementRisc0Pallet`](https://github.com/zkVerify/zkVerify/tree/main/verifiers/risc0)
 
 ### Statement hash components
 

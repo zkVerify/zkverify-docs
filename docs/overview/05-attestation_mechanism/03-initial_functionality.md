@@ -20,7 +20,7 @@ The policy leading to the publication of a new attestation is met when one of th
 - Last published attestation is older than T seconds and there is at least one proof in the new tree.
 - A root user forces the emission of the event.
 
-Note this attestation submission mechanism will cost around 40k-50k gas.  How frequently an attestation should be relayed to a given chain is influenced by different factors:
+Note this attestation submission mechanism will cost around 40k-50k gas. How frequently an attestation should be relayed to a given chain is influenced by different factors:
 
 - Usage of zkVerify Mainchain.
 - The fees to be paid by zkVerify to post an attestation on-chain and by users to verify on-chain that their proof is part of the attestation.
