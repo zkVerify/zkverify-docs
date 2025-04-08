@@ -14,8 +14,6 @@ To get started:
 2. Then users should [request](get_testnet_tokens) some $tVFY testnet tokens.
 3. From there it's possible to proceed in a few different ways. Follow the specific tutorial for:
    - [Porting your dApp](porting-dapp) to zkVerify,
-   - Deploying a zkRollup for [zkSync](run-a-zkrollup/zksync_installation) or for [Polygon CDK](run-a-zkrollup/polygon_cdk_installation).
-   - Simply submitting proofs via [Tenderly](submit-proofs/polygon_cdk_proof_submission) or using the [TypeScript Example](submit-proofs/typescript-example).
    - [Running a node](how_to_run_a_node/getting_started) and participating in the zkVerify network.
 
 **Troubleshooting**
