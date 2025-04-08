@@ -37,7 +37,7 @@ For each of these domains, we are providing the following guarantees:
 - For domains with Mechanism “Bot”, we are running an off-chain relayer that listens to all the new Aggregation Receipt events, and takes care of publishing the receipt on the specified destination chain
 - For domains with Hyperbridge support, we are running our own relayers to the Hyperbridge chain and we are taking care of the costs (for now).
 
-Please find the list below.
+[Please find the list below](#listdomains)
 
 For the addresses of the contracts we have deployed on all the destination chains, please refer to the appropriate section of the docs.
 

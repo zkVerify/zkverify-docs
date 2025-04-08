@@ -11,6 +11,8 @@ Currently native token tVFY can be teleported to Ethereum Sepolia.
 
 This call is used to initialize a cross-chain asset transfer. Any provided assets are custodied by the pallet and a cross-chain request is dispatched to the destination supported chain.
 
+![alt_text](./img/polkadot-js-teleport.png)
+
 The extrinsic can be called by any account and expects the following input params
 
 - `assetId`: the local asset Id registered on Hyperbridge and that should be transferred, for the native token this is 0

@@ -209,7 +209,7 @@ If everything is fine, it processes held funds for aggregation and delivery
 - `Delivery`: Pays for the cross-chain dispatch costs to the delivery_owner account
 
 In case everything is fine a [`Event::NewAggregationReceipt`](#newaggregationreceipt) is emitted.
-It aso dispatches the aggregation to its destination if configured
+It also dispatches the aggregation to its destination if configured
 
 If the aggregation coordinates are not valid and don't indicate an existing aggregation,
 the call will fail, but the weight cost charged to the caller is just the one needed to do the checks.
