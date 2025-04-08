@@ -17,6 +17,9 @@ The flow will be the following:
       - how to hash the verification key
       - how to get the hash version of the verifier to use if any
       - how to extract a byte sequence from public inputs
+    
+    Delivery owners must ensure that the delivery price is updated correctly over time.
+
 2. If the proof is valid a [`<VerifierPallet>::ProofVerified`](../02-mainchain/05-mainchain_api.md#proofverified) event that contains the statement value is emitted; otherwise the transaction emits an error.
 3. The failing transaction will be included in the block anyway, and the user will pay fees for it. This is to prevent DoS attacks.
 

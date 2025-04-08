@@ -202,18 +202,28 @@ In addition to them, the following custom extrinsics are available:
 #### [aggregate](#aggregate_3)
 
 Publish the aggregation. This call is used to publish a new aggregation that is in
-the domain both in to be published queue or is still not completed. If everything is fine,
-move the held funds for this publication to the caller account.
+the domain both in to be published queue or is still not completed. 
+If everything is fine, it processes held funds for aggregation and delivery
+
+- `Aggregation`: Compensates the aggregator (the account calling the aggregate extrinsic) for the transaction costs and provides incentive.
+- `Delivery`: Pays for the cross-chain dispatch costs to the delivery_owner account
 
 In case everything is fine a [`Event::NewAggregationReceipt`](#newaggregationreceipt) is emitted.
+It also dispatches the aggregation to its destination if configured
 
 If the aggregation coordinates are not valid and don't indicate an existing aggregation,
 the call will fail, but the weight cost charged to the caller is just the one needed to do the checks.
 
+Restrictions:
+
+- Origin must be authorized according to the domain's `AggregateSecurityRules`
+- Domain must exist
+- Aggregation must exist and be ready for publication (i.e. an event AggregationComplete must’ve been emitted)
+
 Arguments:
 
-- `domainId`: The domain's identifier.
-- `id`: The aggregation's identifier.
+- `domain_id`: Domain identifier
+- `aggregation_id`: Identifier of the aggregation to publish
 
 #### [registerDomain](#registerdomain)
 
@@ -223,10 +233,22 @@ The account that requested this domain will be the owner and is the only one tha
 
 If everything is fine a [`Event::NewDomain`](#newdomain) is emitted.
 
+Restrictions:
+
+- Origin must be authorized to create domains with the specified delivery destination
+  - Regular users (anyone with a signed account) can only register domains with Destination::None
+  - Managers can register domains with any destination type
+- Delivery owner must be specified (either explicitly or by caller)
+- Sufficient funds must be available for the domain storage deposit. Please refer to the runtime config types `AggregateBaseDeposit` and `AggregateByteDeposit`
+
+
 Arguments:
 
-- `aggregation_size`: The size of the aggregation, in other words how many statements any aggregation has.
-- `queue_size`: The maximum number of aggregations that can be in the queue for this domain.
+- `aggregation_size`: Maximum number of statements per aggregation
+- `queue_size`: Optional maximum number of pending aggregations (defaults to runtime configuration)
+- `aggregate_rules`: Security rules for controlling who can aggregate
+- `delivery`: Parameters for delivery (destination and price) At the moment destination can only be either None or Hyperbridge
+- `delivery_owner`: The delivery owner, as discussed in the previous section (defaults to origin).
 
 #### [holdDomain](#holddomain)
 
@@ -257,6 +279,16 @@ domain owner holds on this domain are unlocked.
 Arguments
 
 - `domainId`: The domain's identifier.
+
+#### [setDeliveryPrice](#setdeliveryprice)
+
+Updates the delivery price for a domain.
+Origin must be domain owner, delivery owner, or manager
+
+Arguments
+
+- `domain_id`: Domain identifier
+- `price`: New delivery price
 
 ### poe
 
@@ -571,6 +603,9 @@ In addition to them, the following custom errors have been defined:
 
 ### aggregate
 
+#### [BadOrigin](#badorigin)
+If caller lacks permission
+
 #### [UnknownDomainId](#unknowndomainid)
 
 It doesn't exist any domain with this identifier.
@@ -586,6 +621,10 @@ The given domain parameters are invalid.
 #### [InvalidDomainState](#invaliddomainstate)
 
 Try to remove or put on hold a domain from an invalid state.
+
+#### [MissedDeliveryOwnership](#misseddeliveryownership)
+
+If no delivery owner is provided
 
 ### poe
 
