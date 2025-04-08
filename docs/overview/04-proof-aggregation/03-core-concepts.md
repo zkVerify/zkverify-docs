@@ -1,4 +1,6 @@
-## Concepts
+---
+title: Concepts
+---
 ### Domains
 
 Domains are logical containers for aggregating statements. Each domain has:
