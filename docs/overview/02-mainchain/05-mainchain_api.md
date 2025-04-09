@@ -59,22 +59,6 @@ and generate the proof:
 
 `MerkleProof`
 
-### poe
-
-#### [poe_proofPath](#poe_proofpath)
-
-Given the hash of a proof and the id of the attestation in which it is included, returns the path of the proof in the Merkle tree.
-In case the proof is not found, an error is returned.
-
-**Parameters**
-
-- `attestation_id: u64`
-- `proof_hash: H256`
-
-**Returns**
-
-`MerkleProof`
-
 ## [Constants](#constants)
 
 All the standard constants are available in the [official documentation](https://polkadot.js.org/docs/substrate/constants).
@@ -82,7 +66,6 @@ Mainchain nodes currently use only a subset of the Substrate constants, in parti
 
 - *balances*
 - *grandpa*
-- *imOnline*
 - *staking*
 - *system*
 - *timestamp*
@@ -99,7 +82,6 @@ Mainchain nodes currently use only a subset of these methods, in particular, the
 - *babe*
 - *balances*
 - *grandpa*
-- *imOnline*
 - *offences*
 - *session*
 - *staking*
@@ -128,58 +110,6 @@ published in a block. This storage is cleaned **every** new block, that means ev
 aggregation is present in this storage for **just one block**: the one where it
 has been aggregated. In order to create the aggregation proof you should inspect the storage
 value at the block where it has been published.
-
-### poe
-
-#### [firstInsertionTime](#firstinsertiontime)
-
-Returns the timestamp of the first insertion of a proof into the Merkle tree of the latest attestation.
-
-**Returns**
-
-`
-Option<u64>
-`
-
-#### [nextAttestation](#nextattestation)
-
-Returns the ID of the next attestation.
-
-**Returns**
-
-`
-u64
-`
-
-#### [palletVersion](#palletversion)
-
-Returns the software version of the pallet.
-
-**Returns**
-
-`
-u16
-`
-
-#### [values](#values)
-
-Queries the storage looking for the proofs included in the Merkle tree of an attestation.
-The return value depends on the presence of the optional parameter `proof_hash`:
-
-- If the parameter is not provided, the method returns the list of all the proofs included in the Merkle tree of the requested attestation (if any)
-- If the parameter is provided, the method returns `null` if the proof is found in the attestation, `None` otherwise
-
-**Parameters**
-
-`attestation_id: u64`
-
-`proof_hash: Option<H256>`
-
-**Returns**
-
-`
-Option<null>
-`
 
 ## [Extrinsics](#extrinsics)
 
@@ -290,17 +220,10 @@ Arguments
 - `domain_id`: Domain identifier
 - `price`: New delivery price
 
-### poe
-
-#### [publishAttestation](#publishattestation)
-
-Creates an extrinsic to trigger the finalization of an attestation containing the proofs submitted in the current window.
-If no proof is currently available, the attestation is empty but still published.
-
 ### Verifier Pallets
 
 All verifier pallets share the following interface and define its types for: verification key, proof and public inputs. Anyway the
-available exstrinsics are:
+available extrinsics are:
 
 #### [submitProof](#submitproof)
 
@@ -326,8 +249,6 @@ Register a verification key that can be used later in submit proof calls and emi
 
 - [settlementGroth16Pallet](#settlementgroth16pallet-types)
 - [settlementRisc0Pallet](#settlementrisc0pallet-types)
-- [settlementFFlonkPallet](#settlementfflonkpallet-types)
-- [settlementZksyncPallet](#settlementzksyncpallet-types)
 - [settlementUltraplonkPallet](#settlementultraplonkpallet-types)
 - [settlementProofOfSQLPallet](#settlementproofofsqlpallet-types)
 - [settlementPlonky2Pallet](#settlementplonky2pallet-types)
@@ -379,33 +300,6 @@ pub enum Proof {
 } // Limited on a configurable max size
 pub type Vk = H256;
 pub type Pubs = Vec<u8>;  // Limited on a configurable max size
-```
-
-##### settlementFFlonkPallet Types
-
-```rust
-pub type Proof = [u8; 768];
-pub struct Vk {
-    power: u8,
-    k1: Fr,
-    k2: Fr,
-    w: Fr,
-    w3: Fr,
-    w4: Fr,
-    w8: Fr,
-    wr: Fr,
-    x2: G2,
-    c0: G1, 
-};
-pub type Pubs = [u8; 32];
-```
-
-##### settlementzksyncPallet Types
-
-```rust
-pub type Proof = [u8; 1408];
-pub type Vk = (); // zksync verifier doesn't have any verification key
-pub type Pubs = [u8; 32];
 ```
 
 #### settlementUltraplonkPallet Types
@@ -558,26 +452,6 @@ till at least one aggregation is published
 ##### Fields
 
 - `domainId: u32` Domain identifier
-
-### poe
-
-#### [NewElement](#newelement)
-
-Emitted when a new ZK proof is submitted, successfully verified, and included in the Merkle tree for the currently pending attestation.
-
-##### Fields
-
-- `value: H256` The hash of the proof that has been included in the Merkle tree (i.e. the value of the leaf of the tree)
-- `attestationId: u64` The ID of the attestation in which the proof has been included
-
-#### [NewAttestation](#newattestation)
-
-Emitted when a new attestation is finalized and published. It may contain 0 or more proofs.
-
-##### Fields
-
-- `id: u64` The ID of the attestation that has been finalized
-- `attestation: H256` The root of the Merkle tree of the attestation
 
 ### Verifier Pallets
 

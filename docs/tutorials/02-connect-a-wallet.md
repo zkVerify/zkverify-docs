@@ -53,10 +53,4 @@ Follow the instructions below to set up your wallet with these variables and sta
 
 Head on over to our [Testnet Faucet](https://zkverify-faucet.zkverify.io/), submit your email address and Wallet Address and you will receive $tVFY within 24 hours.
 
-After you receive your $tVFY zkVerify testnet token, we have a few different user activities you can try out!
-
-* [Submit and verify a Polygon CDK proof to the zkVerify testnet](./05-submit-proofs/03-polygon_cdk_proof_submission.md)
-* [Deploy a full CDK zkRollup, EVM-compatible network on Sepolia that uses zkVerify testnet as the Proof Verification layer](./08-run-a-zkrollup/04-polygon_cdk_installation.md)
-* [Deploy a full zkSync Era zkRollup, EVM-compatible network on Sepolia that uses zkVerify testnet as the Proof Verification layer](./08-run-a-zkrollup/02-zksync_installation.md)
-
 Thank you for testing! If you have any questions or require support from the team, feel free to reach out to us on [Discord](https://discord.gg/zkverify).

@@ -21,11 +21,12 @@ use scale encoded data).
 - `fn vk_hash()` how to hash the verification key, this is useful to bypass the standard mechanism when the verification key is
 already a hash: instead of taking the bytes and hash them you can just forward the vk as-is (default implementation use `keccak256` of
 `Self::vk_bytes()`).
+- `fn verifier_version_hash()` a fingerprint uniquely identifying verifier versions (for versioned verifiers). For non-versioned verifiers, a default implementation is provided with a fixed digest.
 
-Beside the verifier logic and serialization/deserialization stuff, the `Verifier` developer should take care also of how the
+Beside the verifier logic and serialization/deserialization, the `Verifier` developer should take care also of how the
 statement digests will be computed. Given a valid proof, as mentioned in [Submitter Flow](../03-proof_submission_interface/02-proof_submitter_flow.md#proof-submitter-flow), ZkVerify generates a statement digest to identify uniquely the given proof
 and maybe a smart contract should be able to compute this digest too on chain and so compute the public inputs bytes and hash.
-This is way `Verifier` trait give the option to the developer to define his preferred encoding with `pubs_bytes()` to eventually
+This is why the `Verifier` trait gives the option to the developer to define his preferred encoding with `pubs_bytes()` to eventually
 simplify the on-chain work. Also, for the verification key the developer can define how to encode it with the `vk_bytes()` but in
 this case we can assume that a ZkRollup or ZkApp can set the value at deployment stage. Finally, there are some cases where the
 verification key is already a hash (i.e., risc0 proofs) and here we provide to the developer the capability to not hash it
@@ -40,9 +41,11 @@ and `vk` is the verification key:
 let ctx = V::hash_context_data();
 let vk_hash = V::vk_hash(&vk);
 let pubs_bytes = V::pubs_bytes(&pubs);
+let version_hash = V::verifier_version_hash(proof);
 
 let mut data_to_hash = keccak_256(ctx).to_vec();
 data_to_hash.extend_from_slice(vk_hash.as_bytes());
+data_to_hash.extend_from_slice(version_hash.as_bytes());
 data_to_hash.extend_from_slice(keccak_256(pubs_bytes).as_bytes_ref());
 H256(keccak_256(data_to_hash.as_slice()))
 ```
@@ -50,7 +53,7 @@ H256(keccak_256(data_to_hash.as_slice()))
 ### Submit Proof
 
 The [`submitProof`](https://github.com/HorizenLabs/zkVerify/tree/main/pallets/verifiers/src/lib.rs#L213)
-extrinsic get the verification key from the storage (if need it) and use `verify_proof()` implementation to check the proof.
+extrinsic gets the verification key from the storage (if needed) and uses `verify_proof()` implementation to check the proof.
 
 ### Register Verification Key
 

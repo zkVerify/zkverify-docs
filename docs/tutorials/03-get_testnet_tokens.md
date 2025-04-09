@@ -13,5 +13,6 @@ After you receive your $tVFY zkVerify testnet token, we have a few different use
    - [Noir](submit-proofs/noir-ultraplonk-example)
 * Walkthroughs on how to spin up your own zkRollup
    - [Risc0](run-a-zkrollup/risc0_installation)
+   - Via the [TypeScript Example](submit-proofs/typescript-example)
 
 Thank you for testing! If you have any questions or require support from the team, feel free to reach out to us on [Discord](https://discord.gg/zkverify).
