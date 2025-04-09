@@ -1,17 +1,17 @@
 ---
-title: Get Testnet ($ACME) Tokens
+title: Get Testnet ($tVFY) Tokens
 ---
 
 ## Faucet
-Head over to our [Testnet Faucet to get testnet tokens](https://zkverify-faucet.zkverify.io/).
+* Head over to our [Community mantained Testnet Faucet](https://www.zkay.io/faucet).
+* Head over to our [Discord](https://discord.gg/zkverify).
 
 ## Next Steps
-After you receive your $ACME zkVerify testnet token, we have a few different user activities you can try out!  You can explore our tutorials including:
+After you receive your $tVFY zkVerify testnet token, we have a few different user activities you can try out!  You can explore our tutorials including:
 * Walkthroughs on how to submit and verify proofs:
-   - Via [Tenderly](submit-proofs/polygon_cdk_proof_submission)
-   - Via the [TypeScript Example](submit-proofs/typescript-example)
+   - [Groth16](submit-proofs/groth16_proof_submission)
+   - [Noir](submit-proofs/noir-ultraplonk-example)
 * Walkthroughs on how to spin up your own zkRollup
-   - [Polygon CDK zkRollup](run-a-zkrollup/polygon_cdk_installation)
-   - [zkSync Era zkRollup](run-a-zkrollup/zksync_installation)
+   - [Risc0](run-a-zkrollup/risc0_installation)
 
 Thank you for testing! If you have any questions or require support from the team, feel free to reach out to us on [Discord](https://discord.gg/zkverify).

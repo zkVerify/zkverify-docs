@@ -8,16 +8,16 @@ SELECT a, b, c, d, e, f, g, h FROM table WHERE a = 2
 ```
 on the following table
 
-| a | b     | c   | d      | e    | f    | g    | h     |
-|---|-------|-----|--------|------|------|------|-------|
-| 1 | hello | foo | dc     | hide | yin  | chip | vim   |
-| 2 | bye   | bar | marvel | seek | yang | dale | emacs |
+| a   | b     | c   | d      | e    | f    | g    | h     |
+| --- | ----- | --- | ------ | ---- | ---- | ---- | ----- |
+| 1   | hello | foo | dc     | hide | yin  | chip | vim   |
+| 2   | bye   | bar | marvel | seek | yang | dale | emacs |
 
 whose result is the table
 
-| a | b     | c   | d      | e    | f    | g    | h     |
-|---|-------|-----|--------|------|------|------|-------|
-| 2 | bye   | bar | marvel | seek | yang | dale | emacs |
+| a   | b   | c   | d      | e    | f    | g    | h     |
+| --- | --- | --- | ------ | ---- | ---- | ---- | ----- |
+| 2   | bye | bar | marvel | seek | yang | dale | emacs |
 
 Then you will send the proof to zkVerify for on-chain verification.
 
@@ -52,7 +52,7 @@ If you happen to know a bit of Rust and SQL, you can take a look into `src/bin/g
 ## Submitting the proof to zkVerify via `polkadot.js.org` frontend
 
 1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
-2. Select your account (you must have some ACME).
+2. Select your account (you must have some tVFY).
 3. Choose the `settlementProofOfSqlPallet`, and the `submitProof` extrinsic.
 4. Inside the field `vkOrHash` select `Vk`
 5. Fill in all the required fields by toggling the `file upload` switch, and uploading the vk, proof, and pubs files generated in the previous section.

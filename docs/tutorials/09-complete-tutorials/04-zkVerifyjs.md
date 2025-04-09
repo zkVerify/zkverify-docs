@@ -70,7 +70,7 @@ const public = fs.readFileSync("../hello_world/pub.hex").toString()
 </TabItem>
 </Tabs>
 
-Once you have all the requirements imported, we will start by instantiating a session with our testnet with an account(This account should have $ACME to pay for transactions). 
+Once you have all the requirements imported, we will start by instantiating a session with our testnet with an account(This account should have $tVFY to pay for transactions). 
 ```js
 const session = await zkVerifySession.start().Testnet().withAccount("seed-phrase")
 ```

@@ -12,7 +12,7 @@ zkVerify is a blockchain developed using the Substrate framework, operating on t
 ## Steps Involved
 - Bootstrapping the validator node
 - Register your node with the network
-- Stake ACME
+- Stake tVFY
 - Start validating
 
 ## Bootstrapping the validator node
@@ -111,9 +111,9 @@ The public key(hex) field is the required Grandpa key. Once we have these three 
 
 In few seconds you should receive a green pop-up message on the top-right corner confirming the extrinsic has been succesfully submitted.
 
-## Staking ACME
+## Staking tVFY
 
-Next step would be to stake ACME for our registered validator node. In the current zkVerify implementation you need be in the top 10 stakers to be a part of active validators set. So, we will check how much ACME we need to stake to be in the top 10 and then we will proceed to stake our ACME tokens. 
+Next step would be to stake tVFY for our registered validator node. In the current zkVerify implementation you need be in the top 10 stakers to be a part of active validators set. So, we will check how much tVFY we need to stake to be in the top 10 and then we will proceed to stake our tVFY tokens. 
 
 We can check the active validators set in the current era in the same PolkadotJS, we used before for registering our validator. Navigate to ``Developers`` > ``ChainState``, and choose the ``staking`` module. Select the ``currentEra`` extrinsic and click on the ``+`` button to get the current era number. We will be using this number to get the active set of validators. Select the ``eraStakersOverview`` extrinsic and give the era number we got previously. Disable the include option button and click on ``+`` to get the information about active validators set.
 
@@ -162,16 +162,16 @@ The response you get should have a payload similar to this:
   ]
 ]
 ```
-In this particular structure, each of the validator’s information like address, total ACME staked and total nominations can be found. As per the example shared above, the third active validator (sorting them from highest to lowest stake) has staked `139,999,999,999,999,999,971,572,664` (unit of measure is `ACME*10^18`) so you are required to stake at least that amount for participating actively.
+In this particular structure, each of the validator’s information like address, total tVFY staked and total nominations can be found. As per the example shared above, the third active validator (sorting them from highest to lowest stake) has staked `139,999,999,999,999,999,971,572,664` (unit of measure is `tVFY*10^18`) so you are required to stake at least that amount for participating actively.
 
-Now your take would be to stake more than the lowest in the top 10 validators list. Next visit to ``Developer`` > ``Extrinsics`` section and choose the ``staking`` module. Now, choose the ``bond`` extrinsic and fill in the value field with the amount of ACME you would like to stake. Finally, choose the account type in payee option and sign your transaction. 
+Now your take would be to stake more than the lowest in the top 10 validators list. Next visit to ``Developer`` > ``Extrinsics`` section and choose the ``staking`` module. Now, choose the ``bond`` extrinsic and fill in the value field with the amount of tVFY you would like to stake. Finally, choose the account type in payee option and sign your transaction. 
 
 
 ![alt_text](./img/polkadotjs_staking_bond.png)
 
 ## Start validating
 
-Once we have staked ACME, now we are ready to start validating on the zkVerify network. We need to execute an extrinsic called as ``validate(prefs)`` under ``staking`` module which takes an input of how much commission your validator would take from the nominations.(If you are not sure, you can put ``100000000`` as the default value). Also set the ``blocked`` field to ``no`` and sign the transaction.
+Once we have staked tVFY, now we are ready to start validating on the zkVerify network. We need to execute an extrinsic called as ``validate(prefs)`` under ``staking`` module which takes an input of how much commission your validator would take from the nominations.(If you are not sure, you can put ``100000000`` as the default value). Also set the ``blocked`` field to ``no`` and sign the transaction.
 
 ![alt_text](./img/polkadotjs_staking_validate.png)
 

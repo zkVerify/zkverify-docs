@@ -12,7 +12,6 @@ title: zkVerify Hub
 | Github                                                      | https://github.com/HorizenLabs/zkVerify |
 | zkVerifyJS                                                  | https://www.npmjs.com/package/zkverifyjs |
 | zkVerify Block Explorer                                     | https://zkverify-testnet.subscan.io/ |
-| zkVerify Testnet Faucet                                     | https://zkverify-faucet.zkverify.io/ |
 | Monitoring                                                  | https://testnet-telemetry.zkverify.io |
 | Documentation                                               | https://docs.zkverify.io |
 | RPC Gateway                                                 | https://testnet-rpc.zkverify.io, wss://testnet-rpc.zkverify.io |

@@ -6,7 +6,7 @@ title: Proof Submission with Tenderly
 In this tutorial we'll go through the process of submitting and verifying a Polygon CDK proof to the zkVerify chain.
 
 ## Requirements
-- A Substrate compatible wallet with funds (ACME) connected to the network
+- A Substrate compatible wallet with funds (tVFY) connected to the network
 - A Polygon CDK (Fork_ID 6) FFLONK proof
 
 ## Step 1
@@ -50,7 +50,7 @@ Convert it into a hexadecimal format (take care to pad left the result with zero
 Send the proof to zkVerify chain.
 In order to do this you can use [PolkadotJs](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics).
 
-- Select your account (you must have some ACME)
+- Select your account (you must have some tVFY)
 - Choose the `settlementFFlonkPallet` and the call `submitProof`
 - Inside the field `vkOrHash` select `Vk` and paste the following data
 
