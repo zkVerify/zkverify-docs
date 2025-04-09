@@ -3,7 +3,7 @@ title: Get Testnet ($tVFY) Tokens
 ---
 
 ## Faucet
-* Head over to our [Community mantained Testnet Faucet](https://www.zkay.io/faucet).
+* Head over to our [Community mantained Testnet Faucet](https://www.faucy.com/zkverify-volta).
 * Head over to our [Discord](https://discord.gg/zkverify).
 
 ## Next Steps
