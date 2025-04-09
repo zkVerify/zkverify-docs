@@ -7,30 +7,25 @@ title: zkVerify Hub
 
 ## zkVerify Links
 
-| Product                                                     | Link |
-|-------------------------------------------------------------| --- |
-| Github                                                      | https://github.com/HorizenLabs/zkVerify |
-| zkVerifyJS                                                  | https://www.npmjs.com/package/zkverifyjs |
-| zkVerify Block Explorer                                     | https://zkverify-testnet.subscan.io/ |
-| Monitoring                                                  | https://testnet-telemetry.zkverify.io |
-| Documentation                                               | https://docs.zkverify.io |
-| RPC Gateway                                                 | https://testnet-rpc.zkverify.io, wss://testnet-rpc.zkverify.io |
-| zkVerify Proof Explorer                                     | https://proofs.zkverify.io/ |
-| Proof Submission via PolkadotJS                             | [polkadotjs](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io%2Fwss#/explorer) |
-| zkVerify Attestation Contract on Sepolia (Ethereum testnet) | [`0x209f82A06172a8d96CF2c95aD8c42316E80695c1`](https://sepolia.etherscan.io/address/0x209f82A06172a8d96CF2c95aD8c42316E80695c1) | 
-| zkVerify Attestation Contract on Curtis (ApeChain testnet)  | [`0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5`](https://curtis.explorer.caldera.xyz/address/0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5) |
-| zkVerify Attestation Contract on Gobi (EON testnet)         | [`0x6A51D573Bf6fcFdb5D4E394645647304bb9FAb5B`](https://gobi-explorer.horizenlabs.io/address/0x6A51D573Bf6fcFdb5D4E394645647304bb9FAb5B) |
-| zkVerify Attestation Contract on Arbitrum (Sepolia testnet) | [`0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5`](https://sepolia.arbiscan.io/address/0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5) |
-| zkVerify Attestation Contract on EDU Chain testnet          | [`0x147AD899D1773f5De5e064C33088b58c7acb7acf`](https://edu-chain-testnet.blockscout.com/address/0x147AD899D1773f5De5e064C33088b58c7acb7acf) |
-| zkVerify Attestation Contract on Base (Sepolia testnet)     | [`0x344Ffc798Fa042578c7bf6031575f4A2Cd2Fb621`](https://sepolia.basescan.org/address/0x344Ffc798Fa042578c7bf6031575f4A2Cd2Fb621) |
-| zkVerify Attestation Contract on Flow testnet               | [`0x048C091124B04018Fb52B28C2AC90577ef753950`](https://evm-testnet.flowscan.io/address/0x048C091124B04018Fb52B28C2AC90577ef753950) |
-| zkVerify Attestation Contract on Optimism (Sepolia testnet) | [`0x048C091124B04018Fb52B28C2AC90577ef753950`](https://sepolia-optimism.etherscan.io/address/0x048C091124B04018Fb52B28C2AC90577ef753950) |
-| zkVerify Attestation Contract on BNB testnet                | [`0x048C091124B04018Fb52B28C2AC90577ef753950`](https://testnet.bscscan.com/address/0x048C091124B04018Fb52B28C2AC90577ef753950) |
+| Product                                                     | Link                                                                                                                                                                                                       |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Github                                                      | https://github.com/zkVerify/zkVerify                                                                                                                                                                       |
+| zkVerifyJS                                                  | https://www.npmjs.com/package/zkverifyjs                                                                                                                                                                   |
+| zkVerify Block Explorer                                     | https://zkverify-testnet.subscan.io/                                                                                                                                                                       |
+| Monitoring                                                  | https://testnet-telemetry.zkverify.io                                                                                                                                                                      |
+| Documentation                                               | https://docs.zkverify.io                                                                                                                                                                                   |
+| RPC Gateway                                                 | https://testnet-rpc.zkverify.io, wss://testnet-rpc.zkverify.io                                                                                                                                             |
+| zkVerify Proof Explorer                                     | https://proofs.zkverify.io/                                                                                                                                                                                |
+| Proof Submission via PolkadotJS                             | [polkadotjs](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io%2Fwss#/explorer)                                                                                                        |
+| zkVerify Attestation Contract on Sepolia (Ethereum testnet) | [`Contract`](https://sepolia.etherscan.io/address/0x5a3c35CCC5c05fDeFe5Ecafc15F4B1aC8eF71481) [`Proxy`](https://sepolia.etherscan.io/address/0xEA0A0f1EfB1088F4ff0Def03741Cb2C64F89361E)                   |
+| zkVerify Attestation Contract on Arbitrum (Sepolia testnet) | [`Contract`](https://sepolia.arbiscan.io/address/0x8fDFE115948b54e77134Ff3841a626FAd4E6A661) [`Proxy`](https://sepolia.arbiscan.io/address/0xd007494945580eEb25522c8e0b2fa798B3F0FDE2)                     |
+| zkVerify Attestation Contract on Base (Sepolia testnet)     | [`Contract`](https://sepolia.basescan.org/address/0x312468EbF274F1f584d93d0CCA8458cC91460FC0) [`Proxy`](https://sepolia.basescan.org/address/0x0807C544D38aE7729f8798388d89Be6502A1e8A8)                   |
+| zkVerify Attestation Contract on Optimism (Sepolia testnet) | [`Contract`](https://sepolia-optimism.etherscan.io/address/0xFbA954966Fa27adec13Ba42F96E9F8ec8308a860) [`Proxy`](https://sepolia-optimism.etherscan.io/address/0xBBa17b0Eb3DdF0631c0Cce00E4245E4A2EE49982) |
 
 ## Recommended Wallets
 
-| Wallet | Link |
-| --- | --- |
-| Talisman | https://www.talisman.xyz/ |
+| Wallet    | Link                       |
+| --------- | -------------------------- |
+| Talisman  | https://www.talisman.xyz/  |
 | Subwallet | https://www.subwallet.app/ |
 
