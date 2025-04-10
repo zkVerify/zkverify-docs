@@ -6,16 +6,8 @@ title: Functionality
 
 ## Overview
 
-The zkVerify Smart Contract is deployed on different chains, where it receives an attestation from the zkVerify authorized relayer.
-
-Currently, it's deployed to the following chains
-
-| Chain | Contract Address                                                                                                                       |
-|------|----------------------------------------------------------------------------------------------------------------------------------------| 
-| Ethereum Sepolia    | [0xEA0A0f1EfB1088F4ff0Def03741Cb2C64F89361E](https://sepolia.etherscan.io/address/0xEA0A0f1EfB1088F4ff0Def03741Cb2C64F89361E)          |
-| Arbitrum Sepolia    | [0xd007494945580eEb25522c8e0b2fa798B3F0FDE2](https://sepolia.arbiscan.io/address/0xd007494945580eEb25522c8e0b2fa798B3F0FDE2)           | 
-| Optimism sepolia| [0xBBa17b0Eb3DdF0631c0Cce00E4245E4A2EE49982](https://sepolia-optimism.etherscan.io/address/0xBBa17b0Eb3DdF0631c0Cce00E4245E4A2EE49982) |
-| Base Sepolia    | [0x0807C544D38aE7729f8798388d89Be6502A1e8A8](https://sepolia.basescan.org//address/0x0807C544D38aE7729f8798388d89Be6502A1e8A8)         |
+The zkVerify Smart Contract is deployed on different chains, where it receives an aggregation from the zkVerify authorized relayer.
+[Here](../../11-relevant_links.md) is a list of the chains in which zkVerify contracts are deployed.
 
 ## Storage Variables
 
@@ -69,9 +61,9 @@ function onAccept(IncomingPostRequest memory incoming) external override onlyHos
 - Parse and unpacks message payload to get domainId, aggregationId, and proofsAggregation
 - Invokes the `registerAggregation` internal method.
 
-### Verify Proof Attestation Method
+### Verify Proof Aggregation Method
 
-This method is used by proof submitters’ contracts to verify that their proof has been attested by a published attestation.
+This method is used by proof submitters’ contracts to verify that their proof has been attested by a published aggregation.
 
 ```solidity
 function verifyProofAggregation(

@@ -40,7 +40,7 @@ If all these checks pass then:
 5. The Proof Submitter can retrieve the Merkle Path of the submitted proof via the [`aggregate_statementPath`](../02-mainchain/05-mainchain_api.md#aggregate_statementpath) RPC call supplying the
     - `at`: the block `B` where the `Aggregate::NewAggregationReceipt` is emitted
     - `domain_id`
-    - `attestation_id`
+    - `aggregation_id`
     - `statement`
 
 ## Pallets

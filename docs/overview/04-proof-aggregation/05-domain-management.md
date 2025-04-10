@@ -13,7 +13,7 @@ Anyone can create a new domain and become the owner. The owner should hold some 
 
 To create a new domain the owner should call [`registerDomain(aggregationSize, queueSize)`](../02-mainchain/05-mainchain_api.md#registerdomain) extrisic and define both aggregation size and queue size.
 
-The aggregation size should be any unsigned integer smaller than 128, but because it represents a Merkle tree size is better to use a power of two. From the aggregation size a proof submitter that would use this domain can estimate what will be the cost of the membership proof in the aggregation receipt in the destination chain where he wants to use his proof: a bigger size means a bigger cost, but also a lower cost to send the proof on the destination chain since the bridging cost will be amortized by more proofs in the same attestation.
+The aggregation size should be any unsigned integer smaller than 128, but because it represents a Merkle tree size is better to use a power of two. From the aggregation size a proof submitter that would use this domain can estimate what will be the cost of the membership proof in the aggregation receipt in the destination chain where he wants to use his proof: a bigger size means a bigger cost, but also a lower cost to send the proof on the destination chain since the bridging cost will be amortized by more proofs in the same aggregation.
 
 The publishing queue size should be an unsigned integer smaller or equal than 16 and represents how many aggregations can wait for publication: a smaller number can generate a more common `CannotAggregate(DomainFull)` event on proof submission because there is not enough buffer in the publication queue, on the other side using a bigger aggregation size means hold more money.
 

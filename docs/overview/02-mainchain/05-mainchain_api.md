@@ -228,7 +228,7 @@ available extrinsics are:
 #### [submitProof](#submitproof)
 
 Submit a `Proof` and verify it against the verification key `Vk` and public inputs `Pubs`. If the proof is valid it'll be included
-in the next attestation. The extrinsic fails in the case of an invalid proof.
+in the next aggregation within the given domain. The extrinsic fails in the case of an invalid proof.
 
 **Parameters**
 
