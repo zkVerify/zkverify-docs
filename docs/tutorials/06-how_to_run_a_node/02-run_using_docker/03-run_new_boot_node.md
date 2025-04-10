@@ -75,7 +75,7 @@ Lastly, you should notify other node operators about the existence of your bootn
 
 - The IP address (or the DNS).
 - The open ports.
-- The public part of your node key (peer id).  This is printed at the startup of your node with the log `Local node identity is: ...` or is retrievable with command `docker run -v`*`path_to_your_file`*`/node_key.dat:/data/node_key.dat --rm --entrypoint zkv-node horizenlabs/zkverify:latest key inspect-node-key --file /data/node_key.dat`.
+- The public part of your node key (peer id).  This is printed at the startup of your node with the log `Local node identity is: ...` or is retrievable with command `docker run -v`*`path_to_your_file`*`/node_key.dat:/data/node_key.dat --rm --entrypoint zkv-relay horizenlabs/zkverify:latest key inspect-node-key --file /data/node_key.dat`.
 
 In this way others will be able to leverage your boot node to join the network by inserting these configurations into the `.env` file of their node.
 

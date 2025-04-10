@@ -81,7 +81,7 @@ and you should get something like:
 
 Some notes on the output:
 
-- `Launching zkv-node with args --rpc-external --name MyZkVerifyRpcNode --base-path /data/node --rpc-port 9944 --chain test --port 30555 --rpc-methods safe --pruning archive --rpc-cors all`: shows how the configurations in the `.env` file have been parsed and resulted in successful node launch.
+- `Launching zkv-relay with args --rpc-external --name MyZkVerifyRpcNode --base-path /data/node --rpc-port 9944 --chain test --port 30555 --rpc-methods safe --pruning archive --rpc-cors all`: shows how the configurations in the `.env` file have been parsed and resulted in successful node launch.
 - `Node name: MyZkVerifyRpcNode`: the configurations (`ZKV_CONF_NAME`) have been actually passed to the Substrate node.
 - `Local node identity is: 12D3KooWPy5kBKVxRwwz8hjyTKVA4WouoLipBSQVnUSBEVtq8G4X`: the unique identifier for your node, automatically generated at startup.
 - `Highest known block at #0`: since this is the first time the node is running, it doesn't contain any blockchain data, and the copy of the blockchain is just the genesis block (height 0).

@@ -72,7 +72,7 @@ Since you are going to submit extrinsics which change the blockchain state, you 
 
 Run the following command to generate the Babe and ImOnline keys:
 ```bash
-docker run --rm -ti --entrypoint zkv-node horizenlabs/zkverify:latest key inspect --scheme sr25519
+docker run --rm -ti --entrypoint zkv-relay horizenlabs/zkverify:latest key inspect --scheme sr25519
 ```
 
 and provide your validator secret phrase when prompted for (`URI:`), then hit enter.  You should get the following response:
@@ -90,7 +90,7 @@ Secret phrase:       demise trumpet minor soup worth airport minor height sauce 
 The public key(hex) field is the required Babe and ImOnline keys. We will execute the same command but this time with ed25519 scheme.
 
 ```bash
-docker run --rm -ti --entrypoint zkv-node horizenlabs/zkverify:latest key inspect --scheme ed25519
+docker run --rm -ti --entrypoint zkv-relay horizenlabs/zkverify:latest key inspect --scheme ed25519
 ```
 
 and provide same secret phrase when prompted for (`URI:`), then hit enter. You should get the following response:

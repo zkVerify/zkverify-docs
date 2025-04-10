@@ -35,7 +35,7 @@ const config: Config = {
           rehypePlugins: [rehypeKatex],
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/HorizenLabs/zkverify-docs/tree/main',
+          editUrl: 'https://github.com/zkVerify/zkVerify-docs/tree/main',
           routeBasePath: '/',
         },
         theme: {
@@ -95,7 +95,7 @@ const config: Config = {
           label: 'zkVerify Hub',
         },
         {
-          href: 'https://github.com/HorizenLabs/zkverify-docs',
+          href: 'https://github.com/zkVerify/zkVerify-docs',
           label: 'GitHub',
           position: 'right',
         },

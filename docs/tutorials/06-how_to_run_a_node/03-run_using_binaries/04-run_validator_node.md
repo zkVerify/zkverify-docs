@@ -10,20 +10,20 @@ To run a new validator node (refer to [this page](../01-getting_started.md#node-
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | --validator | Enable validator mode.<br/> The node will be started with the authority role and actively participate in any consensus task that it can (e.g. depending on availability of local keys). | No value must be provided. |
 
-Since a validator node needs proper keys for block authoring and chain selection, you can generate them using the `zkv-node` command `key` (refer to [this section](./getting_started_binaries#node-command-line-utilities) for further details).
+Since a validator node needs proper keys for block authoring and chain selection, you can generate them using the `zkv-relay` command `key` (refer to [this section](./getting_started_binaries#node-command-line-utilities) for further details).
 
 Generate a secret phrase with:
 
 ```bash
-target/production/zkv-node key generate
+target/production/zkv-relay key generate
 ```
 
 then take note of the `Secret phrase:` contained in the response and proceed with key insertion:
 
 ```bash
-target/production/zkv-node key insert --key-type babe --chain test --base-path /home/your_user/validator_node_data --scheme sr25519
-target/production/zkv-node key insert --key-type gran --chain test --base-path /home/your_user/validator_node_data --scheme ed25519
-target/production/zkv-node key insert --key-type imon --chain test --base-path /home/your_user/validator_node_data --scheme sr25519
+target/production/zkv-relay key insert --key-type babe --chain test --base-path /home/your_user/validator_node_data --scheme sr25519
+target/production/zkv-relay key insert --key-type gran --chain test --base-path /home/your_user/validator_node_data --scheme ed25519
+target/production/zkv-relay key insert --key-type imon --chain test --base-path /home/your_user/validator_node_data --scheme sr25519
 ```
 
 providing the secret phrase as input when prompted for (`URI:`).
@@ -31,7 +31,7 @@ providing the secret phrase as input when prompted for (`URI:`).
 You can then start with:
 
 ```bash
-target/production/zkv-node --name MyZkVerifyValidatorNode --base-path /home/your_user/validator_node_data --chain test --port 30353 --validator
+target/production/zkv-relay --name MyZkVerifyValidatorNode --base-path /home/your_user/validator_node_data --chain test --port 30353 --validator
 ```
 
 :::note

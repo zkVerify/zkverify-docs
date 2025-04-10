@@ -52,12 +52,12 @@ H256(keccak_256(data_to_hash.as_slice()))
 
 ### Submit Proof
 
-The [`submitProof`](https://github.com/HorizenLabs/zkVerify/tree/main/pallets/verifiers/src/lib.rs#L213)
+The [`submitProof`](https://github.com/zkVerify/zkVerify/tree/main/pallets/verifiers/src/lib.rs#L213)
 extrinsic gets the verification key from the storage (if needed) and uses `verify_proof()` implementation to check the proof.
 
 ### Register Verification Key
 
 If you choose to use the hash of verification key instead of the key itself, you need to register it before via
-[`registerVk`](https://github.com/HorizenLabs/zkVerify/tree/main/pallets/verifiers/src/lib.rs#L241). This
+[`registerVk`](https://github.com/zkVerify/zkVerify/tree/main/pallets/verifiers/src/lib.rs#L241). This
 extrinsic saves the verification key in storage and emits a `VkRegistered(hash)` event with the hash that can be
 used in `submitProof` call.
