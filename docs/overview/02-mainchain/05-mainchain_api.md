@@ -500,14 +500,6 @@ Try to remove or put on hold a domain from an invalid state.
 
 If no delivery owner is provided
 
-### poe
-
-#### [TooEarlyForASmallTree](#tooearlyforasmalltree)
-
-Error thrown when a validator submits a block containing an attestation with too few proofs in the Merkle tree (the minimum and maximum number are configured in the runtime).
-
-Note: the "sudo" account can override this behavior and submit an attestation whose size is lower than the minimum threshold.
-
 ### Verifier Pallets
 
 #### [InvalidInput](#invalidinput)
