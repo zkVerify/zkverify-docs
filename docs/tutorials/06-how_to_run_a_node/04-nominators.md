@@ -25,3 +25,8 @@ After this, you will be shown a list of active and waitlisted validators which y
 Lastly just click on the ``Sign and Submit`` button, to nominate your selected set of validators.
 
 ![alt_text](./img/step_3.png)
+
+:::warning
+As of now, you need to stake a minimum amount of 10 tVFY to become a nominator.
+You can check the `MinimumValidatorBond` by going to `Developer -> Chain State -> staking state query -> minNominatorBond` and clicking the ``+`` button. 
+:::

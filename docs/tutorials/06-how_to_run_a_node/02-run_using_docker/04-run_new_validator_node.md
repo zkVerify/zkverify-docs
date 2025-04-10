@@ -62,7 +62,7 @@ ca4bdf2c6f05   horizenlabs/zkverify:0.2.0-rc1   "/app/entrypoint.sh"   About a m
 
 ## Register your node with the network
 
-In this section you can learn how to register a new validator on the blockchain. The operations described below must be performed just once.  They consist of the submission of some extrinsics (transactions, in Substrate terminology) resulting in your node being able to author new blocks and consequently earn new tokens through staking mechanism. We will require the public keys for your validator to register it with the network. We need three keys: Babe, Grandpa, and ImOnline public keys. Babe and ImOnline keys can be generated with the sr25519 scheme while the Grandpa key can be generated using the ed25519 scheme.
+In this section you can learn how to register a new validator on the blockchain. The operations described below must be performed just once.  They consist of the submission of some extrinsics (transactions, in Substrate terminology) resulting in your node being able to author new blocks and consequently earn new tokens through staking mechanism. We will require the public keys for your validator to register it with the network. We need five keys: Babe, Para Validator, Para Assignment, Authority Discovery and Grandpa. Grandpa key can be generated with the ed25519 scheme while all the others can be generated using the sr25519 scheme.
 
 
 :::note
@@ -70,12 +70,12 @@ Since you are going to submit extrinsics which change the blockchain state, you 
 :::
 
 
-Run the following command to generate the Babe and ImOnline keys:
+Run the following command to generate the Babe, Para Validator, Para Assignment and Authority Discovery keys:
 ```bash
-docker run --rm -ti --entrypoint zkv-relay horizenlabs/zkverify:latest key inspect --scheme sr25519
+docker run --rm -ti --entrypoint zkv-relay horizenlabs/zkverify:latest-relay key inspect --scheme sr25519
 ```
 
-and provide your validator secret phrase when prompted for (`URI:`), then hit enter.  You should get the following response:
+and provide your validator secret phrase when prompted for (`URI:`), then hit enter. You should get the following response:
 
 ```bash
 Secret phrase:       demise trumpet minor soup worth airport minor height sauce legend flag timber
@@ -87,10 +87,11 @@ Secret phrase:       demise trumpet minor soup worth airport minor height sauce 
   SS58 Address:      5GRSEFpxJ8rU4LLiGrsnvkk7s1hdJXFZzx1T41KhECzTn7ot
 ```
 
-The public key(hex) field is the required Babe and ImOnline keys. We will execute the same command but this time with ed25519 scheme.
+The `Public key(hex)` field is the one we are looking for. 
+Now let's execute the same command but this time with ed25519 scheme.
 
 ```bash
-docker run --rm -ti --entrypoint zkv-relay horizenlabs/zkverify:latest key inspect --scheme ed25519
+docker run --rm -ti --entrypoint zkv-relay horizenlabs/zkverify:latest-relay key inspect --scheme ed25519
 ```
 
 and provide same secret phrase when prompted for (`URI:`), then hit enter. You should get the following response:
@@ -105,7 +106,15 @@ Secret phrase:       demise trumpet minor soup worth airport minor height sauce 
   SS58 Address:      5CNiZaphDhE8gT7cCDNZrXkd6vFfsuPjNQqdS8eEEw8mroHp
 ```
 
-The public key(hex) field is the required Grandpa key. Once we have these three keys, we are ready to register our node. Next you need to visit [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/explorer) and call the ``setKeys`` extrinsic under ``sessions`` module. Use the public keys we have generated in the previous step in their required fields, set proof field as ``0x`` and sign the transaction.
+The `Public key(hex)` field is the required Grandpa key. Once we have these three keys, we are ready to register our node. Next you need to visit [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/explorer) and call the ``setKeys`` extrinsic under ``sessions`` module.
+
+In order to fill the `keys` field we need to concatenate the `Babe` key, followed by the `Grandpa` key (without the `0x` at the beginning), followed by all the other keys (without the `0x` at the beginning). Considering the ones we have generated before, the value for the `keys` field will be the following:
+
+```bash
+0xc0c07abce7879c09231fcbd07165cfaabc4a634636850578a914b08b87cf99140dbccabf681188116e642c1dbc9332a2bbec7fbef1792196879a3cba6c52464bc0c07abce7879c09231fcbd07165cfaabc4a634636850578a914b08b87cf9914c0c07abce7879c09231fcbd07165cfaabc4a634636850578a914b08b87cf9914c0c07abce7879c09231fcbd07165cfaabc4a634636850578a914b08b87cf9914
+```
+
+The `proof` field can be set to ``0x``. Now submit and sign the extrinsic:
 
 ![alt_text](./img/validator_set_session_keys.png)
 
@@ -113,7 +122,12 @@ In few seconds you should receive a green pop-up message on the top-right corner
 
 ## Staking tVFY
 
-Next step would be to stake tVFY for our registered validator node. In the current zkVerify implementation you need be in the top 10 stakers to be a part of active validators set. So, we will check how much tVFY we need to stake to be in the top 10 and then we will proceed to stake our tVFY tokens. 
+Next step would be to stake tVFY for our registered validator node. 
+
+:::warning
+As of now, you need to stake a minimum amount of 10000 tVFY to become a validator.
+You can check the `MinimumValidatorBond` by going to `Developer -> Chain State -> staking state query -> minValidatorBond` and clicking the ``+`` button. 
+:::
 
 We can check the active validators set in the current era in the same PolkadotJS, we used before for registering our validator. Navigate to ``Developers`` > ``ChainState``, and choose the ``staking`` module. Select the ``currentEra`` extrinsic and click on the ``+`` button to get the current era number. We will be using this number to get the active set of validators. Select the ``eraStakersOverview`` extrinsic and give the era number we got previously. Disable the include option button and click on ``+`` to get the information about active validators set.
 
@@ -162,7 +176,9 @@ The response you get should have a payload similar to this:
   ]
 ]
 ```
-In this particular structure, each of the validator’s information like address, total tVFY staked and total nominations can be found. As per the example shared above, the third active validator (sorting them from highest to lowest stake) has staked `139,999,999,999,999,999,971,572,664` (unit of measure is `tVFY*10^18`) so you are required to stake at least that amount for participating actively.
+In this particular structure, each of the validator’s information like address, total tVFY staked and total nominations can be found. As per the example shared above, the third active validator (sorting them from highest to lowest stake) has staked `139,999,999,999,999,999,971,572,664` (unit of measure is `tVFY*10^18`) so you are required to stake at least that amount (or amount to it via nominations) for participating actively.
+
+For more information on staking activities in zkVerify, check the corresponding [guide](../04-nominators.md).
 
 Now your take would be to stake more than the lowest in the top 10 validators list. Next visit to ``Developer`` > ``Extrinsics`` section and choose the ``staking`` module. Now, choose the ``bond`` extrinsic and fill in the value field with the amount of tVFY you would like to stake. Finally, choose the account type in payee option and sign your transaction. 
 
