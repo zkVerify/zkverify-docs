@@ -11,7 +11,7 @@ After you receive your $tVFY zkVerify testnet token, we have a few different use
 * Walkthroughs on how to submit and verify proofs:
    - [Groth16](submit-proofs/groth16_proof_submission)
    - [Noir](submit-proofs/noir-ultraplonk-example)
-   - [Risc0](run-a-zkrollup/risc0_installation)
+   - [Risc0](submit-proofs/risc0_proof_submission)
    - [zkVerifyJS](submit-proofs/typescript-example)   
 
 Thank you for testing! If you have any questions or require support from the team, feel free to reach out to us on [Discord](https://discord.gg/zkverify).
