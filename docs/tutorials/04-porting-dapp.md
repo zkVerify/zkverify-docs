@@ -125,13 +125,13 @@ EDU Chain Testnet
 
 ## Code Examples and References
 
-- E2E tests in zkVerify [repository](https://github.com/HorizenLabs/zkVerify):
+- E2E tests in zkVerify [repository](https://github.com/zkVerify/zkVerify):
 
-- [Submit proof, wait for attestation, get the Merkle Path](https://github.com/HorizenLabs/zkVerify/blob/main/zombienet-tests/js_scripts/0005-proofPath_rpc.js)
+- [Submit proof, wait for attestation, get the Merkle Path](https://github.com/zkVerify/zkVerify/blob/main/zombienet-tests/js_scripts/0005-proofPath_rpc.js)
 
-- [Register vk, submit proof, wait for successful verification](https://github.com/HorizenLabs/zkVerify/blob/main/zombienet-tests/js_scripts/0007-proof_with_vk.js)
+- [Register vk, submit proof, wait for successful verification](https://github.com/zkVerify/zkVerify/blob/main/zombienet-tests/js_scripts/0007-proof_with_vk.js)
 
-- TypeScript template [repository](https://github.com/HorizenLabs/zkverify-example-typescript):
+- TypeScript template [repository](https://github.com/zkVerify/zkVerify-example-typescript):
 
 - [Tutorial](https://docs.zkverify.io/tutorials/submit-proofs/typescript-example)
 

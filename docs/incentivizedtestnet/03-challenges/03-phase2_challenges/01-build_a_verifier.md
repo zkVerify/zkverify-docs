@@ -7,7 +7,7 @@ Following the initial response to our verifier-building initiative, we're proud 
 
 To get started, check out our "[Add a New Verifier tutorial](https://docs.zkverify.io/tutorials/add-new-verifier/introduction)" in the zkVerify docs, which walks you through the basics of adding a new verifier to the zkVerify blockchain.
 
-Also, before you begin, we recommend reviewing our [existing verifier implementations](https://github.com/HorizenLabs/zkVerify/tree/main/verifiers), especially if you need to incorporate advanced functionality like verification across multiple elliptic curves or runtime benchmarking for different input sizes. 
+Also, before you begin, we recommend reviewing our [existing verifier implementations](https://github.com/zkVerify/zkVerify/tree/main/verifiers), especially if you need to incorporate advanced functionality like verification across multiple elliptic curves or runtime benchmarking for different input sizes. 
 
 The zkVerify team is always here to help if you need guidance along the way. Find us on [Discord](https://discord.com/invite/zkverify).
 
@@ -54,7 +54,7 @@ From higher to lower priority:
     * Modifications to e2e tests which already tests the other already included verifiers.
 
 
-* Documentation for the newly added verification pallet must be added to zkverify-docs [repository](https://github.com/HorizenLabs/zkverify-docs). Please, follow the same pattern as the [ones](https://docs.zkverify.io/overview/verification_pallets/abstract/) already present.
+* Documentation for the newly added verification pallet must be added to zkverify-docs [repository](https://github.com/zkVerify/zkVerify-docs). Please, follow the same pattern as the [ones](https://docs.zkverify.io/overview/verification_pallets/abstract/) already present.
 
 
 * An end-to-end tutorial on how to submit proofs for the verifier you’ve just added to the zkVerify blockchain must be provided. For instance, if you are integrating the gnark verifier, make sure to document or reference how to generate gnark proofs using the gnark toolchain.
@@ -70,20 +70,20 @@ From higher to lower priority:
 
 ### Acceptance Criteria and Submission
 
-* Code must compile and CI must pass. Take a look at the [instructions](https://github.com/HorizenLabs/zkVerify?tab=readme-ov-file#running-github-workflows-on-local-environment) on how to run the CI locally for more information. If you require the CI to install some dependencies, feel free to modify it. Otherwise reach the team for further support.
+* Code must compile and CI must pass. Take a look at the [instructions](https://github.com/zkVerify/zkVerify?tab=readme-ov-file#running-github-workflows-on-local-environment) on how to run the CI locally for more information. If you require the CI to install some dependencies, feel free to modify it. Otherwise reach the team for further support.
 
 * Try to make sure that compilation time is not “highly impacted” by the inclusion of your verifier (e.g. if you are including heavy dependencies). The zkVerify team, upon review, might decide to reject your implementation.
     * Be sure to pin the version of your dependencies as to avoid unwanted updates of the Cargo.lock
 
 * Branch from the “<i>main</i>” branch for your implementation. Give the branch a meaningful name, ideally "<i>\<verifier_name>-verifier</i>".
 
-* Open a PR in the [zkVerify repository](https://github.com/HorizenLabs/zkVerify) targeted against the “<i>main</i>” branch. Make sure that throughout the review process your branch stays up-to-date with the “<i>main</i>” branch. If not, align it exclusively via git rebase.
+* Open a PR in the [zkVerify repository](https://github.com/zkVerify/zkVerify) targeted against the “<i>main</i>” branch. Make sure that throughout the review process your branch stays up-to-date with the “<i>main</i>” branch. If not, align it exclusively via git rebase.
 
 * All the commits must be signed.
 
 * Make sure the CI passes. If not, apply your fixes and contact the team that will trigger an additional CI run.
 
-* [Documentation & Tutorial] Open a PR in the zkVerify [documentation repository](https://github.com/HorizenLabs/zkverify-docs) against the main branch.
+* [Documentation & Tutorial] Open a PR in the zkVerify [documentation repository](https://github.com/zkVerify/zkVerify-docs) against the main branch.
 
 * PRs will be reviewed by at least 2 members of the zkVerify team. Please make sure to be responsive during the review phase. 
 

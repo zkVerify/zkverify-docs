@@ -29,6 +29,6 @@ The integration of your verifier library can be split in three main parts:
 - The inclusion of the pallet into the runtime, so that it is actually available on the zkVerify chain.
 - The adaptation of the end-to-end tests.
 
-Before proceeding, make sure you have the [zkVerify](https://github.com/HorizenLabs/zkVerify) repository available on your machine.
+Before proceeding, make sure you have the [zkVerify](https://github.com/zkVerify/zkVerify) repository available on your machine.
 
-Two dedicated branches are available for reference: one for the [WASM](https://github.com/HorizenLabs/zkVerify/tree/docs/new_verifier_tutorial_wasm) implementation and one for the [NATIVE](https://github.com/HorizenLabs/zkVerify/tree/docs/new_verifier_tutorial_native) implementation. Other useful resources for reference and comparison are the already available verifier pallets.
+Two dedicated branches are available for reference: one for the [WASM](https://github.com/zkVerify/zkVerify/tree/docs/new_verifier_tutorial_wasm) implementation and one for the [NATIVE](https://github.com/zkVerify/zkVerify/tree/docs/new_verifier_tutorial_native) implementation. Other useful resources for reference and comparison are the already available verifier pallets.

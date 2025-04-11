@@ -24,6 +24,6 @@ After checking out the new source code version, build it with:
 cargo build -p mainchain --profile production
 ```
 
-After the building process has finished, stop your currently running node by pressing `ctrl+c` in the associated terminal and restart it with `target/production/zkv-node` using the same command-line arguments you previously used to start your node.
+After the building process has finished, stop your currently running node by pressing `ctrl+c` in the associated terminal and restart it with `target/production/zkv-relay` using the same command-line arguments you previously used to start your node.
 
 Check the new source code version is used by inspecting the log starting with `✌️  version` (it is located in the very first log lines).

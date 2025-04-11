@@ -105,7 +105,7 @@ Proceed by following the steps below:
   
   impl pallet_verifiers::Config<pallet_foo_verifier::Foo<Runtime>> for Runtime {
       type RuntimeEvent = RuntimeEvent;
-      type OnProofVerified = Poe;
+      type OnProofVerified = Aggregate;
       type WeightInfo =
           pallet_foo_verifier::FooWeight<weights::pallet_foo_verifier::ZKVWeight<Runtime>>;
   }

@@ -228,7 +228,7 @@ available extrinsics are:
 #### [submitProof](#submitproof)
 
 Submit a `Proof` and verify it against the verification key `Vk` and public inputs `Pubs`. If the proof is valid it'll be included
-in the next attestation. The extrinsic fails in the case of an invalid proof.
+in the next aggregation within the given domain. The extrinsic fails in the case of an invalid proof.
 
 **Parameters**
 
@@ -499,14 +499,6 @@ Try to remove or put on hold a domain from an invalid state.
 #### [MissedDeliveryOwnership](#misseddeliveryownership)
 
 If no delivery owner is provided
-
-### poe
-
-#### [TooEarlyForASmallTree](#tooearlyforasmalltree)
-
-Error thrown when a validator submits a block containing an attestation with too few proofs in the Merkle tree (the minimum and maximum number are configured in the runtime).
-
-Note: the "sudo" account can override this behavior and submit an attestation whose size is lower than the minimum threshold.
 
 ### Verifier Pallets
 

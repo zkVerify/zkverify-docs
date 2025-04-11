@@ -28,14 +28,14 @@ If you're uncertain about which node type suits your needs, consider starting wi
 
 The hardware requirements are listed in the table below:
 
-| Requirement        | RPC node           | Boot node          | Validator node     |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| Core               | 1                  | 1                  | 1                  |
-| Threads per core   | 2                  | 2                  | 2                  |
-| Clock speed (GHz)  | 2.2                | 2.2                | 2.2                |
-| Memory (GiB)       | 2                  | 4                  | 2                  |
-| Bandwidth (Gigabit)| Up to 5            | Up to 5            | Up to 5            |
-| Storage (GB)       | 50<br/>5 with pruning| 5                | 150                |
+| Requirement         | RPC node              | Boot node | Validator node |
+| ------------------- | --------------------- | --------- | -------------- |
+| Core                | 1                     | 1         | 1              |
+| Threads per core    | 2                     | 2         | 2              |
+| Clock speed (GHz)   | 2.2                   | 2.2       | 2.2            |
+| Memory (GiB)        | 2                     | 4         | 2              |
+| Bandwidth (Gigabit) | Up to 5               | Up to 5   | Up to 5        |
+| Storage (GB)        | 50<br/>5 with pruning | 5         | 150            |
 
 :::note
 These requirements are likely to change over time, and it's possible that nodes can run effectively on machines with lower specifications than what are laid out above.
@@ -48,6 +48,6 @@ There are two options to set up your node.  You can:
 - **Use Docker (recommended):** which provides a convenient and consistent environment for running your node.  In addition:
   - It simplifies deployment and ensures compatibility across different platforms.
   - It is highly recommended for ease of use and maintenance.
-- **Use binaries built from source:** which allows for more control over the installation process. You can build the binaries directly from the source code, available at [zkVerify](https://github.com/HorizenLabs/zkVerify).  In addition:
+- **Use binaries built from source:** which allows for more control over the installation process. You can build the binaries directly from the source code, available at [zkVerify](https://github.com/zkVerify/zkVerify).  In addition:
   - It requires manual compilation and configuration.
   - This is suitable for advanced users who want to customize their setup.
