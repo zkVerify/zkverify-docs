@@ -7,7 +7,7 @@ In this tutorial we'll go through the process of submitting and verifying a Risc
 ## Requirements
 
 - A Substrate compatible wallet with funds (tVFY) connected to the network.
-- A Risc0 proof, together with its corresponding public inputs and verification key; if you don't satisfy this requirement check out [this tutorial](../run-a-zkrollup/risc0_installation) on how to generate them.
+- A Risc0 proof, together with its corresponding public inputs and verification key; if you don't satisfy this requirement check out [this tutorial](../09-complete-tutorials/02-risc0.md) on how to generate them.
 
 ## Step 1
 

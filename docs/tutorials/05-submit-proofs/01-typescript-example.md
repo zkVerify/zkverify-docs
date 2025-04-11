@@ -1,5 +1,5 @@
 ---
-title: "TypeScript Example: zkverifyjs"
+title: "Submit Proofs with zkVerifyJS"
 ---
 
 import ZkverifyjsReadme from '@site/static/markdown/zkverifyjs.md';
