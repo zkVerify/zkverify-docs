@@ -1,5 +1,5 @@
 ---
-title: Publish Attestations
+title: Publish Aggregations
 ---
 
 Every time an aggregation is complete a [`AggregationComplete{domainId, aggregationId}`](../02-mainchain/05-mainchain_api.md#aggregationcomplete) event is emitted; the aggregation now is complete, no more proofs can be added to it and is moved in the publishing queue.

@@ -146,7 +146,7 @@ You are now ready to run your application!
 Open a terminal located at your working directory and type the command:
 
 ```bash
-cargo run --release -- "zkVerify is da best!"
+RISC0_DEV_MODE=0 cargo run --release -- "zkVerify is da best!"
 ```
 
 Replacing `zkVerify is da best!` with your desired input.
@@ -167,6 +167,8 @@ Finally you need to save the following items:
 
 They will be used respectively as proof, public inputs and verification key during the verification phase.
 
-Now that you have learnt how to set up and run your Risc0 zkVM application you can play a bit with the guest program code and modify the execution logic.
+Now that you have learned how to set up and run your Risc0 zkVM application you can play a bit with the guest program code and modify the execution logic.
 
-The next step is now submitting the proof on the zkVerify Mainchain; jump to [this tutorial](../05-submit-proofs/04-risc0_proof_submission.md) to see how you can achieve this!
+The next step is now submitting the proof to zkVerify:
+- Via [PolkadotJS](../05-submit-proofs/04-risc0_proof_submission.md)
+- Via [zkVerifyJS](../05-submit-proofs/01-typescript-example.md)

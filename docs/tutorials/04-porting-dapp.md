@@ -101,27 +101,7 @@ Please take a look at our [documentation](https://docs.zkverify.io/overview/smar
 
 - You have now verified your zk proof on-chain without executing the verification algorithm itself, and at the cost of a simple merkle path check! Congratulations!
 
-**The zkVerify smart contract is currently deployed on several chains:**
-
-Sepolia (Ethereum Testnet)
-
-[0x209f82A06172a8d96CF2c95aD8c42316E80695c1](https://sepolia.etherscan.io/address/0x209f82A06172a8d96CF2c95aD8c42316E80695c1)
-
-Curtis (Apechain Testnet)
-
-[0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5](https://curtis.explorer.caldera.xyz/address/0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5)
-
-Gobi (EON Testnet)
-
-[0x6A51D573Bf6fcFdb5D4E394645647304bb9FAb5B](https://gobi-explorer.horizenlabs.io/address/0x6A51D573Bf6fcFdb5D4E394645647304bb9FAb5B)
-
-Arbitrum Sepolia Testnet
-
-[0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5](https://sepolia.arbiscan.io/address/0x82941a739E74eBFaC72D0d0f8E81B1Dac2f586D5)
-
-EDU Chain Testnet
-
-[0x147AD899D1773f5De5e064C33088b58c7acb7acf](https://edu-chain-testnet.blockscout.com/address/0x147AD899D1773f5De5e064C33088b58c7acb7acf)
+**The zkVerify smart contract is currently deployed on several chains, check the list [here](../11-relevant_links.md)**
 
 ## Code Examples and References
 
@@ -138,15 +118,3 @@ EDU Chain Testnet
 - Checkout the [Tutorials-Submit Proofs](https://docs.zkverify.io/tutorials/submit-proofs/typescript-example) section of the zkVerify [docs](https://docs.zkverify.io/) for several examples on how to submit proof in Typescript, NextJS, PolkadotJS, PolkadotJS Frontend, etc.
 
 - For some examples related to the L1 logic, involving client configuration and smart contract modifications, you can refer, for instance, to our tutorials on zkRollups integration, for instance:
-
-- Polygon CDK:
-
-      *   [Tutorial](https://docs.zkverify.io/tutorials/run-a-zkrollup/polygon_cdk_installation)
-
-      *   [Repository](https://docs.zkverify.io/tutorials/run-a-zkrollup/polygon_cdk_installation)
-
-      *   New [_verifyBatches_](https://github.com/HorizenLabs/cdk-validium-contracts/blob/main/contracts/CDKValidium.sol#L768) method after modifications to interact with zkVerify contract
-
-      *   Modifications to [cdk-validium-node](https://github.com/HorizenLabs/cdk-validium-node/blob/main-hl/aggregator/aggregator.go) to send proofs to zkVerify (instead of Ethereum), parse the Merkle Path, waiting for attestation to be published on Ethereum, invoking the smart contract for verification via zkVerify smart contract.
-
-      *   [Test showing the interaction](https://github.com/HorizenLabs/cdk-validium-contracts/blob/main/test/contracts/newHorizenSupernets2.test.js)
