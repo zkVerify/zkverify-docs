@@ -27,7 +27,6 @@ To put the domain on `Hold` the owner should use the [`holdDomain(domainId)`](..
 
 When a domain is in `Removable` state the [`unregisterDomain(domainId)`](../02-mainchain/05-mainchain_api.md#unregisterdomain) can be called by the domain's owner; all the owner's bonded funds are unlocked and a [`DomainStateChanged{id, Removed}`](../02-mainchain/05-mainchain_api.md#domainstatechanged) event is emitted.
 
-
 ## System Domains
 
 We provide some `System Domains`, e.g. domains that are pre-registered and configured according to different rules.
@@ -41,12 +40,12 @@ For each of these domains, we are providing the following guarantees:
 
 For the addresses of the contracts we have deployed on all the destination chains, please refer to the appropriate [section](../smart_contract/smart_contract_overview) of the docs.
 
-
-| Domain ID | Chain                     | Mechanism    |
-| --------- | ---------------- | -----------  |
-| 0         | Ethereum Sepolia         | Bot         |
-| 1         | Ethereum Sepolia         | Hyperbridge |
-| 2         | Base Sepolia                | Bot          |
-| 3         | Optimism Sepolia         | Bot         |
-| 4         | Arbitrum Sepolia           | Bot         |
-| 5         | Arbitrum Sepolia           | Hyperbridge |
+| Domain ID | Chain             | Mechanism   |
+| --------- | ----------------- | ----------- |
+| 0         | Ethereum Sepolia  | Bot         |
+| 1         | Ethereum Sepolia  | Hyperbridge |
+| 2         | Base Sepolia      | Bot         |
+| 3         | Optimism Sepolia  | Bot         |
+| 4         | Arbitrum Sepolia  | Bot         |
+| 5         | Arbitrum Sepolia  | Hyperbridge |
+| 56        | EDU Chain Testnet | Bot         |
