@@ -72,7 +72,11 @@ At the end of this step you should have the three files `proof_zkv.json`, `verif
 3. Choose the `settlementGroth16Pallet`, and the `submitProof` extrinsic.
 4. Inside the field `vkOrHash` select `Vk`
 5. Fill in all the required fields by copy-pasting them from the json files obtained in the previous step. All the fields should be pasted without quotes. For the `gammaAbcG1` field and the `input` field you may need to click on the `Add Item` button a certain number of times, depending on the number of corresponding entries in your json files.
-6. Click on the `submitTransaction` button.
+6. Enter the Domain ID corresponding to the domain you want to aggregate the proof for. Think of the Domain ID as the target chain for aggregation. You can find a list of available domains [here](../../overview/04-proof-aggregation/05-domain-management.md).
+
+7. Click on the `submitTransaction` button.
+
+![Groth16 Proof](./img/groth16-proof.png)
 
 ## Step 4
 
