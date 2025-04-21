@@ -169,6 +169,4 @@ They will be used respectively as proof, public inputs and verification key duri
 
 Now that you have learned how to set up and run your Risc0 zkVM application you can play a bit with the guest program code and modify the execution logic.
 
-The next step is now submitting the proof to zkVerify:
-- Via [PolkadotJS](../05-submit-proofs/04-risc0_proof_submission.md)
-- Via [zkVerifyJS](../05-submit-proofs/01-typescript-example.md)
+You can use [zkVerifyJS](./04-zkverify-js.md) to submit the proof to zkVerify. After getting proof receipts from our testnet, you can verify it onchain by calling the zkVerify contract. Checkout this [tutorial](./05-smart-contract.md) to verify proof receipts onchain.
