@@ -46,6 +46,16 @@ noir-cli verify --key <zkv_vk path> --proof <zkv_proof path> --pubs <zkv_pubs pa
 
 ## Submitting the Proof
 
-Submit the proof by using `polkadot.js.org` frontend like on the image below:
+1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
+2. Select your account (you must have some tVFY).
+3. Choose the `settlementUltraplonkPallet`, and the `submitProof` extrinsic.
+4. Inside the field `vkOrHash` select `Vk`
+5. Fill in all the required fields by copy-pasting them from the hex files obtained in the previous step. You will need to fill the Vk, proof and public inputs. If you have more than one public inputs, you can click on the `Add Item` option to add more public inputs.
+6. Enter the Domain ID corresponding to the domain you want to aggregate the proof for. Think of the Domain ID as the target chain for aggregation. You can find a list of available domains [here](../../overview/04-proof-aggregation/05-domain-management.md).
+
+7. Click on the `submitTransaction` button.
+
 
 ![Submit Proof](./img/ultraplonk-proof.png)
+
+Check your transaction on the [zkVerify Block Explorer](https://zkverify-testnet.subscan.io/)!

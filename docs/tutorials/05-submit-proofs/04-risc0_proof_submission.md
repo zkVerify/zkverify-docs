@@ -19,9 +19,10 @@ In order to do this you can use [PolkadotJs](https://polkadot.js.org/apps/?rpc=w
 - Inside the field `vkOrHash` select `Vk` and paste the verification key (i.e. the image id of the code whose execution you want to verify), making sure to prepend it with hexadecimal prefix `0x`.
 - Inside the field `proof` choose the risc0 version used to generate the proof and load the binary file or paste the proof bytes, making sure to prepend it with hexadecimal prefix `0x`.
 - Inside the field `pubs` paste the public inputs, making sure to prepend it with hexadecimal prefix `0x`.
+- Enter the Domain ID corresponding to the domain you want to aggregate the proof for. Think of the Domain ID as the target chain for aggregation. You can find a list of available domains [here](../../overview/04-proof-aggregation/05-domain-management.md).
 - Click on `submitTransaction`.
 
-![alt_text](./img/risc0_submit_proof.png)
+![alt_text](./img/risc0-proof.png)
 
 ## Step 2
 

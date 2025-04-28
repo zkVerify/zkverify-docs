@@ -5,34 +5,28 @@ title: Smart Contract Verification
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-In this tutorial we will be developing a smart contract which verifies the attestation proof by calling the zkVerify contract. We will be using Remix toolkit to develop the smart contract which will have the interface to verify our attestations. Also we have a [foundry template](https://github.com/zkVerify/zkverify-evm-dapp-example) you can check out.
+In this tutorial we will be developing a smart contract which verifies the aggregation proof by calling the zkVerify contract. We will be using Remix toolkit to develop the smart contract which will have the interface to verify our aggregations. Also we have a [foundry template](https://github.com/zkVerify/zkverify-evm-dapp-example) you can check out.
 
-First we need to create an interface to interact with zkVerify smart contracts. Create a new file called as IZKVerify.sol and use the following code snippet to create the interface :
+First we need to create an interface to interact with zkVerify smart contracts. Create a new file called as ``IVerifyProofAggregation.sol`` and use the following code snippet to create the interface :
 
 ```solidity
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+// SPDX-License-Identifier: Apache-2.0
 
-interface IZkVerifyAttestation {
+pragma solidity 0.8.20;
 
-    function submitAttestation(
-        uint256 _attestationId,
-        bytes32 _proofsAttestation) external;
-
-    function submitAttestationBatch(
-        uint256[] calldata _attestationIds,
-        bytes32[] calldata _proofsAttestation) external;
-
-    function verifyProofAttestation(
-        uint256 _attestationId,
+interface IVerifyProofAggregation {
+    function verifyProofAggregation(
+        uint256 _domainId,
+        uint256 _aggregationId,
         bytes32 _leaf,
         bytes32[] calldata _merklePath,
         uint256 _leafCount,
-        uint256 _index) external returns (bool);
+        uint256 _index
+    ) external view returns (bool);
 }
 ```
 
-After this, we are ready to create our main contract which will check attestations and can perform any function as per the business logic. To get started first we declare our proving system which can be different for each proof type, this will be used while generating the leaf digest to verify the attestations.
+After this, we are ready to create our main contract which will verify aggregation proofs and can perform any function as per the business logic. To get started first we declare our proving system which can be different for each proof type, this will be used while generating the leaf digest to verify the aggregation.
 
 <Tabs groupId="proving-id">
 <TabItem value="circom" label="Circom">
@@ -53,7 +47,28 @@ bytes32 public constant PROVING_SYSTEM_ID = keccak256(abi.encodePacked("ultraplo
 </TabItem>
 </Tabs>
 
-We will also need to store the some details like zkVerifier contract address, vkey, and version hash. We will initialize these values with the constructor.
+Next we would need to declare the prover version, we want to verify the aggregation for. This is useful as we support multiple prover version for different proof types. 
+<Tabs>
+<TabItem value="circom" label="Circom">
+```solidity
+bytes32 public constant VERSION_HASH = sha256(abi.encodePacked(""));
+```
+
+</TabItem>
+<TabItem value="r0" label="Risc Zero">
+```solidity
+bytes32 public constant VERSION_HASH = sha256(abi.encodePacked("risc0:v1.1"));
+```
+</TabItem>
+<TabItem value="noir" label="Noir">
+```solidity
+bytes32 public constant VERSION_HASH = sha256(abi.encodePacked(""));
+```
+</TabItem>
+</Tabs>
+
+
+We will also need to store the some details like zkVerifier contract address and vkey. We will initialize these values with the constructor.
 
 <Tabs groupId="constructor">
 <TabItem value="circom" label="Circom">
@@ -78,13 +93,10 @@ We will also need to store the some details like zkVerifier contract address, vk
     // vkey for our circuit
     bytes32 public vkey;
 
-    // version hash
-    bytes32 public vhash;
 
-    constructor(address _zkVerify, bytes32 _vkey, bytes32 _vhash) {
+    constructor(address _zkVerify, bytes32 _vkey) {
         zkVerify = _zkVerify;
         vkey = _vkey;
-        vhash = _vhash;
     }
 ```
 </TabItem>
@@ -104,15 +116,16 @@ We will also need to store the some details like zkVerifier contract address, vk
 </TabItem>
 </Tabs>
 
-Now we can move to the verification part, where can call the zkVerify’s contract to check if the attestations are really correct. We need to get the following to verify the proof :- 
+Now we can move to the verification part, where can call the zkVerify’s contract to check if the aggregation proof is really correct. We need to get the following to verify the proof :- 
 
-- Attestation ID
+- Aggregation ID
+- Domain ID
 - Public Inputs
 - Merkle Proof
 - Number of Leaves
 - Leaf Index
 
-We can get all the above data except the public inputs from the attestation.json file, we have generated earlier. User can provide the public inputs to the verify function which we can use to create the leaf digest. We need to pass the public inputs hash we got while generating proof(You can find this in proof.json file). To create the final leaf we need the hash of proving system, vkey, version hash and the combined hash of public inputs.
+We can get all the above data except the public inputs from the aggregation.json file, we have generated earlier. User can provide the public inputs to the verify function which we can use to create the leaf digest. We need to pass the public inputs hash we got while generating proof(You can find this in proof.json file). To create the final leaf we need the hash of proving system, vkey, version hash and the combined hash of public inputs.
 
 <Tabs groupId="leaf-digest">
 <TabItem value="circom" label="Circom">
@@ -158,23 +171,17 @@ function _changeEndianess(uint256 input) internal pure returns (uint256 v) {
     }
 ```
 ```solidity
-bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, keccak256(abi.encodePacked(_changeEndianess(_hash)))));
+bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_changeEndianess(_hash)))));
 ```
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
-```bash
-roof::V1_0: sha256("risc0:v1.0")="0xdf801e3397d2a8fbb77c2fa30c7f7806ee8a60de44cb536108e7ef272618e2da"
-Proof::V1_1: sha256("risc0:v1.1")="0x2a06d398245e645477a795d1b707344669459840d154e17fde4df2b40eea5558"
-Proof::V1_2: sha256("risc0:v1.2")="0x5f39e7751602fc8dbc1055078b61e2704565e3271312744119505ab26605a942"
-```
-
 ```solidity
-bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, version_hash, keccak256(abi.encodePacked(_hash))));
+bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_hash))));
 ```
 </TabItem>
 <TabItem value="noir" label="Noir">
 ```solidity
-bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, keccak256(abi.encodePacked(_input))));
+bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_input))));
 ```
 </TabItem>
 </Tabs>
@@ -187,16 +194,18 @@ After generating the leaf digest, we can call the zkVerify contracts to verify o
 ```solidity
 function checkHash(
     uint256 _hash,
-    uint256 _attestationId,
+    uint256 _aggregationId,
+    uint256 _domainId,
     bytes32[] calldata _merklePath,
     uint256 _leafCount,
     uint256 _index
 ) public {
 
-    bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, keccak256(abi.encodePacked(_changeEndianess(_hash)))));
+    bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_changeEndianess(_hash)))));
 
-    require(IZkVerifyAttestation(zkVerify).verifyProofAttestation(
-        _attestationId,
+    require(IVerifyProofAggregation(zkVerify).verifyProofAggregation(
+        _domainId,
+        _aggregationId,
         leaf,
         _merklePath,
         _leafCount,
@@ -209,16 +218,18 @@ function checkHash(
 ```solidity
 function checkHash(
     bytes memory _hash,
-    uint256 _attestationId,
+    uint256 _aggregationId,
+    uint256 _domainId,
     bytes32[] calldata _merklePath,
     uint256 _leafCount,
     uint256 _index
 ) public {
 
-    bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, vhash, keccak256(abi.encodePacked(_hash))));
+    bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_hash))));
 
-    require(IZkVerifyAttestation(zkVerify).verifyProofAttestation(
-        _attestationId,
+    require(IVerifyProofAggregation(zkVerify).verifyProofAggregation(
+        _domainId,
+        _aggregationId,
         leaf,
         _merklePath,
         _leafCount,
@@ -231,16 +242,18 @@ function checkHash(
 ```solidity
 function checkHash(
     bytes32 _hash,
-    uint256 _attestationId,
+    uint256 _aggregationId,
+    uint256 _domainId,
     bytes32[] calldata _merklePath,
     uint256 _leafCount,
     uint256 _index
 ) public {
 
-    bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, keccak256(abi.encodePacked(_hash))));
+    bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_hash))));
 
-    require(IZkVerifyAttestation(zkVerify).verifyProofAttestation(
-        _attestationId,
+    require(IVerifyProofAggregation(zkVerify).verifyProofAggregation(
+        _domainId,
+        _aggregationId,
         leaf,
         _merklePath,
         _leafCount,
