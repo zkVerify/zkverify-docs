@@ -77,6 +77,12 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
+          sidebarId: 'archSidebar',
+          position: 'left',
+          label: 'Architecture',
+        },
+        {
+          type: 'docSidebar',
           sidebarId: 'tutSidebar',
           position: 'left',
           label: 'Tutorials',

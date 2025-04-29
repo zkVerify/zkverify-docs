@@ -11,7 +11,7 @@ Anyone can create a new domain and become the owner. The owner should hold some 
 
 ## Create a new domain
 
-To create a new domain the owner should call [`registerDomain(aggregationSize, queueSize)`](../02-mainchain/05-mainchain_api.md#registerdomain) extrisic and define both aggregation size and queue size.
+To create a new domain the owner should call [`registerDomain(aggregationSize, queueSize)`](../02-mainchain/04-mainchain_api.md#registerdomain) extrisic and define both aggregation size and queue size.
 
 The aggregation size should be any unsigned integer smaller than 128, but because it represents a Merkle tree size is better to use a power of two. From the aggregation size a proof submitter that would use this domain can estimate what will be the cost of the membership proof in the aggregation receipt in the destination chain where he wants to use his proof: a bigger size means a bigger cost, but also a lower cost to send the proof on the destination chain since the bridging cost will be amortized by more proofs in the same aggregation.
 
@@ -23,9 +23,9 @@ If the owner has not enough funds to cover for the storage cost needed to mainta
 
 In order to remove a domain the owner should first put it on hold in and then unregister it. When a domain is in `Hold` state it doesn't accept any proof, and it remains in this state till there are some pending aggregations. When there aren't anymore aggregations that should be published in this domain, the domain will change its state in `Removable`.
 
-To put the domain on `Hold` the owner should use the [`holdDomain(domainId)`](../02-mainchain/05-mainchain_api.md#holddomain) extrinsic that emits a [`DomainStateChanged{id, state}`](../02-mainchain/05-mainchain_api.md#domainstatechanged) event, putting the state on `Hold` if there are aggregations that are not published yet, or `Removable` otherwise. If the domain is in `Hold` state, every time that a new aggregation in this domain is published via the `aggregate` extrinsic, the state can change and a new [`DomainStateChanged{id, state}`](../02-mainchain/05-mainchain_api.md#domainstatechanged) can be emitted with the `Removable` state.
+To put the domain on `Hold` the owner should use the [`holdDomain(domainId)`](../02-mainchain/04-mainchain_api.md#holddomain) extrinsic that emits a [`DomainStateChanged{id, state}`](../02-mainchain/04-mainchain_api.md#domainstatechanged) event, putting the state on `Hold` if there are aggregations that are not published yet, or `Removable` otherwise. If the domain is in `Hold` state, every time that a new aggregation in this domain is published via the `aggregate` extrinsic, the state can change and a new [`DomainStateChanged{id, state}`](../02-mainchain/04-mainchain_api.md#domainstatechanged) can be emitted with the `Removable` state.
 
-When a domain is in `Removable` state the [`unregisterDomain(domainId)`](../02-mainchain/05-mainchain_api.md#unregisterdomain) can be called by the domain's owner; all the owner's bonded funds are unlocked and a [`DomainStateChanged{id, Removed}`](../02-mainchain/05-mainchain_api.md#domainstatechanged) event is emitted.
+When a domain is in `Removable` state the [`unregisterDomain(domainId)`](../02-mainchain/04-mainchain_api.md#unregisterdomain) can be called by the domain's owner; all the owner's bonded funds are unlocked and a [`DomainStateChanged{id, Removed}`](../02-mainchain/04-mainchain_api.md#domainstatechanged) event is emitted.
 
 ## System Domains
 

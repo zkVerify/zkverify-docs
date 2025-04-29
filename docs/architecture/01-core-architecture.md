@@ -1,4 +1,4 @@
-# zkVerify Architecture
+# Core Architecture
 
 ![alt_text](./img/zkVerify-workflow.jpg)
 

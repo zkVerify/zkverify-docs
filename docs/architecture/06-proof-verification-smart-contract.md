@@ -1,5 +1,5 @@
 ---
-title: Functionality
+title: Proof Verification Smart Contract
 ---
 
 # Functionality

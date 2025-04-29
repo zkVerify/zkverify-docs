@@ -1,6 +1,8 @@
 ---
-title: Key Considerations
+title: Overview
 ---
+
+![alt_text](../img/zkVerify-workflow.jpg)
 
 # Foundational Framework
 zkVerify embraces the “modular blockchain” paradigm, which emphasizes the design of decentralized systems with interchangeable components. In this context, we have carefully chosen Substrate as the foundation for our software development.
