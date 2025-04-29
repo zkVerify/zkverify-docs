@@ -466,7 +466,7 @@ exstrinsic calls of the same verifier pallet
 
 ##### Fields
 
-- `statement: H256` The [statement](../03-proof_submission_interface/02-proof_submitter_flow.md#proof-submitter-flow)
+- `statement: H256` The [statement](../03-proof-submission-interface.md#proof-submitter-flow)
   hash of the verified proof
 
 ## [Errors](#errors)
