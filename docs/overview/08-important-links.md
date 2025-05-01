@@ -1,0 +1,14 @@
+---
+title: Resources
+---
+
+| Product                                                     | Link                                                                                                                                                                                                             |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Github                                                      | https://github.com/zkVerify/zkVerify                                                                                                                                                                             |
+| zkVerifyJS                                                  | https://www.npmjs.com/package/zkverifyjs                                                                                                                                                                         |
+| zkVerify Block Explorer                                     | https://zkverify-testnet.subscan.io/                                                                                                                                                                             |
+| Monitoring                                                  | https://telemetry.zkverify.io/                                                                                                                                                                                   |
+| Documentation                                               | https://docs.zkverify.io                                                                                                                                                                                         |
+| RPC Gateway                                                 | https://volta-rpc.zkverify.io, wss://volta-rpc.zkverify.io                                                                                                                                                       |
+| zkVerify Proof Explorer                                     | https://proofs.zkverify.io/                                                                                                                                                                                      |
+| Proof Submission via PolkadotJS                             | [polkadotjs](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io%2Fwss#/explorer)                                                                                                              |
