@@ -360,7 +360,7 @@ If you happen to know a bit of Rust and SQL, you can take a look into `src/bin/g
 
 </Tabs>
 
-After generating proofs, there are multiple ways in which you can verify it on [zkVerify](www.zkverify.io). The recommended way to verify proofs on zkVerify is by using the [zkVerifyJS package](./05-zkverify-js.md). You can verify proofs using anyone of the following :-
+After generating proofs, there are multiple ways in which you can verify it on [zkVerify](https://zkverify.io). The recommended way to verify proofs on zkVerify is by using the [zkVerifyJS package](./05-zkverify-js.md). You can verify proofs using anyone of the following :-
 1. Using [zkVerifyJS package](./05-zkverify-js.md)
 2. Using [Polkadot.js frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
 3. Using the [subxt](https://github.com/paritytech/subxt) rust crate
