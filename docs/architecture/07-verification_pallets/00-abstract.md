@@ -24,7 +24,7 @@ already a hash: instead of taking the bytes and hash them you can just forward t
 - `fn verifier_version_hash()` a fingerprint uniquely identifying verifier versions (for versioned verifiers). For non-versioned verifiers, a default implementation is provided with a fixed digest.
 
 Beside the verifier logic and serialization/deserialization, the `Verifier` developer should take care also of how the
-statement digests will be computed. Given a valid proof, as mentioned in [Submitter Flow](../03-proof_submission_interface/02-proof_submitter_flow.md#proof-submitter-flow), ZkVerify generates a statement digest to identify uniquely the given proof
+statement digests will be computed. Given a valid proof, as mentioned in [Submitter Flow](../03-proof-submission-interface.md), ZkVerify generates a statement digest to identify uniquely the given proof
 and maybe a smart contract should be able to compute this digest too on chain and so compute the public inputs bytes and hash.
 This is why the `Verifier` trait gives the option to the developer to define his preferred encoding with `pubs_bytes()` to eventually
 simplify the on-chain work. Also, for the verification key the developer can define how to encode it with the `vk_bytes()` but in

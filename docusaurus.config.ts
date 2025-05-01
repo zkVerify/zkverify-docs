@@ -91,14 +91,14 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'incentivizedTestnetSidebar',
           position: 'left',
-          label: 'Incentivized Testnet',
+          label: '🎖️ Incentivized Testnet',
         },
         {
           type: 'doc',
-          docId: 'relevant_links',
-          to: 'docs/relevant_links.md',
+          docId: 'faq',
+          to: 'docs/faq.md',
           position: 'left',
-          label: 'zkVerify Hub',
+          label: '🤔 FAQ',
         },
         {
           href: 'https://github.com/zkVerify/zkVerify-docs',
