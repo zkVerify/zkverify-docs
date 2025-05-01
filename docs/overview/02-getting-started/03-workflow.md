@@ -14,7 +14,7 @@ The figure below demonstrates one possible integration of zkVerify into a typica
 
 2. **Verify and Store Proof:** The proof is submitted to zkVerify via an RPC call. The proof then enters the mempool, gets verified by the receiving node, and is propagated to the rest of the network in a proposed block. As a part of consensus, it is verified by the rest of the nodes as they receive the proposed block. After consensus is reached, the block is added to the blockchain and stored.
 
-3. **Relay Proof Attestation:** After a sufficient number of proofs are verified (or after a pre-specified amount of time has lapsed), they are aggregated by the domain ID. The attestation data structure is a digitally-signed message that contains the root of a Merkle tree that has proofs as leaves. Although it is not a ZK proof, the attestation is a cryptographic proof that allows for smart contract clients to verify it on-chain via a Merkle proof. It comes in the form of an event contained in the same block the proof has been included into.
+3. **Relay Proof Aggregation:** After a sufficient number of proofs are verified (or after a pre-specified amount of time has lapsed), they are aggregated by the domain ID. The aggregation data structure is a digitally-signed message that contains the root of a Merkle tree that has proofs as leaves. Although it is not a ZK proof, the aggregation is a cryptographic proof that allows for smart contract clients to verify it on-chain via a Merkle proof. It comes in the form of an event contained in the same block the proof has been included into.
 
   ![](./img/zkverify-merkle-tree.png)
 

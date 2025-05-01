@@ -73,25 +73,19 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'docsSidebar',
           position: 'left',
-          label: 'Overview',
+          label: '🛠️ Build',
         },
         {
           type: 'docSidebar',
           sidebarId: 'archSidebar',
           position: 'left',
-          label: 'Architecture',
+          label: '📖 Learn',
         },
         {
           type: 'docSidebar',
           sidebarId: 'nodeSidebar',
           position: 'left',
-          label: 'Node Operators',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutSidebar',
-          position: 'left',
-          label: 'Tutorials',
+          label: '⚙️ Operators',
         },
         {
           type: 'docSidebar',

@@ -1,5 +1,5 @@
 ---
-title: "Submit Proofs with zkVerifyJS"
+title: "zkverifyJS Reference"
 ---
 
 import ZkverifyjsReadme from '@site/static/markdown/zkverifyjs.md';
