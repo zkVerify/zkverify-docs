@@ -38,7 +38,7 @@ For each of these domains, we are providing the following guarantees:
 
 [Please find the list below](#listdomains)
 
-For the addresses of the contracts we have deployed on all the destination chains, please refer to the appropriate [section](../smart_contract/smart_contract_overview) of the docs.
+For the addresses of the contracts we have deployed on all the destination chains, please refer to the appropriate [section](../../overview/06-contract-addresses.md) of the docs.
 
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |

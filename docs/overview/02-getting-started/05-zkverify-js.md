@@ -120,7 +120,7 @@ Once registered you can find a new file called ``vkey.json`` with your registere
 Next we will send a proof verification request to the Volta testnet, with all the details like which proving schema, proof, public signals and the key. We will also need to specify the ``domainId`` for which we want this proof to be aggregated. You can check more about Domain and Aggregation [here](../../architecture/04-proof-aggregation/01-overview.md). For this tutorial, choose the Domain ID based on the target chain where you want to verify the attestations [List of existing domains](../../architecture/04-proof-aggregation/05-domain-management.md). We will also create an event listener, to listen to the ``NewAggregationReceipt`` event whenever our proof is aggregated :- 
 
 <Tabs groupId="proof-verification">
-<TabItem value="circom" label="Circom">
+<TabItem value="groth16" label="Groth16">
 ```js
 session.subscribe([
     {event: ZkVerifyEvents.NewAggregationReceipt, callback: async(eventData: any) => {

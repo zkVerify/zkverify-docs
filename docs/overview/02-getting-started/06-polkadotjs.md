@@ -9,7 +9,7 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 
 <Tabs groupId="verify-polkadotjs">
 
-<TabItem value="circom" label="Circom">
+<TabItem value="groth16" label="Groth16">
 
 1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
 2. Select your account (you must have some tVFY).

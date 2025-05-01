@@ -9,7 +9,7 @@ This guide will walk you through the process of generating compatible proofs whi
 
 <Tabs groupId="generate">
 
-<TabItem value="circom" label="Circom">
+<TabItem value="groth16" label="Groth16">
 We will be implementing a simple hash verification circuit with Circom and will use zkVerify to verify these proofs. The circuit we will be building is very simple where it takes a private input and a public input and just checks if the public input is the same as the Poseidon hash of the private input. 
 
 ## Steps Involved
@@ -87,7 +87,7 @@ noirup
 curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
 ```
 
-4. Install BaBarretenberg's Backend by running bbup command:
+4. Install Barretenberg's Backend by running bbup command:
 ```bash
 bbup
 ```
