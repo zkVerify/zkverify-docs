@@ -11,12 +11,6 @@ In this tutorial, we will use the quickstart Noir Lang guide to generate an Ultr
 - Verifying our proofs on zkVerify and getting proof receipts
 - Verifying the proof receipts on Ethereum
 
-:::warning
-Starting from [bbup v.0.87.0](https://github.com/AztecProtocol/aztec-packages/pull/13800) Ultraplonk has been officially deprecated.
-To keep submitting Noir proofs via zkVerify, please switch to a previous bbup version.
-You can do this via the command:
-`bbup -v <version>`
-:::
 
 To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements :
 
@@ -25,22 +19,29 @@ To start this tutorial, first we need to install the Noir toolkit using noirup t
 curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
 ```
 
-1. Running noirup will install the latest version of Noir Toolkit
+2. Running noirup will install the latest version of Noir Toolkit
 ```bash
 noirup
 ```
 
-1. Install bbup by running the following command:
+3. Install bbup by running the following command:
 ```bash
 curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
 ```
 
-1. Install BaBarretenberg's Backend by running bbup command:
+:::warning
+Starting from [bbup v.0.87.0](https://github.com/AztecProtocol/aztec-packages/pull/13800) Ultraplonk has been officially deprecated.
+To keep submitting Noir proofs via zkVerify, please switch to a previous bbup version.
+You can do this via the command:
+`bbup -v <version>`
+:::
+
+4. Install BaBarretenberg's Backend by running bbup command:
 ```bash
 bbup
 ```
 
-1. Create hello_world noir project using the following command:
+5. Create hello_world noir project using the following command:
 ```bash
 nargo new hello_world
 ```
