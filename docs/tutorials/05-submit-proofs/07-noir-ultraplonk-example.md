@@ -6,6 +6,13 @@ In this tutorial, we will walk through the process of submitting a Ultraplonk pr
 
 > **Note:** Recursive proofs are not supported.
 
+:::warning
+Starting from [bbup v.0.87.0](https://github.com/AztecProtocol/aztec-packages/pull/13800) Ultraplonk has been officially deprecated.
+To keep submitting Noir proofs via zkVerify, please switch to a previous bbup version.
+You can do this via the command:
+`bbup -v <version>`
+:::
+
 ## Requirements
 
 Before starting, ensure you have the [`noir-cli`](https://github.com/zkVerify/ultraplonk_verifier/tree/main/src/bin/noir_cli) tool installed.
