@@ -2,6 +2,7 @@
 
 | Proof Type           | Supported Versions / Curves | Limits                                                                                                 |
 | -------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Fflonk**           | Bn128                       | **Public Inputs:** 1                                                                                                                |
 | **Groth16**          | Bls12-381, Bn128            | **Public Inputs:** 16                                                                                  |
 | **Noir UltraPlonk**  | >= v0.31.0, bbup \<\= v0.76.4                  | **Public Inputs:** 32                                                                                  |
 | **Risc0**            | \<\= v1.2.x                 | **Max Public Inputs Size:** 2052 bytes (2048 bytes user input), **Format:** cbor                       |
