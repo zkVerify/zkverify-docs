@@ -86,10 +86,16 @@ noirup
 ```bash
 curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
 ```
+:::warning
+Starting from [bbup v.0.87.0](https://github.com/AztecProtocol/aztec-packages/pull/13800) Ultraplonk has been officially deprecated.
+To keep submitting Noir proofs via zkVerify, please switch to a previous bbup version(recommended 0.76.4).
+You can do this via the command:
+`bbup -v <version>`
+:::
 
 4. Install Barretenberg's Backend by running bbup command:
 ```bash
-bbup
+bbup -v <version>
 ```
 
 5. Create hello_world noir project using the following command:
