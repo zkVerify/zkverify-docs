@@ -19,7 +19,7 @@ This call is used to initialize a cross-chain asset transfer. Any provided asset
 The extrinsic can be called by any account and expects the following input params
 
 - `assetId`: the local asset Id registered on Hyperbridge and that should be transferred, for the native token (tVFY) this is 0
-- `destination`: Destination state machine that should receive the funds, defined by its chain type and chain id. For now select `Evm` 
+- `destination`: Destination state machine that should receive the funds, defined by its chain type and chain id. For now select `Evm` and in the subsection of `Evm:u32` enter `11155111` as we will be bridging to Ethereum Sepolia.
 - `recipient`: The beneficiary account for the funds on the destination. (For EVM chains, the address should be left padded with zeros to fit into the required 32 bytes.)
 - `amount`: The amount that should be transferred (Note: decimals must be specified, tVFY token has 18 decimals)
 - `timeout`:The request timeout, this is the time after which the request cannot be delivered to the destination. It should represent the cumulative time for finalization on the source chain and hyperbridge with some additional buffer. If 0, it means it never times out.
