@@ -22,12 +22,7 @@ npm i @zk-email/sdk zkverifyjs
 After installing all the required packages, we can create ``index.js`` file. We can start by importing all the required packages.
 
 ```js
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
-// CommonJS import
-const { zkVerifySession, Library, CurveType, ZkVerifyEvents } = require("zkverifyjs");
-
+import { zkVerifySession, Library, CurveType, ZkVerifyEvents } from "zkverifyjs";
 import zkeSDK, { Proof } from "@zk-email/sdk";
 import fs from "fs/promises";
 ```
