@@ -1,5 +1,5 @@
 ---
-title: "zkverifyJS Reference"
+title: "zkVerifyJS Reference"
 ---
 
 import ZkverifyjsReadme from '@site/static/markdown/zkverifyjs.md';
