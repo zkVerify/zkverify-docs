@@ -126,26 +126,7 @@ bb write_vk -b ./target/hello_world.json -o ./target/vk
 
 ```
 
-Now, we have sucessfully created our required proof and vk files. Now we will use zkVerify's ```noir-cli``` tool to convert these files to required hex formats. Let's start by downloading our ```noir-cli``` toolkit by cloning our github repository.
-```bash
-git clone https://github.com/zkVerify/ultraplonk_verifier.git
-```
-
-After downloading, we need to build the toolkit so make sure you have rust installed. To build the toolkit run the following command:
-```bash
-cargo install --features bins --path .
-```
-
-Now run the following commands to convert the generated files to required hex formats:
-```bash
-# noir-cli proof-data -n <num_public_inputs> --input-proof <bb_proof path> --output-proof <zkv_proof path> --output-pubs <zkv_pubs path>
-noir-cli proof-data -n 1 --input-proof ./target/proof --output-proof proof.hex --output-pubs pub.hex
-
-# noir-cli key --input <bb_vk path> --output <zkv_vk path>
-noir-cli key --input ./target/vk --output vk.hex
-```
-
-After running all these commands, you would have generated three files namely proof.hex, pub.hex and vk.hex. We will be using all these files while submitting proof for verification.
+After running these commands, you will be having two files naemly ``proof`` and ``vk`` inside the ``target`` folder which will be used for verification.
 </TabItem>
 
 <TabItem value="risc-zero" label="Risc Zero">
