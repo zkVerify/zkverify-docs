@@ -126,7 +126,7 @@ bb write_vk -b ./target/hello_world.json -o ./target/vk
 
 ```
 
-After running these commands, you will be having two files naemly ``proof`` and ``vk`` inside the ``target`` folder which will be used for verification.
+After running these commands, you will be having two files namely ``proof`` and ``vk`` inside the ``target`` folder which will be used for verification.
 </TabItem>
 
 <TabItem value="risc-zero" label="Risc Zero">
