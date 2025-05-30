@@ -74,9 +74,9 @@ noir-cli key --input ./target/vk --output vk.hex
 After running all these commands, you would have generated three files namely proof.hex, pub.hex and vk.hex. We will be using all these files while submitting proof for verification. Come back to our ``index.js`` file and paste the following code snippet :- 
 
 ```js
-const vkhex = fs.readFileSync("../target/vk.hex");
-const proofhex = fs.readFileSync("../target/proof.hex");
-const pubhex = fs.readFileSync("../target/pub.hex");
+const vkhex = fs.readFileSync("../hello_world/vk.hex").toString();
+const proofhex = fs.readFileSync("../hello_world/proof.hex").toString();
+const pubhex = fs.readFileSync("../hello_world/pub.hex").toString();
 ```
 </TabItem>
 </Tabs>
