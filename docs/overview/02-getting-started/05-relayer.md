@@ -192,13 +192,18 @@ Job finalized successfully
 
 ## Job Status
 
-In this example, we demonstrated how to wait for "Finalized" status for our proof verification. There are multiple proof status you can wait for. You can check all the status available following :- 
+In this example, we demonstrated how to wait for "Finalized" status for our proof verification. There are multiple proof status you can wait for. You can check all the status available following : 
 
 - Queued - Proof accepted and waiting for processing
 - Valid - Proof passed optimistic verification
 - Submitted - Proof submitted to blockchain/mempool
 - IncludedInBlock - Proof transaction included in a block
 - Finalized - Proof transaction finalized on-chain
+
+:::note
+All the status mentioned below, would not be generated if chainId is not provided in the submit proof request
+:::
+
 - AggregationPending - Proof ready for aggregation
 - Aggregated - Proof successfully aggregated and published
 - AggregationPublished - Proof aggregation successfully published to zkVerify contract on destination chain
