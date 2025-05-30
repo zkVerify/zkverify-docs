@@ -103,4 +103,4 @@ You can check your verified proof on our [zkVerify Explorer](https://zkverify-te
 
 ### Next Steps
 
-You can check our more detailed [tutorials](../02-getting-started/05-zkverify-js.md) to aggregate proofs and verify the aggregations on other connected chains like Ethereum, Arbitrum etc.
+You can check our more detailed [tutorials](../02-getting-started/06-zkverify-js.md) to aggregate proofs and verify the aggregations on other connected chains like Ethereum, Arbitrum etc.

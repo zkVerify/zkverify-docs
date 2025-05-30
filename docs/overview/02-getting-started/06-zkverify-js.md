@@ -241,5 +241,5 @@ You can check details about the verified proofs using our [zkVerify explorer](ht
 </TabItem>
 </Tabs>
 
-By running the above code snippet, your attestation proof will be saved at attestation.json file. After completing this process, we have successfully verified our proof with zkVerify and the next steps will be to use this attestation proof for our business logic onchain. Next we will be verifying the proof reciepts through a smart contract. You can check this [tutorial](./07-smart-contract.md) to understand more about the smart contract verification part.
+By running the above code snippet, your attestation proof will be saved at attestation.json file. After completing this process, we have successfully verified our proof with zkVerify and the next steps will be to use this attestation proof for our business logic onchain. Next we will be verifying the proof reciepts through a smart contract. You can check this [tutorial](./08-smart-contract.md) to understand more about the smart contract verification part.
 
