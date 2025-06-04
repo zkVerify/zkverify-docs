@@ -18,7 +18,7 @@ cd galxe-identity-zkVerify
 npm init -y && npm pkg set type=module
 
 # Installing required packages
-npm i galxe-identity-zkVerify ethers zkverifyjs
+npm i @galxe-identity-protocol/sdk ethers zkverifyjs
 ```
 
 Create a ``.env`` file and paste the follwoing code snippet. Make sure to replace ``<SEED-PHRASE>`` with your wallet's seed phrase.

@@ -52,6 +52,10 @@ const proof = fs.readFileSync("../my_project/proof.json"); // Following the Risc
 </TabItem>
 <TabItem value="noir" label="Noir">
 
+:::note
+Please make sure, you have latest version of rust installed on your machine
+:::
+
 To use the relayer, we need to convert our binary proof artifacts to hex. We need to use ``noir-cli`` for this conversion. Let's start by downloading our ```noir-cli``` toolkit by cloning our github repository.
 ```bash
 git clone https://github.com/zkVerify/ultraplonk_verifier.git
