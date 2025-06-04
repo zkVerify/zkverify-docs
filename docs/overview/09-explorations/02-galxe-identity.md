@@ -30,7 +30,7 @@ Next, we will import all the required dependencies. Also we will initialize the 
 ```js
 import { prepare, credential, evm, credType, errors, user, issuer, utils, babyzkTypes } from "@galxe-identity-protocol/sdk";
 import { ethers } from "ethers";
-import { CurveType, Library, VerifyTransactionInfo, VKRegistrationTransactionInfo, ZkVerifyEvents, zkVerifySession } from "zkverifyjs";
+import { CurveType, Library, ZkVerifyEvents, zkVerifySession } from "zkverifyjs";
 
 const unwrap = errors.unwrap;
 
@@ -46,7 +46,7 @@ const dummyIssuerEvmAddr = "0x15f4a32c40152a0f48E61B7aed455702D1Ea725e";
 
 Now, we will create a function for issuing credentials. We will be needing the User's EVM address amd User's Identity commitment. First we will create the type of credential, for this tutorial let's create a Scalar type. Then we will create the credential and sign it by the issuer.
 ```js
-async function issuingProcess(userEvmAddr: string, userIdc: bigint) {
+async function issuingProcess(userEvmAddr, userIdc) {
   // 1. First of all, we must create the type of the credential.
   // In this example, Let's use the primitive type Scalar.
   const typeSpec = credType.primitiveTypes.scalar;
@@ -110,7 +110,7 @@ async function issuingProcess(userEvmAddr: string, userIdc: bigint) {
 
 We will also create a function for the proof generation process. We will be taking the user and credential data as inputs to this function. Then, we will create an external nullifier for our proof. We will download the proof generation gadgets, and then list down the checks we want to implement like we want to verify that the credential is still valid after 3 days, prove that the credential's 'val' value is between 500 and 5000 etc.
 ```js
-async function proofGenProcess(myCred: credential.Credential, u: user.User) {
+async function proofGenProcess(myCred, u) {
   // Now issuer can issue a credential to the user.
   // In this example, we will issue a credential that represents the number of transactions,
   // that the user has made on the Ethereum, at the time of issuance.
@@ -134,7 +134,7 @@ async function proofGenProcess(myCred: credential.Credential, u: user.User) {
   const pseudonym = BigInt("0xdeadbeef");
   // We want to prove that the credential's 'val' value is between 500 and 5000, inclusively.
   const proof = await u.genBabyzkProofWithQuery(
-    u.getIdentityCommitment("evm")!,
+    u.getIdentityCommitment("evm"),
     myCred,
     proofGenGagets,
     `
@@ -164,10 +164,10 @@ async function proofGenProcess(myCred: credential.Credential, u: user.User) {
 
 Next we will create a specific function to verify proofs with zkVerify. We will take the proof and the vk as the inputs for our function. First, we will start a session with zkVerify's Volta Testnet with our seed phrase, then we will call the verify function and pass the proof artifacts to get verified on zkVerify. After the proof is sent for verification, we will wait to listen for ``IncludedInBlock`` and ``Finalized`` events.
 ```js
-async function executeVerificationWithZkVerify(proof: babyzkTypes.WholeProof, vk: unknown) {
+async function executeVerificationWithZkVerify(proof, vk) {
   try {
     // Start a new zkVerifySession on our testnet
-    const session = await zkVerifySession.start().Volta().withAccount(process.env.ZKVERIFY_SIGNER_PK!);
+    const session = await zkVerifySession.start().Volta().withAccount(process.env.SEED_PHRASE);
 
     // Execute the verification transaction
     const { events, transactionResult } = await session
@@ -198,7 +198,7 @@ async function executeVerificationWithZkVerify(proof: babyzkTypes.WholeProof, vk
     });
 
     // Await the final transaction result
-    const transactionInfo: VerifyTransactionInfo = await transactionResult;
+    const transactionInfo = await transactionResult;
     console.log("Transaction completed successfully:", transactionInfo);
     return transactionInfo;
   } catch (error) {
@@ -210,7 +210,7 @@ async function executeVerificationWithZkVerify(proof: babyzkTypes.WholeProof, vk
 
 Let's create a function to get our proof verification key from the registry. Also we will call the ``executeVerificationWithZkVerify`` function with the proof and vk inside this function.
 ```js
-async function verifyWithZkVerify(proof: babyzkTypes.WholeProof): Promise<boolean> {
+async function verifyWithZkVerify(proof) {
   const expectedTypeID = credType.primitiveTypes.scalar.type_id;
 
   // When using zkVerify on-chain verification, you must first get the verification key.
