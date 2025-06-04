@@ -3,6 +3,7 @@
 
 # Dependencies
 /node_modules
+/.yarn
 
 # Production
 /build
