@@ -52,7 +52,7 @@ There are two options to set up your node.  You can:
   - It requires manual compilation and configuration.
   - This is suitable for advanced users who want to customize their setup.
 
-## Optional ZKV Node Data Snashots
+## Optional ZKV Node Data Snapshots
 
 To speed up the initialization of your node, **daily snapshots of chain data** are available [here](https://bootstraps.zkverify.io). These snapshots allow you to skip the full synchronization from genesis, saving significant time and resources.
 
