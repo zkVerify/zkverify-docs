@@ -149,7 +149,7 @@ session.subscribe([
         const statementproof = {
           ...statementpath,
           domainId: parseInt(eventData.data.domainId),
-          aggregationId: parseInt(eventData.data.aggregationId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
         };
         fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
     }
@@ -186,7 +186,7 @@ session.subscribe([
         const statementproof = {
           ...statementpath,
           domainId: parseInt(eventData.data.domainId),
-          aggregationId: parseInt(eventData.data.aggregationId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
         };
         fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
     }
@@ -225,7 +225,7 @@ session.subscribe([
         const statementproof = {
           ...statementpath,
           domainId: parseInt(eventData.data.domainId),
-          aggregationId: parseInt(eventData.data.aggregationId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
         };
         fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
     }
