@@ -117,7 +117,7 @@ regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
 </TabItem>
 </Tabs>
 
-Once registered you can find a new file called ``vkey.json`` with your registered verification key in the following format
+Now you can run this script using the command ``node register.js`` to start the registration process. Once registered you can find a new file called ``vkey.json`` with your registered verification key in the following format
 ```json
 {
   "vkey": "0x828c736b33ab492251a8b275468a29ce06e98fc833c0c7f0bc7f6272b300c05b"
@@ -171,7 +171,7 @@ const {events} = await session.verify()
 
 </Tabs>
 
-Now you can run this script using the command ``node index.js``. After running the script a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:-
+Now you can run this script using the command ``node index.js``. After running the script a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:
 ```json
 {
   "root": "0xef4752160e8d7ccbc254a87f71256990f2fcd8173e15a592f7ccc7e130aa5ab0",

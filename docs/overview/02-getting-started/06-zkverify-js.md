@@ -103,7 +103,7 @@ Once you have all the requirements imported, we will start by instantiating a se
 const session = await zkVerifySession.start().Volta().withAccount(process.env.SEED_PHRASE);
 ```
 
-Next we will send a proof verification request to the Volta testnet, with all the details like which proving schema, proof, public signals and the key. We will also need to specify the ``domainId`` for which we want this proof to be aggregated. You can check more about Domain and Aggregation [here](../../architecture/04-proof-aggregation/01-overview.md). For this tutorial, choose the Domain ID based on the target chain where you want to verify the attestations [List of existing domains](../../architecture/04-proof-aggregation/05-domain-management.md). We will also create an event listener, to listen to the ``NewAggregationReceipt`` event whenever our proof is aggregated :- 
+Next we will send a proof verification request to the Volta testnet, with all the details like which proving schema, proof, public signals and the key. We will also need to specify the ``domainId`` for which we want this proof to be aggregated. You can check more about Domain and Aggregation [here](../../architecture/04-proof-aggregation/01-overview.md). For this tutorial, choose the Domain ID based on the target chain where you want to verify the attestations [List of existing domains](../../architecture/04-proof-aggregation/05-domain-management.md). We will also create an event listener, to listen to the ``NewAggregationReceipt`` event whenever our proof is aggregated : 
 
 <Tabs groupId="proof-verification">
 <TabItem value="groth16" label="Circom">
@@ -221,7 +221,7 @@ const {events} = await session.verify()
 </TabItem>
 </Tabs>
 
-We can listen to events to get the current status of our submitted proof, and collect important data required for attestation verification. We have custom events for block inclusion, transaction finalization, etc. You can listen to them using our events.on() function like :- 
+We can listen to events to get the current status of our submitted proof, and collect important data required for attestation verification. We have custom events for block inclusion, transaction finalization, etc. You can listen to them using our events.on() function like : 
 ```js
 events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
     console.log("Included in block", eventData);
@@ -229,7 +229,7 @@ events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
 })
 ```
 
-Now you can run this script using the command ``node index.js``. After running the script a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:-
+Now you can run this script using the command ``node index.js``. After running the script a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:
 ```json
 {
   "root": "0xef4752160e8d7ccbc254a87f71256990f2fcd8173e15a592f7ccc7e130aa5ab0",
@@ -247,7 +247,7 @@ Now you can run this script using the command ``node index.js``. After running t
 
 ```
 
-You can check details about the verified proofs using our [zkVerify explorer](https://zkverify-testnet.subscan.io/).
+You can check details about the verified proofs using the ``txHash`` on our [zkVerify explorer](https://zkverify-testnet.subscan.io/).
 
 <Tabs groupId="explorer">
 <TabItem value="circom" label="Circom">
