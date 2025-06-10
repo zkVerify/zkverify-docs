@@ -29,7 +29,7 @@ npm i zkverifyjs dotenv
 
 Let's create a ``.env`` file to store our ``SEED PHRASE``, which will be used later to send proofs for verification to zkVerify. Use the following code snippet to fill up your ``.env`` file.
 ```bash
-SEED_PHRASE = "<SEED-PHRASE>"
+SEED_PHRASE = "this is my seed phrase i should not share it with anyone"
 ```
 
 Create a new file named ```index.js``` to write the verification logic. Open ```index.js``` in your IDE and import the following components from ```zkVerify JS``` and ``dotenv`` :
@@ -87,7 +87,8 @@ const base64Vk = bufvk.toString("base64");
 </Tabs>
 
 :::info
-Make sure the wrap the following code snippets, with a async function. You can create a async main function and use it.
+Next we will be writing the core logic to send proofs to zkVerify for verification.
+All the following code snippets should be inserted within async main function.
 ```js
 async function main(){
   // Required code
@@ -102,51 +103,6 @@ Once you have all the requirements imported, we will start by instantiating a se
 const session = await zkVerifySession.start().Volta().withAccount(process.env.SEED_PHRASE);
 ```
 
-:::note
-Registration of the vkey is required once per circuit. Also create a separate file for the vkey registration and use the following code snippets. You can skip this part if you are just building for a hackathon project or POC.
-:::
-For Circom and Noir proofs, we need to register a verification key on our Volta testnet which will be used in further steps while verifying proofs. This step is not required for Risc Zero because we already got a hash of the image id which can be used directly. You can execute the following code snippet to register a vkey:
-
-<Tabs groupId="register-vkey">
-<TabItem value="circom" label="Circom">
-```js
-const {regevent} = await session.registerVerificationKey().groth16({library: Library.snarkjs, curve: CurveType.bn128}).execute(key);
-
-regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
-    console.log('Registration finalized:', eventData);
-    fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
-    return eventData.statementHash
-});
-```
-
-Once registered you can find a new file called ``vkey.json`` with your registered verification key in the following format
-```json
-{
-  "vkey": "0x828c736b33ab492251a8b275468a29ce06e98fc833c0c7f0bc7f6272b300c05b"
-}
-```
-
-</TabItem>
-<TabItem value="noir" label="Noir">
-```js
-const {regevent} = await session.registerVerificationKey().ultraplonk({numberOfPublicInputs:2}).execute(base64Vk); // Make sure to replace the numberOfPublicInputs field as per your circuit
-
-regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
-    console.log('Registration finalized:', eventData);
-    fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
-    return eventData.statementHash
-});
-
-```
-Once registered you can find a new file called ``vkey.json`` with your registered verification key in the following format
-```json
-{
-  "vkey": "0x828c736b33ab492251a8b275468a29ce06e98fc833c0c7f0bc7f6272b300c05b"
-}
-```
-</TabItem>
-</Tabs>
-
 Next we will send a proof verification request to the Volta testnet, with all the details like which proving schema, proof, public signals and the key. We will also need to specify the ``domainId`` for which we want this proof to be aggregated. You can check more about Domain and Aggregation [here](../../architecture/04-proof-aggregation/01-overview.md). For this tutorial, choose the Domain ID based on the target chain where you want to verify the attestations [List of existing domains](../../architecture/04-proof-aggregation/05-domain-management.md). We will also create an event listener, to listen to the ``NewAggregationReceipt`` event whenever our proof is aggregated :- 
 
 <Tabs groupId="proof-verification">
@@ -154,8 +110,6 @@ Next we will send a proof verification request to the Volta testnet, with all th
 ```js
 let statement, aggregationId;
 
-// You can remove the following line if you have not registered a vkey
-const vkey = JSON.parse(fs.readFileSync("./vkey.json")) //Importing the registered vkhash
 
 session.subscribe([
   {
@@ -184,9 +138,8 @@ session.subscribe([
 
 const {events} = await session.verify()
 .groth16({library: Library.snarkjs, curve: CurveType.bn128})
-.withRegisteredVk() // Remove this line, if vkey is not registered
 .execute({proofData: {
-    vk: vkey.hash, // Replace this with key, if vkey is not registered
+    vk: key,
     proof: proof,
     publicSignals: publicInputs
 }, domainId: 0});
@@ -233,9 +186,6 @@ const {events} = await session.verify().risc0()
 ```js
 let statement, aggregationId;
 
-// You can remove the following line if you have not registered a vkey
-const vkey = JSON.parse(fs.readFileSync("./vkey.json")) //Importing the registered vkhash
-
 session.subscribe([
   {
     event: ZkVerifyEvents.NewAggregationReceipt,
@@ -263,9 +213,8 @@ session.subscribe([
 
 const {events} = await session.verify()
     .ultraplonk({numberOfPublicInputs: 2}) // Make sure to replace the numberOfPublicInputs field as per your circuit 
-    .withRegisteredVk() // Remove this line, if vkey is not registered
     .execute({proofData: {
-        vk: vkey.hash, // Remove this with base64Vk, if vkey is not registered
+        vk: base64Vk,
         proof: base64Proof,
     }, domainId: 0});
 ```
