@@ -7,6 +7,11 @@ import TabItem from '@theme/TabItem';
 
 In this tutorial we will be verifying proofs using zkVerify JS package. ```zkVerify JS``` is a NPM package which makes it very easy to submit proofs, listen events and get aggregation proofs. You can use this package with all the proof types we support.
 
+:::note
+Before starting the tutorial make sure to update your Node JS to the latest version.
+You can check your Node JS version with command ``node -v``
+:::
+
 Let's create a new project and install ```zkverify JS``` for our project. Run the following commands:
 ```bash
 # Creating a new directory
@@ -75,14 +80,17 @@ Once you have all the requirements imported, we will start by instantiating a se
 const session = await zkVerifySession.start().Volta().withAccount("seed-phrase")
 ```
 
+:::note
+Registration of the vkey is required once per circuit. Also create a separate file for the vkey registration and use the following code snippets.
+:::
 For Circom and Noir proofs, we need to register a verification key on our Volta testnet which will be used in further steps while verifying proofs. This step is not required for Risc Zero because we already got a hash of the image id which can be used directly. You can execute the following code snippet to register a vkey:
 
 <Tabs groupId="register-vkey">
 <TabItem value="circom" label="Circom">
 ```js
-const {events} = await session.registerVerificationKey().groth16({library: Library.snarkjs, curve: CurveType.bn128}).execute(key);
+const {regevent} = await session.registerVerificationKey().groth16({library: Library.snarkjs, curve: CurveType.bn128}).execute(key);
 
-events.on(ZkVerifyEvents.Finalized, (eventData) => {
+regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
     console.log('Registration finalized:', eventData);
     fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
     return eventData.statementHash
@@ -99,9 +107,9 @@ Once registered you can find a new file called ``vkey.json`` with your registere
 </TabItem>
 <TabItem value="noir" label="Noir">
 ```js
-const {events} = await session.registerVerificationKey().ultraplonk({numberOfPublicInputs:2}).execute(base64Vk); // Make sure to replace the numberOfPublicInputs field as per your circuit
+const {regevent} = await session.registerVerificationKey().ultraplonk({numberOfPublicInputs:2}).execute(base64Vk); // Make sure to replace the numberOfPublicInputs field as per your circuit
 
-events.on(ZkVerifyEvents.Finalized, (eventData) => {
+regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
     console.log('Registration finalized:', eventData);
     fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
     return eventData.statementHash
@@ -122,26 +130,38 @@ Next we will send a proof verification request to the Volta testnet, with all th
 <Tabs groupId="proof-verification">
 <TabItem value="groth16" label="Circom">
 ```js
+let statement, aggregationId;
 const vkey = fs.readFileSync("./vkey.json") //Importing the registered vkhash
 
 session.subscribe([
-    {event: ZkVerifyEvents.NewAggregationReceipt, callback: async(eventData: any) => {
-        console.log('New aggregation receipt:', eventData);
-        let statementpath = await session.getAggregateStatementPath(eventData.blockHash, parseInt(eventData.data.domainId), parseInt(eventData.data.aggregationId), statement);
-        console.log('Statement path:', statementpath);
+  {
+    event: ZkVerifyEvents.NewAggregationReceipt,
+    callback: async (eventData) => {
+      console.log("New aggregation receipt:", eventData);
+      if(aggregationId == parseInt(eventData.data.aggregationId.replace(/,/g, ''))){
+        let statementpath = await session.getAggregateStatementPath(
+          eventData.blockHash,
+          parseInt(eventData.data.domainId),
+          parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+          statement
+        );
+        console.log("Statement path:", statementpath);
         const statementproof = {
-            ...statementpath,
-            domainId: parseInt(eventData.data.domainId),
-            aggregationId: parseInt(eventData.data.aggregationId),
+          ...statementpath,
+          domainId: parseInt(eventData.data.domainId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
         };
-        fs.writeFile("aggregation.json", JSON.stringify(statementproof));
-    }, options:{domainId:0}}
-])
+        fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
+    }
+    },
+    options: { domainId: 0 },
+  },
+]);
 
 const {events} = await session.verify()
 .groth16({library: Library.snarkjs, curve: CurveType.bn128}).withRegisteredVk()
 .execute({proofData: {
-    vk: vkey.hash,
+    vk: JSON.parse(vkey).hash,
     proof: proof,
     publicSignals: public
 }, domainId: 0});
@@ -149,19 +169,31 @@ const {events} = await session.verify()
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
+let statement, aggregationId;
 session.subscribe([
-    {event: ZkVerifyEvents.NewAggregationReceipt, callback: async(eventData: any) => {
-        console.log('New aggregation receipt:', eventData);
-        let statementpath = await session.getAggregateStatementPath(eventData.blockHash, parseInt(eventData.data.domainId), parseInt(eventData.data.aggregationId), statement);
-        console.log('Statement path:', statementpath);
+  {
+    event: ZkVerifyEvents.NewAggregationReceipt,
+    callback: async (eventData) => {
+      console.log("New aggregation receipt:", eventData);
+      if(aggregationId == parseInt(eventData.data.aggregationId.replace(/,/g, ''))){
+        let statementpath = await session.getAggregateStatementPath(
+          eventData.blockHash,
+          parseInt(eventData.data.domainId),
+          parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+          statement
+        );
+        console.log("Statement path:", statementpath);
         const statementproof = {
-            ...statementpath,
-            domainId: parseInt(eventData.data.domainId),
-            aggregationId: parseInt(eventData.data.aggregationId),
+          ...statementpath,
+          domainId: parseInt(eventData.data.domainId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
         };
-        fs.writeFile("aggregation.json", JSON.stringify(statementproof));
-    }, options:{domainId:0}}
-])
+        fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
+    }
+    },
+    options: { domainId: 0 },
+  },
+]);
 
 const {events} = await session.verify().risc0()
 .execute({proofData:{
@@ -174,27 +206,39 @@ const {events} = await session.verify().risc0()
 </TabItem>
 <TabItem value="noir" label="Noir">
 ```js
+let statement, aggregationId;
 const vkey = fs.readFileSync("./vkey.json") //Importing the registered vkhash
 
 session.subscribe([
-    {event: ZkVerifyEvents.NewAggregationReceipt, callback: async(eventData: any) => {
-        console.log('New aggregation receipt:', eventData);
-        let statementpath = await session.getAggregateStatementPath(eventData.blockHash, parseInt(eventData.data.domainId), parseInt(eventData.data.aggregationId), statement);
-        console.log('Statement path:', statementpath);
+  {
+    event: ZkVerifyEvents.NewAggregationReceipt,
+    callback: async (eventData) => {
+      console.log("New aggregation receipt:", eventData);
+      if(aggregationId == parseInt(eventData.data.aggregationId.replace(/,/g, ''))){
+        let statementpath = await session.getAggregateStatementPath(
+          eventData.blockHash,
+          parseInt(eventData.data.domainId),
+          parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+          statement
+        );
+        console.log("Statement path:", statementpath);
         const statementproof = {
-            ...statementpath,
-            domainId: parseInt(eventData.data.domainId),
-            aggregationId: parseInt(eventData.data.aggregationId),
+          ...statementpath,
+          domainId: parseInt(eventData.data.domainId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
         };
-        fs.writeFile("aggregation.json", JSON.stringify(statementproof));
-    }, options:{domainId:0}}
-])
+        fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
+    }
+    },
+    options: { domainId: 0 },
+  },
+]);
 
 const {events} = await session.verify()
     .ultraplonk({numberOfPublicInputs: 2}) // Make sure to replace the numberOfPublicInputs field as per your circuit 
     .withRegisteredVk()
     .execute({proofData: {
-        vk: vkey.hash,
+        vk: JSON.parse(vkey).hash,
         proof: base64Proof,
     }, domainId: 0});
 ```
@@ -209,7 +253,7 @@ events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
 })
 ```
 
-Now, a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:-
+Now you can run this script using the command ``node index.js``. After running the script a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:-
 ```json
 {
   "root": "0xef4752160e8d7ccbc254a87f71256990f2fcd8173e15a592f7ccc7e130aa5ab0",
