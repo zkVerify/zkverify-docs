@@ -61,4 +61,4 @@ Snapshots are available in two forms:
 - **Full node snapshot**
 - **Archive node snapshot**
 
-Each snapshot is a .tar.gz archive containing the **db** directory, intended to replace the **db** directory generated during the initial node run.
+Each snapshot is a **.tar.gz** archive containing the **db** directory, intended to replace the **db** directory generated during the initial node run.
