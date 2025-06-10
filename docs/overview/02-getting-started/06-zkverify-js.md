@@ -24,25 +24,36 @@ cd proof-submission
 npm init -y && npm pkg set type=module
 
 # Installing zkVerify JS
-npm i zkverifyjs
+npm i zkverifyjs dotenv
 ```
 
-Create a new file named ```index.js``` to write the verification logic. Open ```index.js``` in your IDE and import the following components from ```zkVerify JS``` :
+Let's create a ``.env`` file to store our ``SEED PHRASE``, which will be used later to send proofs for verification to zkVerify. Use the following code snippet to fill up your ``.env`` file.
+```bash
+SEED_PHRASE = "<SEED-PHRASE>"
+```
+
+Create a new file named ```index.js``` to write the verification logic. Open ```index.js``` in your IDE and import the following components from ```zkVerify JS``` and ``dotenv`` :
 
 <Tabs groupId="import">
 <TabItem value="circom" label="Circom">
 ```js
 import { zkVerifySession, Library, CurveType, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
 ```
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
 import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
 ```
 </TabItem>
 <TabItem value="noir" label="Noir">
 ```js
 import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
 ```
 </TabItem>
 </Tabs>
@@ -53,15 +64,15 @@ We would also need to import the required files we have generated already in pre
 <TabItem value="circom" label="Circom">
 ```js
 import fs from "fs";
-const proof = fs.readFileSync("./data/proof.json");
-const public = fs.readFileSync("./data/public.json");
-const key = fs.readFileSync("./data/main.groth16.vkey.json");
+const proof = JSON.parse(fs.readFileSync("./data/proof.json"));
+const publicInputs = JSON.parse(fs.readFileSync("./data/public.json"));
+const key = JSON.parse(fs.readFileSync("./data/main.groth16.vkey.json"));
 ```
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
 import fs from "fs";
-const proof = fs.readFileSync("../my_project/proof.json"); // Following the Risc Zero tutorial
+const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the Risc Zero tutorial
 ```
 </TabItem>
 <TabItem value="noir" label="Noir">
@@ -75,13 +86,24 @@ const base64Vk = bufvk.toString("base64");
 </TabItem>
 </Tabs>
 
+:::info
+Make sure the wrap the following code snippets, with a async function. You can create a async main function and use it.
+```js
+async function main(){
+  // Required code
+}
+
+main();
+```
+:::
+
 Once you have all the requirements imported, we will start by instantiating a session with our Volta testnet with an account(This account should have $tVFY to pay for transactions). 
 ```js
-const session = await zkVerifySession.start().Volta().withAccount("seed-phrase")
+const session = await zkVerifySession.start().Volta().withAccount(process.env.SEED_PHRASE);
 ```
 
 :::note
-Registration of the vkey is required once per circuit. Also create a separate file for the vkey registration and use the following code snippets.
+Registration of the vkey is required once per circuit. Also create a separate file for the vkey registration and use the following code snippets. You can skip this part if you are just building for a hackathon project or POC.
 :::
 For Circom and Noir proofs, we need to register a verification key on our Volta testnet which will be used in further steps while verifying proofs. This step is not required for Risc Zero because we already got a hash of the image id which can be used directly. You can execute the following code snippet to register a vkey:
 
@@ -131,7 +153,9 @@ Next we will send a proof verification request to the Volta testnet, with all th
 <TabItem value="groth16" label="Circom">
 ```js
 let statement, aggregationId;
-const vkey = fs.readFileSync("./vkey.json") //Importing the registered vkhash
+
+// You can remove the following line if you have not registered a vkey
+const vkey = JSON.parse(fs.readFileSync("./vkey.json")) //Importing the registered vkhash
 
 session.subscribe([
   {
@@ -159,11 +183,12 @@ session.subscribe([
 ]);
 
 const {events} = await session.verify()
-.groth16({library: Library.snarkjs, curve: CurveType.bn128}).withRegisteredVk()
+.groth16({library: Library.snarkjs, curve: CurveType.bn128})
+.withRegisteredVk() // Remove this line, if vkey is not registered
 .execute({proofData: {
-    vk: JSON.parse(vkey).hash,
+    vk: vkey.hash, // Replace this with key, if vkey is not registered
     proof: proof,
-    publicSignals: public
+    publicSignals: publicInputs
 }, domainId: 0});
 ```
 </TabItem>
@@ -207,7 +232,9 @@ const {events} = await session.verify().risc0()
 <TabItem value="noir" label="Noir">
 ```js
 let statement, aggregationId;
-const vkey = fs.readFileSync("./vkey.json") //Importing the registered vkhash
+
+// You can remove the following line if you have not registered a vkey
+const vkey = JSON.parse(fs.readFileSync("./vkey.json")) //Importing the registered vkhash
 
 session.subscribe([
   {
@@ -236,9 +263,9 @@ session.subscribe([
 
 const {events} = await session.verify()
     .ultraplonk({numberOfPublicInputs: 2}) // Make sure to replace the numberOfPublicInputs field as per your circuit 
-    .withRegisteredVk()
+    .withRegisteredVk() // Remove this line, if vkey is not registered
     .execute({proofData: {
-        vk: JSON.parse(vkey).hash,
+        vk: vkey.hash, // Remove this with base64Vk, if vkey is not registered
         proof: base64Proof,
     }, domainId: 0});
 ```
