@@ -51,3 +51,14 @@ There are two options to set up your node.  You can:
 - **Use binaries built from source:** which allows for more control over the installation process. You can build the binaries directly from the source code, available at [zkVerify](https://github.com/zkVerify/zkVerify).  In addition:
   - It requires manual compilation and configuration.
   - This is suitable for advanced users who want to customize their setup.
+
+## Optional: ZKV Node Data Snapshots
+
+To reduce the time required for a node's startup, **daily snapshots of chain data** are available [here](https://bootstraps.zkverify.io).
+
+Snapshots are available in two forms:
+
+- **Full node snapshot**
+- **Archive node snapshot**
+
+Each snapshot is a **.tar.gz** archive containing the **db** directory, intended to replace the **db** directory generated during the initial node run.
