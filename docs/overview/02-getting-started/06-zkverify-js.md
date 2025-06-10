@@ -24,25 +24,36 @@ cd proof-submission
 npm init -y && npm pkg set type=module
 
 # Installing zkVerify JS
-npm i zkverifyjs
+npm i zkverifyjs dotenv
 ```
 
-Create a new file named ```index.js``` to write the verification logic. Open ```index.js``` in your IDE and import the following components from ```zkVerify JS``` :
+Let's create a ``.env`` file to store our ``SEED PHRASE``, which will be used later to send proofs for verification to zkVerify. Use the following code snippet to fill up your ``.env`` file.
+```bash
+SEED_PHRASE = "this is my seed phrase i should not share it with anyone"
+```
+
+Create a new file named ```index.js``` to write the verification logic. Open ```index.js``` in your IDE and import the following components from ```zkVerify JS``` and ``dotenv`` :
 
 <Tabs groupId="import">
 <TabItem value="circom" label="Circom">
 ```js
 import { zkVerifySession, Library, CurveType, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
 ```
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
 import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
 ```
 </TabItem>
 <TabItem value="noir" label="Noir">
 ```js
 import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
 ```
 </TabItem>
 </Tabs>
@@ -53,15 +64,15 @@ We would also need to import the required files we have generated already in pre
 <TabItem value="circom" label="Circom">
 ```js
 import fs from "fs";
-const proof = fs.readFileSync("./data/proof.json");
-const public = fs.readFileSync("./data/public.json");
-const key = fs.readFileSync("./data/main.groth16.vkey.json");
+const proof = JSON.parse(fs.readFileSync("./data/proof.json"));
+const publicInputs = JSON.parse(fs.readFileSync("./data/public.json"));
+const key = JSON.parse(fs.readFileSync("./data/main.groth16.vkey.json"));
 ```
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
 import fs from "fs";
-const proof = fs.readFileSync("../my_project/proof.json"); // Following the Risc Zero tutorial
+const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the Risc Zero tutorial
 ```
 </TabItem>
 <TabItem value="noir" label="Noir">
@@ -75,63 +86,30 @@ const base64Vk = bufvk.toString("base64");
 </TabItem>
 </Tabs>
 
+:::info
+Next we will be writing the core logic to send proofs to zkVerify for verification.
+All the following code snippets should be inserted within async main function.
+```js
+async function main(){
+  // Required code
+}
+
+main();
+```
+:::
+
 Once you have all the requirements imported, we will start by instantiating a session with our Volta testnet with an account(This account should have $tVFY to pay for transactions). 
 ```js
-const session = await zkVerifySession.start().Volta().withAccount("seed-phrase")
+const session = await zkVerifySession.start().Volta().withAccount(process.env.SEED_PHRASE);
 ```
 
-:::note
-Registration of the vkey is required once per circuit. Also create a separate file for the vkey registration and use the following code snippets.
-:::
-For Circom and Noir proofs, we need to register a verification key on our Volta testnet which will be used in further steps while verifying proofs. This step is not required for Risc Zero because we already got a hash of the image id which can be used directly. You can execute the following code snippet to register a vkey:
-
-<Tabs groupId="register-vkey">
-<TabItem value="circom" label="Circom">
-```js
-const {regevent} = await session.registerVerificationKey().groth16({library: Library.snarkjs, curve: CurveType.bn128}).execute(key);
-
-regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
-    console.log('Registration finalized:', eventData);
-    fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
-    return eventData.statementHash
-});
-```
-
-Once registered you can find a new file called ``vkey.json`` with your registered verification key in the following format
-```json
-{
-  "vkey": "0x828c736b33ab492251a8b275468a29ce06e98fc833c0c7f0bc7f6272b300c05b"
-}
-```
-
-</TabItem>
-<TabItem value="noir" label="Noir">
-```js
-const {regevent} = await session.registerVerificationKey().ultraplonk({numberOfPublicInputs:2}).execute(base64Vk); // Make sure to replace the numberOfPublicInputs field as per your circuit
-
-regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
-    console.log('Registration finalized:', eventData);
-    fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
-    return eventData.statementHash
-});
-
-```
-Once registered you can find a new file called ``vkey.json`` with your registered verification key in the following format
-```json
-{
-  "vkey": "0x828c736b33ab492251a8b275468a29ce06e98fc833c0c7f0bc7f6272b300c05b"
-}
-```
-</TabItem>
-</Tabs>
-
-Next we will send a proof verification request to the Volta testnet, with all the details like which proving schema, proof, public signals and the key. We will also need to specify the ``domainId`` for which we want this proof to be aggregated. You can check more about Domain and Aggregation [here](../../architecture/04-proof-aggregation/01-overview.md). For this tutorial, choose the Domain ID based on the target chain where you want to verify the attestations [List of existing domains](../../architecture/04-proof-aggregation/05-domain-management.md). We will also create an event listener, to listen to the ``NewAggregationReceipt`` event whenever our proof is aggregated :- 
+Next we will send a proof verification request to the Volta testnet, with all the details like which proving schema, proof, public signals and the key. We will also need to specify the ``domainId`` for which we want this proof to be aggregated. You can check more about Domain and Aggregation [here](../../architecture/04-proof-aggregation/01-overview.md). For this tutorial, choose the Domain ID based on the target chain where you want to verify the attestations [List of existing domains](../../architecture/04-proof-aggregation/05-domain-management.md). We will also create an event listener, to listen to the ``NewAggregationReceipt`` event whenever our proof is aggregated : 
 
 <Tabs groupId="proof-verification">
 <TabItem value="groth16" label="Circom">
 ```js
 let statement, aggregationId;
-const vkey = fs.readFileSync("./vkey.json") //Importing the registered vkhash
+
 
 session.subscribe([
   {
@@ -159,11 +137,11 @@ session.subscribe([
 ]);
 
 const {events} = await session.verify()
-.groth16({library: Library.snarkjs, curve: CurveType.bn128}).withRegisteredVk()
+.groth16({library: Library.snarkjs, curve: CurveType.bn128})
 .execute({proofData: {
-    vk: JSON.parse(vkey).hash,
+    vk: key,
     proof: proof,
-    publicSignals: public
+    publicSignals: publicInputs
 }, domainId: 0});
 ```
 </TabItem>
@@ -207,7 +185,6 @@ const {events} = await session.verify().risc0()
 <TabItem value="noir" label="Noir">
 ```js
 let statement, aggregationId;
-const vkey = fs.readFileSync("./vkey.json") //Importing the registered vkhash
 
 session.subscribe([
   {
@@ -236,16 +213,15 @@ session.subscribe([
 
 const {events} = await session.verify()
     .ultraplonk({numberOfPublicInputs: 2}) // Make sure to replace the numberOfPublicInputs field as per your circuit 
-    .withRegisteredVk()
     .execute({proofData: {
-        vk: JSON.parse(vkey).hash,
+        vk: base64Vk,
         proof: base64Proof,
     }, domainId: 0});
 ```
 </TabItem>
 </Tabs>
 
-We can listen to events to get the current status of our submitted proof, and collect important data required for attestation verification. We have custom events for block inclusion, transaction finalization, etc. You can listen to them using our events.on() function like :- 
+We can listen to events to get the current status of our submitted proof, and collect important data required for attestation verification. We have custom events for block inclusion, transaction finalization, etc. You can listen to them using our events.on() function like : 
 ```js
 events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
     console.log("Included in block", eventData);
@@ -253,7 +229,7 @@ events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
 })
 ```
 
-Now you can run this script using the command ``node index.js``. After running the script a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:-
+Now you can run this script using the command ``node index.js``. After running the script a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:
 ```json
 {
   "root": "0xef4752160e8d7ccbc254a87f71256990f2fcd8173e15a592f7ccc7e130aa5ab0",
@@ -271,7 +247,7 @@ Now you can run this script using the command ``node index.js``. After running t
 
 ```
 
-You can check details about the verified proofs using our [zkVerify explorer](https://zkverify-testnet.subscan.io/).
+You can check details about the verified proofs using the ``txHash`` on our [zkVerify explorer](https://zkverify-testnet.subscan.io/).
 
 <Tabs groupId="explorer">
 <TabItem value="circom" label="Circom">
