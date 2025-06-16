@@ -7,32 +7,46 @@ import TabItem from '@theme/TabItem';
 
 In this tutorial, we will be exploring the process of verifying proofs on zkVerify using Relayer. Relayer is a REST API service built by [Horizen Labs](https://horizenlabs.io) which makes the process of verifying proofs on zkVerify very easy and straightforward.
 
+:::note
+Before starting the tutorial make sure to update your Node JS to the latest version (v24.1.0)
+You can check your Node JS version with command ``node -v``
+:::
+
 Let's create a new project and install ```axios``` for our project. Run the following commands:
+
+Create a new directory:
 ```bash
-# Creating a new directory
 mkdir proof-submission
-
-# Navigating to the project directory
+```
+Navigate to the project directory:
+```bash
 cd proof-submission
-
-# Initializing an NPM project
+```
+Initialize an NPM project:
+```bash
 npm init -y && npm pkg set type=module
+```
+Install axios and dotenv:
+```bash
+npm i axios dotenv
+```
 
-# Installing axios of make API calls
-npm i axios
+Let's create a ``.env`` file to store our ``API_KEY``, which will be used later to send proofs for verification using Relayer. Use the following code snippet to fill up your ``.env`` file. To use the relayer you need to get an ``API Key``. You can try to contact any of the team members or open a ticket on our [Discord](https://discord.gg/zkverify). 
+```bash
+API_KEY = "get your API Key from Horizen Labs team"
 ```
 
 Create a new file named ``index.js`` as the entrypoint for our application. Open ``index.js`` in your IDE and start with import neccesary packages :
 ```js
 import axios from 'axios';
 import fs from 'fs';
+import dotenv from 'dotenv';
+dotenv.config();
 ```
 
-After this let's initialize our API variables. To use the relayer you need to get an ``API Key``. You can try to contact any of the team members or open a ticket on our [Discord](https://discord.gg/zkverify). 
-
+After this let's initialize our API URL. You can also check the Swagger docs for the Relayer API [here](https://relayer-api.horizenlabs.io/docs) 
 ```js
 const API_URL = 'https://relayer-api.horizenlabs.io/api/v1';
-const API_KEY = "<API_KEY>"
 ```
 
 We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets :
@@ -40,14 +54,14 @@ We would also need to import the required files we have generated already in pre
 <Tabs groupId="import-files">
 <TabItem value="circom" label="Circom">
 ```js
-const proof = fs.readFileSync("./data/proof.json");
-const public = fs.readFileSync("./data/public.json");
-const key = fs.readFileSync("./data/main.groth16.vkey.json");
+const proof = JSON.parse(fs.readFileSync("./data/proof.json"));
+const publicInputs = JSON.parse(fs.readFileSync("./data/public.json"));
+const key = JSON.parse(fs.readFileSync("./data/main.groth16.vkey.json"));
 ```
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
-const proof = fs.readFileSync("../my_project/proof.json"); // Following the Risc Zero tutorial
+const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the Risc Zero tutorial
 ```
 </TabItem>
 <TabItem value="noir" label="Noir">
@@ -85,6 +99,18 @@ const pubhex = fs.readFileSync("../hello_world/pub.hex").toString();
 </TabItem>
 </Tabs>
 
+:::info
+Next we will be writing the core logic to send proofs to zkVerify for verification.
+All the following code snippets should be inserted within async main function.
+```js
+async function main(){
+  // Required code
+}
+
+main();
+```
+:::
+
 Once you have all the requirements imported, we will start the verification process by calling a ``POST`` endpoint named ``submit-proof``. We will also need to create a params object with all the necessary information about the proof, which will be sent in the API call.
 
 <Tabs groupId="submit-proof">
@@ -100,11 +126,11 @@ const params = {
     "proofData": {
         "proof": proof,
         "publicSignals": publicInputs,
-        "vk": vkey
+        "vk": key
     }    
 }
 
-const requestResponse = await axios.post(`${API_URL}/submit-proof/${API_KEY}`, params)
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
 console.log(requestResponse.data)
 ```
 </TabItem>
@@ -123,7 +149,7 @@ const params = {
     }
 }
 
-const requestResponse = await axios.post(`${API_URL}/submit-proof/${API_KEY}`, params)
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
 console.log(requestResponse.data)
 ```
 </TabItem>
@@ -139,7 +165,7 @@ const params = {
     }
 }
 
-const requestResponse = await axios.post(`${API_URL}/submit-proof/${API_KEY}`, params)
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
 console.log(requestResponse.data)
 ```
 </TabItem>
@@ -154,7 +180,7 @@ if(requestResponse.data.optimisticVerify != "success"){
 }
 
 while(true){
-    const jobStatusResponse = await axios.get(`${API_URL}/job-status/${API_KEY}/${requestResponse.data.jobId}`);
+    const jobStatusResponse = await axios.get(`${API_URL}/job-status/${process.env.API_KEY}/${requestResponse.data.jobId}`);
     if(jobStatusResponse.data.status === "Finalized"){
         console.log("Job finalized successfully");
         console.log(jobStatusResponse.data);
