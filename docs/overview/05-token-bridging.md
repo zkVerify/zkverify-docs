@@ -4,30 +4,49 @@ title: Token Bridging
 
 ## Native token tVFY bridging
 
-Token bridging is a component offered by Hyperbridge.
-Currently native token tVFY can be teleported to Ethereum Sepolia and back as well.
+Token bridging is a component offered by **Hyperbridge**. \
+Currently native token tVFY can be teleported to **Ethereum Sepolia** and back as well. \
+In the future more networks will be supported.
 
 ### From zkVerify to Sepolia ETH
 
-`teleport` is an extrinsic of the pallet token gateway.
-From PolkadotJS navigate to `Developer-> Extrinsics` and select the `tokenGateway` pallet and the `teleport` extrinsic.
+From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvolta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `tokenGateway` pallet and the `teleport` extrinsic.
 
 This call is used to initialize a cross-chain asset transfer. Any provided assets are custodied by the pallet and a cross-chain request is dispatched to the destination supported chain.
 
-![alt_text](./img/polkadot-js-teleport.png)
 
-The extrinsic can be called by any account and expects the following input params
+#### Parameters Definitions
 
-- `assetId`: the local asset Id registered on Hyperbridge and that should be transferred, for the native token (tVFY) this is 0
-- `destination`: Destination state machine that should receive the funds, defined by its chain type and chain id. For now select `Evm` and in the subsection of `Evm:u32` enter `11155111` as we will be bridging to Ethereum Sepolia.
-- `recipient`: The beneficiary account for the funds on the destination. (For EVM chains, the address should be left padded with zeros to fit into the required 32 bytes.)
-- `amount`: The amount that should be transferred (Note: decimals must be specified, tVFY token has 18 decimals)
-- `timeout`:The request timeout, this is the time after which the request cannot be delivered to the destination. It should represent the cumulative time for finalization on the source chain and hyperbridge with some additional buffer. If 0, it means it never times out.
-- `tokengateway`: The address of the token gateway module on the destination chain. Addresses can be found here (currently only Ethereum Sepolia is supported) https://docs.hyperbridge.network/developers/evm/contracts/testnet
-https://docs.hyperbridge.network/developers/evm/contracts/mainnet
+- `assetId`: the local asset Id registered on Hyperbridge and that should be transferred.
+- `destination`: Destination state machine that should receive the funds, defined by its chain type and chain id. 
+- `recipient`: The beneficiary account for the funds on the destination.
+- `amount`: The amount that should be transferred.
+- `timeout`:The request timeout, this is the time after which the request cannot be delivered to the destination. It should represent the cumulative time for finalization on the source chain and Hyperbridge with some additional buffer. 
+- `tokengateway`: The address of the token gateway module on the destination chain. 
 - `relayer_fee`: The amount to be paid to relayers for delivering the request, a value of zero means the dispatcher is responsible for relaying the request. For now it's okay to leave it to 0.
-- `redeem`: Always false, we will not deploy ERC20 on our own.
+- `redeem`: Boolean specifying if we are redeeming an existing ERC20. 
 
+#### Parameters Template
+
+| Parameter | Example Value                              | Customizable | Comments                                                                                                                                        |
+|-----------|--------------------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `assetId` | 0                                          | No           | native token tVFY asset Id is 0                                                                                                                 |
+| `destination` | Evm -> 11155111                            | No           | Eth Sepolia chain ID                                                                                                                            |
+| `recipient` | 0x000000000000000000000000[ADDRESS]        | Yes          | Address should be left padded with zeros to fit into the required 32 bytes. Copy paste the example + append your address (remove the 0x though) |
+| `amount` | 1000000000000000000                        | Yes          | tVFY token has 18 decimals                                                                                                                      |
+| `timeout` | 0                                          | No           | Can be custom but recommend to put 0 which means it never times out.                                                                            |
+| `tokengateway` | 0xFcDa26cA021d5535C3059547390E6cCd8De7acA6 | No           | Contract address for ETH sepolia                                                                                                                |
+| `relayer_fee` | 0                                          | No           | 0 means the dispatcher is responsible for relaying the request, we can leave it as it is for now.                                               |
+| `redeem` | false                                      | No           | we will not deploy ERC20 on our own so always false.                                                                                            | 
+
+#### Parameters Template hex-encoded call
+
+Instead of copying each value at a time from the previous you can decode a complete extrinsic example and only change the values you need.
+For this purpose, go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex
+
+***0x5d000000000000a736aa000000000000000000000000006a88ce5345fdf2afef1d5dd26104696e9c3a3e8800008a5d784563010000000000000000000000000000000050fcda26ca021d5535c3059547390e6ccd8de7aca6000000000000000000000000000000000000***
+
+Then click on the `Submission` tab and change the values you need. 
 ### From Sepolia ETH to zkVerify
 
 First find the TokenGateway contract deployed on the EVM of interest (in this case zkVerify)
