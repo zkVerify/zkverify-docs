@@ -7,6 +7,11 @@ import TabItem from '@theme/TabItem';
 
 In this tutorial, we will be exploring the process of verifying proofs on zkVerify using Relayer. Relayer is a REST API service built by [Horizen Labs](https://horizenlabs.io) which makes the process of verifying proofs on zkVerify very easy and straightforward.
 
+:::note
+Before starting the tutorial make sure to update your Node JS to the latest version (v24.1.0)
+You can check your Node JS version with command ``node -v``
+:::
+
 Let's create a new project and install ```axios``` for our project. Run the following commands:
 ```bash
 # Creating a new directory

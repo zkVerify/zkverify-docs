@@ -8,7 +8,7 @@ import TabItem from '@theme/TabItem';
 In this tutorial we will be verifying proofs using zkVerify JS package. ```zkVerify JS``` is a NPM package which makes it very easy to submit proofs, listen events and get aggregation proofs. You can use this package with all the proof types we support.
 
 :::note
-Before starting the tutorial make sure to update your Node JS to the latest version.
+Before starting the tutorial make sure to update your Node JS to the latest version (v24.1.0)
 You can check your Node JS version with command ``node -v``
 :::
 
