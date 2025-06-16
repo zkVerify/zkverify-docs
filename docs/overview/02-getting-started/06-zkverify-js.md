@@ -13,17 +13,21 @@ You can check your Node JS version with command ``node -v``
 :::
 
 Let's create a new project and install ```zkverify JS``` for our project. Run the following commands:
+
+Create a new directory:
 ```bash
-# Creating a new directory
 mkdir proof-submission
-
-# Navigating to the project directory
+```
+Navigate to the project directory:
+```bash
 cd proof-submission
-
-# Initializing an NPM project
+```
+Initialise an NPM project:
+```bash
 npm init -y && npm pkg set type=module
-
-# Installing zkVerify JS
+```
+Install zkVerify JS:
+```bash
 npm i zkverifyjs dotenv
 ```
 
