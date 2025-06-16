@@ -14,22 +14,19 @@ You can check your Node JS version with command ``node -v``
 
 Let's create a new project and install ```axios``` for our project. Run the following commands:
 
-Create a new directory
+Create a new directory:
 ```bash
 mkdir proof-submission
 ```
-
-Navigate to the project directory
+Navigate to the project directory:
 ```bash
 cd proof-submission
 ```
-
-Initialize an NPM project
+Initialize an NPM project:
 ```bash
 npm init -y && npm pkg set type=module
 ```
-
-Install axios of make API calls
+Install axios of make API calls:
 ```bash
 npm i axios dotenv
 ```
