@@ -26,7 +26,7 @@ Initialise an NPM project:
 ```bash
 npm init -y && npm pkg set type=module
 ```
-Install zkVerify JS:
+Install zkVerify JS and dotenv:
 ```bash
 npm i zkverifyjs dotenv
 ```

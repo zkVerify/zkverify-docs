@@ -26,7 +26,7 @@ Initialize an NPM project:
 ```bash
 npm init -y && npm pkg set type=module
 ```
-Install axios of make API calls:
+Install axios and dotenv:
 ```bash
 npm i axios dotenv
 ```
@@ -44,7 +44,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 
-After this let's initialize our API URL. 
+After this let's initialize our API URL. You can also check the Swagger docs for the Relayer API [here](https://relayer-api.horizenlabs.io/docs) 
 ```js
 const API_URL = 'https://relayer-api.horizenlabs.io/api/v1';
 ```
