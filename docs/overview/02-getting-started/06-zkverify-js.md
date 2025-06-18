@@ -177,12 +177,11 @@ session.subscribe([
   },
 ]);
 
-const {events} = await session.verify().risc0()
+const {events} = await session.verify().risc0({version: "V1_2"}) // Mention the R0 version used while proving
 .execute({proofData:{
     proof: proof.proof,
     vk: proof.image_id,
     publicSignals: proof.pub_inputs,
-    version: "V1_2" // Mention the R0 version used while proving
 }, domainId: 0})
 ```
 </TabItem>
@@ -229,7 +228,8 @@ We can listen to events to get the current status of our submitted proof, and co
 ```js
 events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
     console.log("Included in block", eventData);
-    statement = eventData.statement
+    statement = eventData.statement;
+    aggregationId = eventData.aggregationId;
 })
 ```
 
