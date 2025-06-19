@@ -91,7 +91,7 @@ main();
 ```
 :::
 
-Once you have all the requirements imported, we will start the verification process by calling a ``POST`` endpoint named ``submit-proof``. We will also need to create a params object with all the necessary information about the proof, which will be sent in the API call.
+Once you have all the requirements imported, we will start the verification process by calling a ``POST`` endpoint named ``submit-proof``. We will also need to create a params object with all the necessary information about the proof, which will be sent in the API call. If you want to aggregate the verified proof(want to verify the proof aggregation on connected chains like Sepolia, Base Sepolia etc) check the code snippets with aggregation.
 <Tabs groupId="aggregated-submission">
 <TabItem value="without-aggregation" label="Without Aggregation">
 <Tabs groupId="submit-proof">
@@ -227,7 +227,7 @@ console.log(requestResponse.data)
 </Tabs>
 
 
-After sending the verification request to the relayer, we can fetch the status of our request using the ``jobId`` returned in the response of the previous API call. To get the status, we will be making a ``GET`` API call to ``job-status`` endpoint. We want to wait till our proof is finalized on zkVerify, thus we will run a loop waiting for 5 seconds between multiple API calls. If you want to aggregate our verified proof(want to verify the proof aggregation on connected chains like Sepolia, Base Sepolia etc) check the code snippets with aggregation.
+After sending the verification request to the relayer, we can fetch the status of our request using the ``jobId`` returned in the response of the previous API call. To get the status, we will be making a ``GET`` API call to ``job-status`` endpoint. We want to wait till our proof is finalized on zkVerify, thus we will run a loop waiting for 5 seconds between multiple API calls.
 
 <Tabs groupId="aggregated-listening">
 <TabItem value="without-aggregation" label="Without Aggregation">
