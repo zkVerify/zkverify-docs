@@ -2,6 +2,11 @@
 title: Client side proof with Noir
 ---
 
+:::info
+All the codebase used in the tutorial can be explored [here](https://github.com/zkVerify/tutorials/tree/main/nextjs-noir)
+:::
+
+
 This guide will walk you through the process of developing a NextJS application with client side proving supported by Circom and verifying the proofs with [relayer service](../02-getting-started/05-relayer.md). We will start from scratch by developing a simple ``Noir`` circuit and then using ``bbjs`` to generate proofs on the client side.
 
 To start this tutorial, we will create our NextJS application using the following command:

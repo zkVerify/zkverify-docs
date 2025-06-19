@@ -5,6 +5,10 @@ title: Verifying proofs with zkVerifyJS
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+:::info
+All the codebase used in the tutorial can be explored [here](https://github.com/zkVerify/tutorials/tree/main/zkVerifyJS)
+:::
+
 In this tutorial we will be verifying proofs using zkVerify JS package. ```zkVerify JS``` is a NPM package which makes it very easy to submit proofs, listen events and get aggregation proofs. You can use this package with all the proof types we support.
 
 :::note

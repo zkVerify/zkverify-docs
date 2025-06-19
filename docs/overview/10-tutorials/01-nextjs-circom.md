@@ -2,6 +2,10 @@
 title: Client side proof with Circom
 ---
 
+:::info
+All the codebase used in the tutorial can be explored [here](https://github.com/zkVerify/tutorials/tree/main/nextjs-circom)
+:::
+
 This guide will walk you through the process of developing a NextJS application with client side proving supported by Circom and verifying the proofs with [relayer service](../02-getting-started/05-relayer.md). We will start from scratch by developing a simple ``circom`` circuit and then using ``snarkjs`` to generate proofs on the client side.
 
 To start this tutorial, we will create our circuits using [zkRepl](https://zkrepl.dev/), which is very beginner-friendly. We won’t be diving deep into Circom DSL, but we will explore all the required code snippets. We will design a simple circuit, which takes three inputs(a,b,c) and constraints that ``c === (a*b)``. You can use the below code snippet for the circom circuit :
