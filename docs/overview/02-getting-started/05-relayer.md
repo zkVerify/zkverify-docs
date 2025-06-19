@@ -66,35 +66,11 @@ const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Follow
 </TabItem>
 <TabItem value="noir" label="Noir">
 
-:::note
-Please make sure, you have latest version of rust installed on your machine
-:::
-
-To use the relayer, we need to convert our binary proof artifacts to hex. We need to use ``noir-cli`` for this conversion. Let's start by downloading our ```noir-cli``` toolkit by cloning our github repository.
-```bash
-git clone https://github.com/zkVerify/ultraplonk_verifier.git
-```
-
-After downloading, we need to build the toolkit so make sure you have rust installed. To build the toolkit run the following command:
-```bash
-cargo install --features bins --path .
-```
-
-Now run the following commands to convert the generated files to required hex formats:
-```bash
-# noir-cli proof-data -n <num_public_inputs> --input-proof <bb_proof path> --output-proof <zkv_proof path> --output-pubs <zkv_pubs path>
-noir-cli proof-data -n 1 --input-proof ./target/proof --output-proof proof.hex --output-pubs pub.hex
-
-# noir-cli key --input <bb_vk path> --output <zkv_vk path>
-noir-cli key --input ./target/vk --output vk.hex
-```
-
-After running all these commands, you would have generated three files namely proof.hex, pub.hex and vk.hex. We will be using all these files while submitting proof for verification. Come back to our ``index.js`` file and paste the following code snippet :- 
-
 ```js
-const vkhex = fs.readFileSync("../hello_world/vk.hex").toString();
-const proofhex = fs.readFileSync("../hello_world/proof.hex").toString();
-const pubhex = fs.readFileSync("../hello_world/pub.hex").toString();
+const bufvk = fs.readFileSync("./assets/noir/vk");
+const bufproof = fs.readFileSync("./assets/noir/proof");
+const base64Proof = bufproof.toString("base64");
+const base64Vk = bufvk.toString("base64");
 ```
 </TabItem>
 </Tabs>
@@ -158,10 +134,12 @@ console.log(requestResponse.data)
 const params = {
     "proofType": "ultraplonk",
     "vkRegistered": false,
+    "proofOptions": {
+        "numberOfPublicInputs": 1 // Replace this for the number of public inputs your circuit support
+    },
     "proofData": {
-        "proof": proofhex.split("\n")[0],
-        "publicSignals": pubhex.split("\n").slice(0,-1),
-        "vk": vkhex.split("\n")[0]
+        "proof": base64Proof,
+        "vk": base64Vk
     }
 }
 

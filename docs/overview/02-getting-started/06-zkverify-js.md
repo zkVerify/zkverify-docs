@@ -48,7 +48,7 @@ dotenv.config();
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
-import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import { zkVerifySession, ZkVerifyEvents, Risc0Version } from "zkverifyjs";
 import dotenv from 'dotenv';
 dotenv.config();
 ```
@@ -177,7 +177,7 @@ session.subscribe([
   },
 ]);
 
-const {events} = await session.verify().risc0({version: "V1_2"}) // Mention the R0 version used while proving
+const {events} = await session.verify().risc0({ version: Risc0Version.V1_2} ) // Mention the R0 version used while proving
 .execute({proofData:{
     proof: proof.proof,
     vk: proof.image_id,
