@@ -5,6 +5,10 @@ title: Verifying proofs with Relayer
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+:::info
+All the codebase used in the tutorial can be explored [here](https://github.com/zkVerify/tutorials/tree/main/relayer)
+:::
+
 In this tutorial, we will be exploring the process of verifying proofs on zkVerify using Relayer. Relayer is a REST API service built by [Horizen Labs](https://horizenlabs.io) which makes the process of verifying proofs on zkVerify very easy and straightforward.
 
 :::note
@@ -66,35 +70,11 @@ const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Follow
 </TabItem>
 <TabItem value="noir" label="Noir">
 
-:::note
-Please make sure, you have latest version of rust installed on your machine
-:::
-
-To use the relayer, we need to convert our binary proof artifacts to hex. We need to use ``noir-cli`` for this conversion. Let's start by downloading our ```noir-cli``` toolkit by cloning our github repository.
-```bash
-git clone https://github.com/zkVerify/ultraplonk_verifier.git
-```
-
-After downloading, we need to build the toolkit so make sure you have rust installed. To build the toolkit run the following command:
-```bash
-cargo install --features bins --path .
-```
-
-Now run the following commands to convert the generated files to required hex formats:
-```bash
-# noir-cli proof-data -n <num_public_inputs> --input-proof <bb_proof path> --output-proof <zkv_proof path> --output-pubs <zkv_pubs path>
-noir-cli proof-data -n 1 --input-proof ./target/proof --output-proof proof.hex --output-pubs pub.hex
-
-# noir-cli key --input <bb_vk path> --output <zkv_vk path>
-noir-cli key --input ./target/vk --output vk.hex
-```
-
-After running all these commands, you would have generated three files namely proof.hex, pub.hex and vk.hex. We will be using all these files while submitting proof for verification. Come back to our ``index.js`` file and paste the following code snippet :- 
-
 ```js
-const vkhex = fs.readFileSync("../hello_world/vk.hex").toString();
-const proofhex = fs.readFileSync("../hello_world/proof.hex").toString();
-const pubhex = fs.readFileSync("../hello_world/pub.hex").toString();
+const bufvk = fs.readFileSync("./assets/noir/vk");
+const bufproof = fs.readFileSync("./assets/noir/proof");
+const base64Proof = bufproof.toString("base64");
+const base64Vk = bufvk.toString("base64");
 ```
 </TabItem>
 </Tabs>
@@ -111,8 +91,9 @@ main();
 ```
 :::
 
-Once you have all the requirements imported, we will start the verification process by calling a ``POST`` endpoint named ``submit-proof``. We will also need to create a params object with all the necessary information about the proof, which will be sent in the API call.
-
+Once you have all the requirements imported, we will start the verification process by calling a ``POST`` endpoint named ``submit-proof``. We will also need to create a params object with all the necessary information about the proof, which will be sent in the API call. If you want to aggregate the verified proof(want to verify the proof aggregation on connected chains like Sepolia, Base Sepolia etc) check the code snippets with aggregation.
+<Tabs groupId="aggregated-submission">
+<TabItem value="without-aggregation" label="Without Aggregation">
 <Tabs groupId="submit-proof">
 <TabItem value="circom" label="Circom">
 ```js
@@ -158,10 +139,12 @@ console.log(requestResponse.data)
 const params = {
     "proofType": "ultraplonk",
     "vkRegistered": false,
+    "proofOptions": {
+        "numberOfPublicInputs": 1 // Replace this for the number of public inputs your circuit support
+    },
     "proofData": {
-        "proof": proofhex.split("\n")[0],
-        "publicSignals": pubhex.split("\n").slice(0,-1),
-        "vk": vkhex.split("\n")[0]
+        "proof": base64Proof,
+        "vk": base64Vk
     }
 }
 
@@ -170,9 +153,84 @@ console.log(requestResponse.data)
 ```
 </TabItem>
 </Tabs>
+</TabItem>
+<TabItem value="with-aggregation" label="With Aggregation">
+We need to define the chainId where we want to verify our aggregated proof. Use the following chainId:
+- ETH Sepolia - 11155111
+- Base Sepolia - 84532
+- Optimism Sepolia - 11155420
+- Arbitrum Sepolia - 421614
+- EDU Chain Testnet - 656476
+<Tabs groupId="submit-proof">
+<TabItem value="circom" label="Circom">
+```js
+const params = {
+    "proofType": "groth16",
+    "vkRegistered": false,
+    "chainId": 11155111,
+    "proofOptions": {
+        "library": "snarkjs",
+        "curve": "bn128"
+    },
+    "proofData": {
+        "proof": proof,
+        "publicSignals": publicInputs,
+        "vk": key
+    }    
+}
+
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
+console.log(requestResponse.data)
+```
+</TabItem>
+<TabItem value="r0" label="Risc Zero">
+```js
+const params = {
+    "proofType": "risc0",
+    "vkRegistered": false,
+    "chainId": 11155111,
+    "proofOptions": {
+        "version": "V1_2" // Replace this with the Risc0 version 
+    },
+    "proofData": {
+        "proof": proof.proof,
+        "publicSignals": proof.pub_inputs,
+        "vk": proof.image_id
+    }
+}
+
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
+console.log(requestResponse.data)
+```
+</TabItem>
+<TabItem value="noir" label="Noir">
+```js
+const params = {
+    "proofType": "ultraplonk",
+    "vkRegistered": false,
+    "chainId": 11155111,
+    "proofOptions": {
+        "numberOfPublicInputs": 1 // Replace this for the number of public inputs your circuit support
+    },
+    "proofData": {
+        "proof": base64Proof,
+        "vk": base64Vk
+    }
+}
+
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
+console.log(requestResponse.data)
+```
+</TabItem>
+</Tabs>
+</TabItem>
+</Tabs>
+
 
 After sending the verification request to the relayer, we can fetch the status of our request using the ``jobId`` returned in the response of the previous API call. To get the status, we will be making a ``GET`` API call to ``job-status`` endpoint. We want to wait till our proof is finalized on zkVerify, thus we will run a loop waiting for 5 seconds between multiple API calls.
 
+<Tabs groupId="aggregated-listening">
+<TabItem value="without-aggregation" label="Without Aggregation">
 ```js
 if(requestResponse.data.optimisticVerify != "success"){
     console.error("Proof verification, check proof artifacts");
@@ -219,6 +277,71 @@ Job finalized successfully
   transactionDetails: {}
 }
 ```
+</TabItem>
+<TabItem value="with-aggregation" label="With Aggregation">
+```js
+if(requestResponse.data.optimisticVerify != "success"){
+    console.error("Proof verification, check proof artifacts");
+    return;
+}
+
+while(true){
+    const jobStatusResponse = await axios.get(`${API_URL}/job-status/${process.env.API_KEY}/${requestResponse.data.jobId}`);
+    if(jobStatusResponse.data.status === "Aggregated"){
+        console.log("Job aggregated successfully");
+        console.log(jobStatusResponse.data);
+        fs.writeFileSync("aggregation.json", JSON.stringify({...jobStatusResponse.data.aggregationDetails, aggregationId: jobStatusResponse.data.aggregationId}))
+        break;
+    }else{
+        console.log("Job status: ", jobStatusResponse.data.status);
+        console.log("Waiting for job to aggregated...");
+        await new Promise(resolve => setTimeout(resolve, 20000)); // Wait for 5 seconds before checking again
+    }
+}
+```
+
+Next run this script by running ``node index.js`` command. You should get a response similar to the following :- 
+```json
+{
+  jobId: '4e77e1c5-4d36-11f0-8eb5-b2e0eb476089',
+  optimisticVerify: 'success'
+}
+Job status:  Submitted
+Waiting for job to aggregated...
+Job status:  AggregationPending
+Waiting for job to aggregated...
+Job aggregated successfully
+{
+  jobId: '4e77e1c5-4d36-11f0-8eb5-b2e0eb476089',
+  status: 'Aggregated',
+  statusId: 6,
+  proofType: 'groth16',
+  chainId: 11155111,
+  createdAt: '2025-06-19T17:53:29.000Z',
+  updatedAt: '2025-06-19T17:54:05.000Z',
+  txHash: '0x1087c19de3d4b6dc5c8b20aec8a640d94ad6862e57634b5cf48defcabea3a92e',
+  blockHash: '0x5c8279c370ac8611e5dc5810fabf6078e1997c0c323fc2b26de74ff420e27c65',
+  aggregationId: 29537,
+  statement: '0xd72c67547100dd6f00c60f05f4bb7cf33f22b077e6a76125e911e091197bd55c',
+  aggregationDetails: {
+    receipt: '0x84c25ba051bc3cc66a74bcf2169befad5f348d0ad7b24efd6c68c70a25783ad2',
+    receiptBlockHash: '0x11802c585a367a02df4b0555d1310ff96fa5490fb6e8da8ebefde3f537ef5cb7',
+    root: '0x84c25ba051bc3cc66a74bcf2169befad5f348d0ad7b24efd6c68c70a25783ad2',
+    leaf: '0xd72c67547100dd6f00c60f05f4bb7cf33f22b077e6a76125e911e091197bd55c',
+    leafIndex: 6,
+    numberOfLeaves: 8,
+    merkleProof: [
+      '0xc714a8b348a529a98fd65c547d7d0819afd3be840fdbad95f04c5ce026424cd4',
+      '0x958bf24c3a974ce5ad51461bdea442de1907d90d237bba2be3aaca3ec609d777',
+      '0x9367529337c04392b71c3174eaaba23fa2c8d8b599b82ec1ec1a420bbf2e2d77'
+    ]
+  }
+}
+```
+
+And you would now have a new file named ``aggregation.json`` which will have the aggregation details which can be used later during smart contract verification.
+</TabItem>
+</Tabs>
 
 ## Job Status
 
