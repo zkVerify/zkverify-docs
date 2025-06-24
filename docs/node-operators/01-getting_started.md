@@ -58,7 +58,7 @@ To reduce the time required for a node's startup, **daily snapshots of chain dat
 
 Snapshots are available in two forms:
 
-- **Full node snapshot**
+- **Node snapshot**
 - **Archive node snapshot**
 
 Each snapshot is a **.tar.gz** archive containing the **db** directory, intended to replace the **db** directory generated during the initial node run.
