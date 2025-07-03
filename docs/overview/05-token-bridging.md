@@ -21,7 +21,7 @@ This call is used to initialize a cross-chain asset transfer. Any provided asset
 - `destination`: Destination state machine that should receive the funds, defined by its chain type and chain id. 
 - `recipient`: The beneficiary account for the funds on the destination.
 - `amount`: The amount that should be transferred.
-- `timeout`:The request timeout, this is the time after which the request cannot be delivered to the destination. It should represent the cumulative time for finalization on the source chain and Hyperbridge with some additional buffer. 
+- `timeout`:The request timeout in seconds, this is the time after which the request cannot be delivered to the destination. It should represent the cumulative time for finalization on the source chain and Hyperbridge with some additional buffer. If 0 it never times out.
 - `tokengateway`: The address of the token gateway module on the destination chain. 
 - `relayer_fee`: The amount to be paid to relayers for delivering the request, a value of zero means the dispatcher is responsible for relaying the request. For now it's okay to leave it to 0.
 - `redeem`: Boolean specifying if we are redeeming an existing ERC20. 
@@ -34,7 +34,7 @@ This call is used to initialize a cross-chain asset transfer. Any provided asset
 | `destination`  | Evm -> 11155111                            | No           | Eth Sepolia chain ID                                                                                                                            |
 | `recipient`    | 0x000000000000000000000000[ADDRESS]        | Yes          | Address should be left padded with zeros to fit into the required 32 bytes. Copy paste the example + append your address (remove the 0x though) |
 | `amount`       | 1000000000000000000                        | Yes          | tVFY token has 18 decimals                                                                                                                      |
-| `timeout`      | 0                                          | Yes          | Can be custom but recommend to put 0 which means it never times out.                                                                            |
+| `timeout`      | 7200                                       | Yes          | Can be custom but recommend to put 7200 seconds (2 hours).                                                                                      |
 | `tokengateway` | 0xFcDa26cA021d5535C3059547390E6cCd8De7acA6 | No           | Contract address for ETH sepolia                                                                                                                |
 | `relayer_fee`  | 0                                          | No           | 0 means the dispatcher is responsible for relaying the request, we can leave it as it is for now.                                               |
 | `redeem`       | false                                      | No           | we will not deploy ERC20 on our own so always false.                                                                                            | 
@@ -92,7 +92,7 @@ FYI, you need some Sepolia ETH tokens to pay the fees.
 - `redeem`: Redeem ERC20 on the destination?
 - `to` ->  This is the destination address receiving the tokens.
 - `dest`: This is the bytes representation of the destination chain, in this case zkVerify.
-- `timeout`: The request timeout, this is the time after which the request cannot be delivered to the destination. It should represent the cumulative time for finalization on the source chain and Hyperbridge with some additional buffer. 
+- `timeout`: The request timeout in seconds, this is the time after which the request cannot be delivered to the destination. It should represent the cumulative time for finalization on the source chain and Hyperbridge with some additional buffer. If 0 it never times out.
 - `nativeCost`: Amount of native token to pay for dispatching the request. If 0 will use the `IIsmpHost.feeToken`
 - `data`: Destination contract call data
 
@@ -106,7 +106,7 @@ FYI, you need some Sepolia ETH tokens to pay the fees.
 | `redeem`     | false                                                              | No           | We'll never redeem an ERC-20 on the destination chain                                           |
 | `to`         | 0xa23ab6a920b139595c75b86d04b81f4508146e8a5fe756de9f04de9c64e23845 | Yes          | Need to be given in public key hex format (check following section to see how it's computed)    |
 | `dest`       | 0x5355425354524154452d7a6b765f                                     | No           | bytes representation of the destination chain, zkVerify (check following section to see how it's computed)                                        |
-| `timeout`    | 0                                                                  | Yes          | Can be custom but recommend to put 0 which means it never times out.                            |
+| `timeout`    | 7200                                                               | Yes          | Can be custom but recommend to put 7200 seconds (2 hours).                           |
 | `nativeCost` | 0                                                                  | No           |                                                                                                 |
 | `data`       | 0x                                                                 | No           |                                                                                                 | 
 
