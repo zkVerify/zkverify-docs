@@ -82,13 +82,14 @@ import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Buffer } from "buffer";
 
+const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
     
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method not allowed' });
     }
     try{
-        const API_URL = 'https://relayer-api.horizenlabs.io/api/v1';
 
         const proofUint8 = new Uint8Array(Object.values(req.body.proof));
 
@@ -160,7 +161,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(405).json({ error: 'Method not allowed' });
     }
     try{
-        const API_URL = 'https://relayer-api.horizenlabs.io/api/v1';
 
         const proofUint8 = new Uint8Array(Object.values(req.body.proof));
 

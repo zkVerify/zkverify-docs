@@ -4,7 +4,7 @@ title: Supported Networks
 
 ## Aggregation Contract
 
-| Network                                                     | Contract Address                                                                                                                                                                                                             | Relayer Chain ID                                                     
+| Network                                                     | Contract Address                                                                                                                                                                                                             | Chain ID                                                     
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |  ----------------------------------------------------------- 
 | Sepolia (Ethereum testnet) | [`Contract`](https://sepolia.etherscan.io/address/0x5a3c35CCC5c05fDeFe5Ecafc15F4B1aC8eF71481) [`Proxy`](https://sepolia.etherscan.io/address/0xEA0A0f1EfB1088F4ff0Def03741Cb2C64F89361E)                         | 11155111 |
 | Arbitrum (Sepolia testnet) | [`Contract`](https://sepolia.arbiscan.io/address/0x8fDFE115948b54e77134Ff3841a626FAd4E6A661) [`Proxy`](https://sepolia.arbiscan.io/address/0xd007494945580eEb25522c8e0b2fa798B3F0FDE2)                           | 421614 |

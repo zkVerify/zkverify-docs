@@ -153,7 +153,7 @@ const {events} = await session.verify().risc0()
         proof: proof.proof,
         vk: vkey.hash,
         publicSignals: proof.pub_inputs,
-        version: "V1_2" // Mention the R0 version used while proving
+        version: "V2_1" // Mention the R0 version used while proving
     }, domainId: 0})
 ```
 </TabItem>

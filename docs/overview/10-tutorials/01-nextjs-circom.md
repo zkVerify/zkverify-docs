@@ -85,6 +85,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import path from "path";
 
+const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -94,7 +96,6 @@ export default async function handler(
   }
 
   try {
-    const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
 
     if(fs.existsSync(path.join(process.cwd(), "public", "assets", "vkey.json")) === false) {
       await registerVk();
@@ -164,7 +165,6 @@ export default async function handler(
 
 async function registerVk() {
 
-  const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
   const vk = fs.readFileSync(
     path.join(process.cwd(), "public", "assets", "main.groth16.vkey.json"),
     "utf-8"
