@@ -91,7 +91,94 @@ main();
 ```
 :::
 
-Once you have all the requirements imported, we will start the verification process by calling a ``POST`` endpoint named ``submit-proof``. We will also need to create a params object with all the necessary information about the proof, which will be sent in the API call. If you want to aggregate the verified proof(want to verify the proof aggregation on connected chains like Sepolia, Base Sepolia etc) check the code snippets with aggregation.
+Once you have all the requirements imported, we will start by registering our verification key. We can do this by calling a ``GET`` endpoint named ``register-vk`` on our relayer service. We will also need to create a params object with all the necessary information about the verification key, which will be sent in the API call. Once we register the verification key, we will store the ``vkHash`` in a json file which can be used in subsequent API verification calls.
+
+<Tabs groupId="register-vk">
+<TabItem value="circom" label="Circom">
+```js
+if(!fs.existsSync("circom-vkey.json")){
+    try{
+        const regParams = {
+            "proofType": "groth16",
+            "proofOptions": {
+                "library": "snarkjs",
+                "curve": "bn128"
+            },
+            "vk": key
+        }
+        const regResponse = await axios.post(`${API_URL}/register-vk/${process.env.API_KEY}`, regParams);
+        fs.writeFileSync(
+            "circom-vkey.json",
+            JSON.stringify(regResponse.data)
+        );
+    }catch(error){
+        fs.writeFileSync(
+            "circom-vkey.json",
+            JSON.stringify(error.response.data)
+        );
+    }
+}
+const vk = JSON.parse(fs.readFileSync("circom-vkey.json"));
+```
+</TabItem>
+<TabItem value="r0" label="Risc Zero">
+```js
+if(!fs.existsSync("r0-vkey.json")){
+    // Registering the verification key
+    try{
+        const regParams = {
+            "proofType": "risc0",
+            "proofOptions": {
+                "version": "V2_1"
+            },
+            "vk": proof.image_id
+        }
+        const regResponse = await axios.post(`${API_URL}/register-vk/${process.env.API_KEY}`, regParams);
+        fs.writeFileSync(
+            "r0-vkey.json",
+            JSON.stringify(regResponse.data)
+        );
+    }catch(error){
+        fs.writeFileSync(
+            "r0-vkey.json",
+            JSON.stringify(error.response.data)
+        );
+    }
+}
+
+const vk = JSON.parse(fs.readFileSync("r0-vkey.json"));
+```
+</TabItem>
+<TabItem value="noir" label="Noir">
+```js
+if(!fs.existsSync("noir-vkey.json")){
+    // Registering the verification key
+    try{
+        const regParams = {
+            "proofType": "ultraplonk",
+            "proofOptions": {
+                "numberOfPublicInputs": 1
+            },
+            "vk": base64Vk
+        }
+        const regResponse = await axios.post(`${API_URL}/register-vk/${process.env.API_KEY}`, regParams);
+        fs.writeFileSync(
+            "noir-vkey.json",
+            JSON.stringify(regResponse.data)
+        );
+    }catch(error){
+        fs.writeFileSync(
+            "noir-vkey.json",
+            JSON.stringify(error.response.data)
+        );
+    }
+}
+const vk = JSON.parse(fs.readFileSync("noir-vkey.json"));
+```
+</TabItem>
+</Tabs>
+
+After registering our verification key, we will start the verification process by calling a ``POST`` endpoint named ``submit-proof``. We will also need to create a params object with all the necessary information about the proof and the vkHash we got after registering our verification key, which will be sent in the API call. If you want to aggregate the verified proof(want to verify the proof aggregation on connected chains like Sepolia, Base Sepolia etc) check the code snippets with aggregation.
 <Tabs groupId="aggregated-submission">
 <TabItem value="without-aggregation" label="Without Aggregation">
 <Tabs groupId="submit-proof">
@@ -99,7 +186,7 @@ Once you have all the requirements imported, we will start the verification proc
 ```js
 const params = {
     "proofType": "groth16",
-    "vkRegistered": false,
+    "vkRegistered": true,
     "proofOptions": {
         "library": "snarkjs",
         "curve": "bn128"
@@ -107,7 +194,7 @@ const params = {
     "proofData": {
         "proof": proof,
         "publicSignals": publicInputs,
-        "vk": key
+        "vk": vk.vkHash || vk.meta.vkHash
     }    
 }
 
@@ -119,14 +206,14 @@ console.log(requestResponse.data)
 ```js
 const params = {
     "proofType": "risc0",
-    "vkRegistered": false,
+    "vkRegistered": true,
     "proofOptions": {
-        "version": "V1_2" // Replace this with the Risc0 version 
+        "version": "V2_1"
     },
     "proofData": {
         "proof": proof.proof,
         "publicSignals": proof.pub_inputs,
-        "vk": proof.image_id
+        "vk": vk.vkHash || vk.meta.vkHash
     }
 }
 
@@ -138,13 +225,13 @@ console.log(requestResponse.data)
 ```js
 const params = {
     "proofType": "ultraplonk",
-    "vkRegistered": false,
+    "vkRegistered": true,
     "proofOptions": {
         "numberOfPublicInputs": 1 // Replace this for the number of public inputs your circuit support
     },
     "proofData": {
         "proof": base64Proof,
-        "vk": base64Vk
+        "vk": vk.vkHash || vk.meta.vkHash
     }
 }
 
@@ -155,18 +242,13 @@ console.log(requestResponse.data)
 </Tabs>
 </TabItem>
 <TabItem value="with-aggregation" label="With Aggregation">
-We need to define the chainId where we want to verify our aggregated proof. Use the following chainId:
-- ETH Sepolia - 11155111
-- Base Sepolia - 84532
-- Optimism Sepolia - 11155420
-- Arbitrum Sepolia - 421614
-- EDU Chain Testnet - 656476
+We need to define the chainId where we want to verify our aggregated proof. You can find the chain ID for all the supported networks [here](../06-contract-addresses.md)
 <Tabs groupId="submit-proof">
 <TabItem value="circom" label="Circom">
 ```js
 const params = {
     "proofType": "groth16",
-    "vkRegistered": false,
+    "vkRegistered": true,
     "chainId": 11155111,
     "proofOptions": {
         "library": "snarkjs",
@@ -175,7 +257,7 @@ const params = {
     "proofData": {
         "proof": proof,
         "publicSignals": publicInputs,
-        "vk": key
+        "vk": vk.vkHash || vk.meta.vkHash
     }    
 }
 
@@ -187,15 +269,15 @@ console.log(requestResponse.data)
 ```js
 const params = {
     "proofType": "risc0",
-    "vkRegistered": false,
+    "vkRegistered": true,
     "chainId": 11155111,
     "proofOptions": {
-        "version": "V1_2" // Replace this with the Risc0 version 
+        "version": "V2_1"
     },
     "proofData": {
         "proof": proof.proof,
         "publicSignals": proof.pub_inputs,
-        "vk": proof.image_id
+        "vk": vk.vkHash || vk.meta.vkHash
     }
 }
 
@@ -207,14 +289,14 @@ console.log(requestResponse.data)
 ```js
 const params = {
     "proofType": "ultraplonk",
-    "vkRegistered": false,
+    "vkRegistered": true,
     "chainId": 11155111,
     "proofOptions": {
         "numberOfPublicInputs": 1 // Replace this for the number of public inputs your circuit support
     },
     "proofData": {
         "proof": base64Proof,
-        "vk": base64Vk
+        "vk": vk.vkHash || vk.meta.vkHash
     }
 }
 
