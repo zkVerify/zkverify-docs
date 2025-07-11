@@ -33,6 +33,7 @@ Users submits a Merkle Proof to the zkVerify contract on-chain in order to verif
 We have created built-in verifier pallets for different proving schemes to support a wide variety of zk proofs on our chain. The proof submission interface passes the proof verification requests to respective verifier pallets which verify these proofs and add them to the block. Currently, we support :
 
 - Groth16 (Circom, SnarkJS, Gnark)
+- UltraHonk (Noir)
 - UltraPlonk (Noir)
 - Risc Zero
 - SxT Proof of SQL
