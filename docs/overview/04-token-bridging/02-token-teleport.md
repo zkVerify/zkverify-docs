@@ -16,7 +16,7 @@ In this guide, we will be using teleport to move VFY tokens from zkVerify to VFl
 
 You can find more information on XCM [here](https://polkadot.com/blog/xcm-the-cross-consensus-message-format/).
 
-### From zkVerify to VFlow
+### From zkVerify to VFlow via PolkadotJS-UI
 
 From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvolta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `xcmPallet` pallet and the `teleportAssets` extrinsic:
 
@@ -105,10 +105,10 @@ If you don't want to construct this complex extrinsic by yourself, you can go to
 
 Then click on the `Submission` tab and change the values you need (like the Parachain ID, amount, destination address, etc.). 
 
-### From VFlow to zkVerify
+### From VFlow to zkVerify via PolkadotJS-UI
 
 The process here is exactly a mirror of what we did on zkVerify side.
-Let's navigate to `Developer-> Extrinsics` and select the `zkvXcm` pallet and the `teleportAssets` extrinsic.
+From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvflow-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `zkvXcm` pallet and the `teleportAssets` extrinsic.
 
 ![alt_text](./img/extrinsic_para.png)
 
@@ -170,6 +170,99 @@ If you don't want to construct this complex extrinsic by yourself, you can go to
 `0x5d0284e07fcda4d3142f9e2c12cea25e418d18492a3781db9a6d3e84d2331a3b02c371f782180d79c4ed54bebac862cdae663527e47b4405dde8273edde4ec218e4f2fd4300df9ca09ec35be66137cad5ad1c3fe16004b0025010800001f010501000500010100486b90dbf0cb9bfe92b6ba7d4942019a17ada772ab5fa9258ac3df821daca54d050401000013000064a7b3b6e00d00000000`
 
 Then click on the `Submission` tab and change the values you need (like the amount, destination address, etc.).
+
+### From VFlow to zkVerify via EVM Tooling
+
+We've included a precompile contract in VFlow that allows you to teleport VFY tokens to zkVerify directly from your standard EVM tools (like Metamask).
+Contract is deployed at address `2060`. Here is an example script leveraging `web3` library:
+
+```javascript
+const { Web3 } = require('web3');
+
+// Configuration
+const RPC_URL = ''; // VFlow RPC endpoint
+const PRIVATE_KEY = ''; 
+const PRECOMPILE_ADDRESS = '0x000000000000000000000000000000000000080C'; // XCM Teleport precompile address
+
+// XCM Teleport precompile ABI
+const teleportABI = [{
+    "name": "teleportToRelayChain",
+    "type": "function",
+    "inputs": [
+        {"name": "destinationAccount", "type": "bytes32"},
+        {"name": "amount", "type": "uint256"}
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+}];
+
+async function testTeleport() {
+    try {
+        // Initialize Web3
+        const web3 = new Web3(RPC_URL);
+
+        // Add your account to the wallet
+        const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+        web3.eth.accounts.wallet.add(account);
+
+        console.log(`Using account: ${account.address}`);
+
+        // Check balance
+        const balance = await web3.eth.getBalance(account.address);
+        console.log(`Account balance: ${web3.utils.fromWei(balance, 'ether')} tVFY`);
+
+        // Set up the contract
+        const contract = new web3.eth.Contract(teleportABI, PRECOMPILE_ADDRESS);
+
+        // Test parameters
+        const destinationAccount = ''; // 32-byte relay chain account
+        const amount = web3.utils.toWei('5', 'ether'); // 1 VFY
+
+        console.log(`Teleporting ${web3.utils.fromWei(amount, 'ether')} tVFY`);
+        console.log(`From: ${account.address} (parachain)`);
+        console.log(`To: ${destinationAccount} (relay chain)`);
+
+        // Estimate gas
+        const gasEstimate = await contract.methods
+            .teleportToRelayChain(destinationAccount, amount)
+            .estimateGas({ from: account.address });
+
+        console.log(`Estimated gas: ${gasEstimate}`);
+
+        // Send transaction
+        console.log('Sending transaction...');
+        const result = await contract.methods
+            .teleportToRelayChain(destinationAccount, amount)
+            .send({
+                from: account.address,
+                gas: gasEstimate
+            });
+
+        console.log('✅ Transaction successful!');
+        console.log(`Transaction hash: ${result.transactionHash}`);
+        console.log(`Block number: ${result.blockNumber}`);
+        console.log(`Gas used: ${result.gasUsed}`);
+
+        // Check events (if any)
+        if (result.events && Object.keys(result.events).length > 0) {
+            console.log('Events:', result.events);
+        }
+
+    } catch (error) {
+        console.error('❌ Error:', error.message);
+
+        // More detailed error info
+        if (error.reason) {
+            console.error('Reason:', error.reason);
+        }
+        if (error.code) {
+            console.error('Code:', error.code);
+        }
+    }
+}
+
+testTeleport();
+```
 
 ### A Note on XCM Teleport Fees
 
