@@ -33,7 +33,6 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 
 7. Click on the `submitTransaction` button.
 
-
 ![Submit Proof](./img/ultraplonk-proof-explorer.png)
 </TabItem>
 
@@ -50,16 +49,4 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 ![alt_text](./img/risc0-proof.png)
 </TabItem>
 
-<TabItem value="sxt" label="SxT">
-1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
-2. Select your account (you must have some tVFY).
-3. Choose the `settlementProofOfSqlPallet`, and the `submitProof` extrinsic.
-4. Inside the field `vkOrHash` select `Vk`
-5. Fill in all the required fields by toggling the `file upload` switch, and uploading the vk, proof, and pubs files generated in the previous section.
-6. Click on the `submitTransaction` button.
-</TabItem>
-
 </Tabs>
-
-
-

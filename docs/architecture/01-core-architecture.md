@@ -35,5 +35,5 @@ We have created built-in verifier pallets for different proving schemes to suppo
 - Groth16 (Circom, SnarkJS, Gnark)
 - UltraPlonk (Noir)
 - Risc Zero
-- SxT Proof of SQL
 - Plonky2
+- SP1
