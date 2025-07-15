@@ -13,7 +13,7 @@ To start with we will create a new cargo project using the follwing command:
 ```bash
 cargo new zkverify-tee-r0
 ```
-After creating the project, open it with IDE of your choice. We will be importing all the required modules for our project. We will be using [Automata's DCAP CLI]("https://github.com/automata-network/automata-dcap-zkvm-cli") project for all the required TEE verification functions. We will also use ``risc0-zkvm`` to create a client and generate a proof with the Bonsai proving service.
+After creating the project, open it with IDE of your choice. We will be importing all the required modules for our project. We will be using [Automata's DCAP CLI](https://github.com/automata-network/automata-dcap-zkvm-cli) project for all the required TEE verification functions. We will also use ``risc0-zkvm`` to create a client and generate a proof with the Bonsai proving service.
 
 Next, open the ``cargo.toml`` file and replace it with the following:
 ```toml
@@ -132,7 +132,7 @@ pub async fn verify_proof(receipt: Receipt, image_id: String) -> Result<()>{
 }
 ```
 
-Now let's dive to create the main logic for our application. We don't need to write a zkVM program, because we will be using [Automata's DCAP CLI]("https://github.com/automata-network/automata-dcap-zkvm-cli") project which already contains all the zkVM programs needed for the wrapping of the TEE attestation.
+Now let's dive to create the main logic for our application. We don't need to write a zkVM program, because we will be using [Automata's DCAP CLI](https://github.com/automata-network/automata-dcap-zkvm-cli) project which already contains all the zkVM programs needed for the wrapping of the TEE attestation.
 
 Open the ``main.rs`` file, and import alll the following modules:
 ```rust
