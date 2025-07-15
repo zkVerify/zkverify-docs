@@ -180,92 +180,90 @@ Contract is deployed at address `2060`. Here is an example script leveraging `we
 const { Web3 } = require('web3');
 
 // Configuration
-const RPC_URL = ''; // VFlow RPC endpoint
-const PRIVATE_KEY = ''; 
+const RPC_URL = 'wss://vflow-rpc.zkverify.io'; // VFlow RPC endpoint
+const PRIVATE_KEY = ''; // Your Ethereum account private key
 const PRECOMPILE_ADDRESS = '0x000000000000000000000000000000000000080C'; // XCM Teleport precompile address
 
 // XCM Teleport precompile ABI
-const teleportABI = [{
-    "name": "teleportToRelayChain",
-    "type": "function",
-    "inputs": [
-        {"name": "destinationAccount", "type": "bytes32"},
-        {"name": "amount", "type": "uint256"}
+const teleportABI = [
+  {
+    name: 'teleportToRelayChain',
+    type: 'function',
+    inputs: [
+      { name: 'destinationAccount', type: 'bytes32' },
+      { name: 'amount', type: 'uint256' },
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-}];
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+];
 
 async function testTeleport() {
-    try {
-        // Initialize Web3
-        const web3 = new Web3(RPC_URL);
+  // Initialize Web3
+  const web3 = new Web3(RPC_URL);
 
-        // Add your account to the wallet
-        const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
-        web3.eth.accounts.wallet.add(account);
+  // Add your account to the wallet
+  const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+  web3.eth.accounts.wallet.add(account);
 
-        console.log(`Using account: ${account.address}`);
+  console.log(`Using account: ${account.address}`);
 
-        // Check balance
-        const balance = await web3.eth.getBalance(account.address);
-        console.log(`Account balance: ${web3.utils.fromWei(balance, 'ether')} tVFY`);
+  // Check balance
+  const balance = await web3.eth.getBalance(account.address);
+  console.log(`Account balance: ${web3.utils.fromWei(balance, 'ether')} tVFY`);
 
-        // Set up the contract
-        const contract = new web3.eth.Contract(teleportABI, PRECOMPILE_ADDRESS);
+  // Set up the contract
+  const contract = new web3.eth.Contract(teleportABI, PRECOMPILE_ADDRESS);
 
-        // Test parameters
-        const destinationAccount = ''; // 32-byte relay chain account
-        const amount = web3.utils.toWei('5', 'ether'); // 1 VFY
+  // Test parameters
+  const destinationAccount = ''; // 32-byte relay chain account
+  const amount = web3.utils.toWei('1', 'ether'); // 1 VFY
 
-        console.log(`Teleporting ${web3.utils.fromWei(amount, 'ether')} tVFY`);
-        console.log(`From: ${account.address} (parachain)`);
-        console.log(`To: ${destinationAccount} (relay chain)`);
+  console.log(`Teleporting ${web3.utils.fromWei(amount, 'ether')} tVFY`);
+  console.log(`From: ${account.address} (parachain)`);
+  console.log(`To: ${destinationAccount} (relay chain)`);
 
-        // Estimate gas
-        const gasEstimate = await contract.methods
-            .teleportToRelayChain(destinationAccount, amount)
-            .estimateGas({ from: account.address });
+  // Estimate gas
+  const gasEstimate = await contract.methods
+    .teleportToRelayChain(destinationAccount, amount)
+    .estimateGas({ from: account.address });
 
-        console.log(`Estimated gas: ${gasEstimate}`);
+  console.log(`Estimated gas: ${gasEstimate}`);
 
-        // Send transaction
-        console.log('Sending transaction...');
-        const result = await contract.methods
-            .teleportToRelayChain(destinationAccount, amount)
-            .send({
-                from: account.address,
-                gas: gasEstimate
-            });
+  // Send transaction
+  console.log('Sending transaction...');
+  const result = await contract.methods
+    .teleportToRelayChain(destinationAccount, amount)
+    .send({
+      from: account.address,
+      gas: gasEstimate,
+    });
 
-        console.log('✅ Transaction successful!');
-        console.log(`Transaction hash: ${result.transactionHash}`);
-        console.log(`Block number: ${result.blockNumber}`);
-        console.log(`Gas used: ${result.gasUsed}`);
-
-        // Check events (if any)
-        if (result.events && Object.keys(result.events).length > 0) {
-            console.log('Events:', result.events);
-        }
-
-    } catch (error) {
-        console.error('❌ Error:', error.message);
-
-        // More detailed error info
-        if (error.reason) {
-            console.error('Reason:', error.reason);
-        }
-        if (error.code) {
-            console.error('Code:', error.code);
-        }
-    }
+  console.log('✅ Transaction successful!');
+  console.log(`Transaction hash: ${result.transactionHash}`);
+  console.log(`Block number: ${result.blockNumber}`);
+  console.log(`Gas used: ${result.gasUsed}`);
 }
 
 testTeleport();
+
 ```
+
+A couple of important notes:
+- In this case, the `amount` to be sent, doesn't require to specify 18 decimals.
+- The `destinationAccount` is an hex public key of zkVerify. While from PolkadotJS-UI you can use the AccountID and PolkadotJS automatically performs the conversion to the correct format, in this case you need to do it manually.
+From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvolta-rpc.zkverify.io#/explorer) navigate to `Developer-> Utilities` and select the `Convert Address` tab:
+
+![alt_text](./img/convert_address.png)
+
+Just copy paste the account id in the `address to convert` field to automatically get the public key to use as `destinationAccount`.
+
+### Teleport via zkv-xcm-library
+We've developed a Typescript library, called [zkv-xcm-library](https://github.com/zkVerify/zkv-xcm-library?tab=readme-ov-file#zkverify-xcm-library), in order to simplify the creation of such XCM teleport extrinsics and for ease of integration with your app/frontend.
+Check the readme for installation and usage instructions.
 
 ### A Note on XCM Teleport Fees
 
 Since an XCM message is executed both on the Relay Chain and Parachain side, both sender and receiver need to pay for execution fees. However:
-- The fees charged to the sender **are deducted directly from its main balance**. This happens immediately when the transaction is included in a block, **before the teleport's burn logic is even executed**.
+- The fees charged to the sender **are deducted directly from its main balance**. This happens immediately when the transaction is included in a block, **before the teleport's burn logic is even executed**. So, if after fee deduction your remaining balance is not enough to cover the burn logic, the transaction will fail.
 - The fees charged to the receiver **are deducted from the amount being teleported**. This happens when the XCM message is executed on the Parachain side.
