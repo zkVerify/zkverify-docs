@@ -2,6 +2,10 @@
 title: zkEmail
 ---
 
+:::info
+All the codebase used in the tutorial can be explored [here](https://github.com/zkVerify/explorations/tree/main/zkEmail)
+:::
+
 This guide will walk you through the process of verifying zkEmail proofs with zkVerify. We will be using the [zkEmail SDK](https://docs.zk.email/zk-email-sdk/setup) to generate remote proofs, and then we will be using [zkVerifyJS](../04-zkverifyjs.md) to verify the zkEmail proofs(Groth16).
 
 To start with, we will create a new directory, initialize npm, and install required packages(@zk-email/sdk and zkVerifyJS). Use the following commands:- 
