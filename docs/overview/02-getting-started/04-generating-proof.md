@@ -155,7 +155,7 @@ Check out [this section](https://dev.risczero.com/api/zkvm/) of Risc0 documentat
 
 :::tip[**Toolchain version**]
 
-Note this tutorial is based on version `1.2.1` of Risc0 toolchain. Very likely you should be able to follow it using a more recent version, but in case you encounter any issue you can explicitly target that version with command `rzup --version 1.2.1`.
+Note this tutorial is based on version `2.1.0` of Risc0 toolchain. Very likely you should be able to follow it using a more recent version, but in case you encounter any issue you can explicitly target that version with command `rzup --version 2.1.0`.
 
 :::
 
@@ -190,7 +190,19 @@ In order to build the application, go through the following steps:
     hex = "0.4.3"
     ```
 
-  - Open the file `hasher/host/src/main.rs` and replace the lines:
+  - Open the file `hasher/host/src/main.rs`. After all the imports add the following:
+    ```rust
+    use serde::Serialize;
+    use std::{fs::File, io::Write};
+    #[derive(Serialize)]
+    pub struct Proof{
+        proof: String,
+        image_id: String,
+        pub_inputs: String
+    }
+    ```
+
+    And then replace these lines:
 
     ```rust
     // For example:
@@ -204,7 +216,7 @@ In order to build the application, go through the following steps:
     println!("Input argument is: {}", input);
     ```
 
-    and the lines:
+    and these lines:
 
     ```rust
     // TODO: Implement code for retrieving receipt journal here.
@@ -217,30 +229,25 @@ In order to build the application, go through the following steps:
     ```rust
     let mut bin_receipt = Vec::new();
     ciborium::into_writer(&receipt, &mut bin_receipt).unwrap();
-    let out = std::fs::File::create("proof.bin").unwrap();
-    ciborium::into_writer(&receipt, out).unwrap();
-
-    println!(
-        "Serialized bytes array (hex) INNER: {}\n",
-        hex::encode(&bin_receipt)
-    );
-    let receipt_journal_bytes_array = &receipt.journal.bytes.as_slice();
-    println!(
-        "Journal bytes array (hex): {}\n",
-        hex::encode(&receipt_journal_bytes_array)
-    );
     let image_id_hex = hex::encode(
         HASHER_GUEST_ID
             .into_iter()
             .flat_map(|v| v.to_le_bytes().into_iter())
             .collect::<Vec<_>>(),
     );
-    println!("Serialized bytes array (hex) IMAGE_ID: {}\n", image_id_hex);
-    let output: String = receipt.journal.decode().unwrap();
-    println!("Output is: {}", output);
+    let receipt_journal_bytes_array = &receipt.journal.bytes.as_slice();
+    let proof = Proof{
+        proof: "0x".to_string()+&hex::encode(&bin_receipt),
+        image_id: "0x".to_string()+&image_id_hex,
+        pub_inputs: "0x".to_string()+&hex::encode(&receipt_journal_bytes_array)
+    };
+
+    let json_string = serde_json::to_string_pretty(&proof).unwrap();
+    let mut file = File::create("proof_output.json").unwrap();
+    file.write_all(json_string.as_bytes()).unwrap();
     ```
 
-  In this way you have prepared the host to easily receive command-line argument and to save the proof binary data in `proof.bin`, print out also to the terminal the proof (`bin_receipt`), the outputs (`receipt_journal_bytes_array`) and the image id (`image_id_hex`); these will be useful in a later step when you need to submit them on the zkVerify Mainchain.
+  In this way you have prepared the host to easily receive command-line argument and to save the proof json data in `proof.json`, which will be useful in a later step when you need to submit them on the zkVerify Mainchain.
 
 - Modify the guest program (just consider it as the code whose execution you want to prove and you want other to verify):
 
@@ -300,7 +307,7 @@ In summary, the above command will:
 
 Finally you need to save the following items:
 
-- The serialized proof (`receipt_inner_bytes_array` string or the `proof.bin` file).
+- The serialized proof (`receipt_inner_bytes_array` string).
 - The serialized outputs (`receipt_journal_bytes_array`).
 - The guest program fingerprint, known as image id (`image_id_hex`).
 

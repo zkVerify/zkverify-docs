@@ -2,6 +2,10 @@
 title: Galxe Identity Protocol
 ---
 
+:::info
+All the codebase used in the tutorial can be explored [here](https://github.com/zkVerify/explorations/tree/main/galxe-identity)
+:::
+
 Galxe Identity Protocol is a permissionless self-sovereign identity infrastructure. Powered by Zero-Knowledge Proof, you’ll be able to own, manage, and share verifiable credentials securely and privately. Galxe Identity Protocol also presents a diverse range of opportunities for builders to build Sybil prevention algorithms, reputation systems, credit systems, personal data markets, decentralized review systems, and beyond.
 
 Galxe Identity Protocol SDK is capable to utilize zkVerify's proof verification technology to drastically reduce the costly onchain proof verifications. This tutorial will guide you through the process of using zkVerifyJS to verify credentials on zkVerify.
