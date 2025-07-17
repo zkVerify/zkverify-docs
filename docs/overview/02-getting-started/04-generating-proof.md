@@ -61,18 +61,93 @@ Specify your inputs and generate proof on this page. Then save the proof in proo
 ![alt_text](img/circom-tutorial-proof-generate.png)
 </TabItem>
 
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+We will use the quickstart Noir Lang guide to generate an UltraHonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
+
+## Steps Involved
+- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup 
+- Generating Noir UltraHonk proofs
+- Converting the proof, vk, and public inputs to required hex format using Bash
+- Verifying our proofs on zkVerify and getting proof receipts
+- Verifying the proof receipts on Ethereum
+
+To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements:
+
+1. Install noirup by running the following command:
+```bash
+curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
+```
+
+2. Running noirup will install the latest version of Noir Toolkit
+```bash
+noirup
+```
+
+3. Install bbup by running the following command:
+```bash
+curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
+```
+
+4. Install Barretenberg's Backend by running bbup command:
+```bash
+bbup -v <version>
+```
+
+5. Create hello_world noir project using the following command:
+```bash
+nargo new hello_world
+```
+
+After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
+
+To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below :
+```toml
+x = "1"
+y = "2"
+```
+
+Let's execute our hello_world circuit and get our witness value, which will be used to generate proofs and vk. Use the following command to execute:
+```bash
+nargo execute
+```
+
+Once we have generated our witness, we can generate proof and vk using the bb toolkit. Use the following command to generate the required files:
+```bash
+# To generate proof
+bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target/proof --oracle_hash keccak --zk
+
+# To generate vk
+bb write_vk -s ultra_honk -b ./target/hello_world.json -o ./target/vk --oracle_hash keccak
+
+```
+
+After running these commands, you will have three files, namely: `proof`, `public_inputs`, and `vk` inside the `target` folder which will be used for verification.
+
+To convert the three files into hex format, run the following Bash commands:
+```bash
+# Convert proof to hexadecimal format
+{ printf "0x"; xxd -p -c 256 "./target/proof" | tr -d '\n'; echo; } > "./target/zkv_proof.hex"
+
+# Convert vk to hexadecimal format
+{ printf "0x"; xxd -p -c 256 "./target/vk" | tr -d '\n'; echo; } > "./target/zkv_vk.hex"
+
+# Convert public inputs to hexadecimal format
+{ printf "0x"; xxd -p -c 256 "./target/public_inputs" | tr -d '\n'; echo; } > "./target/zkv_pubs.hex"
+
+```
+</TabItem>
+
+<TabItem value="ultraplonk" label="Ultraplonk">
 We will use the quickstart Noir Lang guide to generate an UltraPlonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved
-
-- Installing Noir using noirup, and also installing bb(Barretenberg's Backend) using bbup
+- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup 
 - Generating Noir UltraPlonk proofs
 - Converting the proof and vk to required hex format using Noir-CLI
 - Verifying our proofs on zkVerify and getting proof receipts
 - Verifying the proof receipts on Ethereum
 
-To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements :
+To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements:
 
 1. Install noirup by running the following command:
 
@@ -111,10 +186,9 @@ bbup -v <version>
 nargo new hello_world
 ```
 
-After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hellow_world project.
+After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
 
-To generate proofs, first we need to create a ` Prover.Toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.Toml` file with the inputs given below :
-
+To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below:
 ```toml
 x = "1"
 y = "2"
@@ -126,8 +200,7 @@ Let's execute our hello_world circuit and get our witness value, which will be u
 nargo execute
 ```
 
-Once we have generated our witness, we can generate proof and vk using bb toolkit. Use the follwing command to generate the required files:
-
+Once we have generated our witness, we can generate proof and vk using the bb toolkit. Use the following command to generate the required files:
 ```bash
 # To generate proof
 bb prove -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target/proof
@@ -137,7 +210,7 @@ bb write_vk -b ./target/hello_world.json -o ./target/vk
 
 ```
 
-After running these commands, you will be having two files namely `proof` and `vk` inside the `target` folder which will be used for verification.
+After running these commands, you will have two files, namely: `proof` and `vk` inside the `target` folder which will be used for verification.
 </TabItem>
 
 <TabItem value="risc-zero" label="Risc Zero">
