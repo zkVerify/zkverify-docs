@@ -70,7 +70,7 @@ We will use the quickstart Noir Lang guide to generate an UltraHonk proof and wi
 - Verifying our proofs on zkVerify and getting proof receipts
 - Verifying the proof receipts on Ethereum
 
-To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements :
+To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements:
 
 1. Install noirup by running the following command:
 ```bash
@@ -99,7 +99,7 @@ nargo new hello_world
 
 After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
 
-To generate proofs, first we need to create a ```Prover.Toml``` file, which will hold our inputs for the hello_world noir circuit. Populate the ```Prover.Toml``` file with the inputs given below :
+To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below :
 ```toml
 x = "1"
 y = "2"
@@ -120,7 +120,7 @@ bb write_vk -s ultra_honk -b ./target/hello_world.json -o ./target/vk --oracle_h
 
 ```
 
-After running these commands, you will have three files, namely: ``proof``, ``public_inputs``, and ``vk`` inside the ``target`` folder which will be used for verification.
+After running these commands, you will have three files, namely: `proof`, `public_inputs`, and `vk` inside the `target` folder which will be used for verification.
 
 To convert the three files into hex format, run the following Bash commands:
 ```bash
@@ -140,13 +140,13 @@ To convert the three files into hex format, run the following Bash commands:
 We will use the quickstart Noir Lang guide to generate an UltraPlonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved
-- Installing Noir using noirup, and also installing bb(Barretenberg's Backend) using bbup 
+- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup 
 - Generating Noir UltraPlonk proofs
 - Converting the proof and vk to required hex format using Noir-CLI
 - Verifying our proofs on zkVerify and getting proof receipts
 - Verifying the proof receipts on Ethereum
 
-To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements :
+To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements:
 
 1. Install noirup by running the following command:
 ```bash
@@ -181,7 +181,7 @@ nargo new hello_world
 
 After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
 
-To generate proofs, first we need to create a ```Prover.Toml``` file, which will hold our inputs for the hello_world noir circuit. Populate the ```Prover.Toml``` file with the inputs given below :
+To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below :
 ```toml
 x = "1"
 y = "2"
