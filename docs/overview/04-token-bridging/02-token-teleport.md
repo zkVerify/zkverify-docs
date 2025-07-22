@@ -34,11 +34,11 @@ This parameter specifies the target chain where the assets are being teleported.
     - `parents` as `0`
     - `interior` as `X1` from the scroll-down menu. Then new fields will appear. Let's set:
         - `Parachain` as `0` field, from the scroll-down menu
-        - We need finally to insert the ID of the `Parachain` we want to send the assets to, in the example is `1599`, but in case of VFlow it will be `1`.
+        - We need finally to insert the ID of the VFlow `Parachain`, which is `1`.
 
 Let's provide a brief explanation here:
 - `dest` provides details about the destination of the message (we need to select the XCM version currently being used. V5 is the most-up-to-date at the time of writing).
-    - `parents` tells the Relay Chain XCM executor the destination location of the teleport. 
+    - `parents` tells the Relay Chain XCM executor that the following `interior` is relative to the Relay chain itself. 
 
     - `interior` describes the rest of the path, the specific, step-by-step directions to the final destination. It defines a sequence of "hops" or _Junctions_. Each junction is a specific location or entity within a consensus system.
         - The interior is structured as a container, usually X1, X2, X3, etc. where X stands for the number of Junctions (hops) in the path.
@@ -59,7 +59,7 @@ So setting `parents = 0` means it's the current location (in bash it would be `.
 Setting `interior = X1 { Parachain: 3 }` means essentially specifying `./parachain_3`;
 Instead setting `interior = X2 { Parachain: 3, AccountKey20: 0x111 }` means essentially specifying `./parachain_3/account_111`
 
-Putting it all together, we are initiating the teleport from the Relay Chain (so `parents` is 0, since we are already on the Relay Chain) to the Parachain with id `1599`, which is *one hop* away from the parent (so `interior` is `X1` with `Parachain` set to `1599`).
+Putting it all together, we are initiating the teleport from the Relay Chain (so `parents` is 0, since we are already on the Relay Chain) to the Parachain with id `1`, which is *one hop* away from the parent (so `interior` is `X1` with `Parachain` set to `1`).
 
 #### Beneficiary
 
@@ -74,7 +74,7 @@ This specifies the account that will receive the assets on the destination chain
         - We need finally to insert the address of the Ethereum account we want to receive the assets on VFlow. 
 
 Note the usage of:
-- `parents = 0`: the instruction for minting the funds and depositing them into the beneficiary's account **is executed by VFlow**. From VFlow perspective, the beneficiary account is right there on-chain. It doesn't need to go up to the Relay Chain to find it (we are already in the `parachain_1599` directory)
+- `parents = 0`: the instruction for minting the funds and depositing them into the beneficiary's account **is executed by VFlow**. From VFlow perspective, the beneficiary account is right there on-chain. It doesn't need to go up to the Relay Chain to find it (we are already in the `parachain_1` directory)
 - `interior = X1`: We need to do "one hop" from the Parachain to the beneficiary account on the Parachain itself (like accessing `./beneficiary_account`)
 
 #### Assets
@@ -101,7 +101,7 @@ Finally, let's click on `submitTransaction` and then `sign And Submit` on the ne
 
 If you don't want to construct this complex extrinsic by yourself, you can go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
 
-`0x6d028400486b90dbf0cb9bfe92b6ba7d4942019a17ada772ab5fa9258ac3df821daca54d01f83f47f9aea563b9c1ab8edb2bd2a2aa3b8ed0d3ae60b3f7ed79e937f789002b7e12ce1f9be511750c9f9b3f47339700360773cb857322c2f956b1afff7fba8475006400008c0105000100fd180500010300e07fcda4d3142f9e2c12cea25e418d18492a3781050400000013000064a7b3b6e00d00000000`
+`0x69028400486b90dbf0cb9bfe92b6ba7d4942019a17ada772ab5fa9258ac3df821daca54d0186a4c5711073978f36dd5b6c42f421fcd5fe5d3fbbc89011380e62cfb2247729970ccae4d50757ca313d06e97c58fcc1aa6aedc380d55f024d3204aef76ec18ec5027c00008c0105000100040500010300b311b8f3eb086477244cb1e198c697ee0d699d9105040000001300004c31b8d9a79800000000`
 
 Then click on the `Submission` tab and change the values you need (like the Parachain ID, amount, destination address, etc.). 
 
