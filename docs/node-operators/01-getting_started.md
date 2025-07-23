@@ -28,14 +28,14 @@ If you're uncertain about which node type suits your needs, consider starting wi
 
 The hardware requirements are listed in the table below:
 
-| Requirement         | RPC node              | Boot node | Validator node |
-| ------------------- | --------------------- | --------- | -------------- |
-| Core                | 1                     | 1         | 1              |
-| Threads per core    | 2                     | 2         | 2              |
-| Clock speed (GHz)   | 2.2                   | 2.2       | 2.2            |
-| Memory (GiB)        | 2                     | 4         | 2              |
-| Bandwidth (Gigabit) | Up to 5               | Up to 5   | Up to 5        |
-| Storage (GB)        | 50<br/>5 with pruning | 5         | 150            |
+| Requirement           | RPC node                                  | Boot node | Validator node |
+|-----------------------|-------------------------------------------|-----------|----------------|
+| Core                  | 4                                         | 4         | 8              |
+| Threads per core      | 2                                         | 2         | 2              |
+| Clock speed (GHz)     | ≥ 2.5                                     | ≥ 2.2     | ≥ 3.5          |
+| Memory (GiB)          | 16                                        | 16        | 32             |
+| Bandwidth (Gbps)      | ≥ 1                                       | ≥ 1       | ≥ 1            |
+| Storage Fast NVMe(GB) | ≥ 500 (archive)<br/> ≥ 200 (with pruning) | ≥ 100     | ≥ 500          |
 
 :::note
 These requirements are likely to change over time, and it's possible that nodes can run effectively on machines with lower specifications than what are laid out above.
