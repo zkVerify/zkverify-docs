@@ -191,6 +191,7 @@ In order to build the application, go through the following steps:
     ```
 
   - Open the file `hasher/host/src/main.rs`. After all the imports add the following:
+
     ```rust
     use serde::Serialize;
     use std::{fs::File, io::Write};
@@ -353,16 +354,17 @@ After having obtained a compressed proof, it's necessary to post-process the pro
 The [`sp1_zkv_sdk`](https://github.com/zkVerify/sp1-verifier/tree/main/sp1-zkv-sdk) crate contains utility functions to perform the relevant conversions.
 
 ```rust
+use sp1_sdk::HashableKey; // for the `hash_bytes` method.
 use sp1_zkv_sdk::*; // for the `convert_to_zkv` and `convert_proof_to_zkv` methods.
 
 // Convert proof and vk into a zkVerify-compatible proof.
 let SP1ZkvProofWithPublicValues {
-    proof: shrunk_proof,
+    proof: zkv_proof,
     public_values,
 } = client
     .convert_proof_to_zkv(proof, Default::default())
     .unwrap();
-let vk_hash = vk.convert_to_zkv();
+let vk_hash = vk.hash_bytes();
 ```
 
 ## Proving artifacts conversion without `sp1_zkv_sdk`
@@ -380,29 +382,34 @@ let compressed_proof = proof
     .try_as_compressed()
     .expect("proof is not compressed");
 // Shrink the compressed proof.
-let shrunk_proof = client
+let SP1ReduceProof {
+    vk,
+    proof: shard_proof,
+} = client
     .inner()
     .shrink(*compressed_proof, Default::default())
-    .expect("failed to shrink")
-    .proof;
+    .expect("failed to shrink");
+let input = SP1CompressWitnessValues {
+    vks_and_proofs: vec![(vk.clone(), shard_proof.clone())],
+    is_complete: true,
+};
+let proof_with_vk_and_merkle = self.inner().make_merkle_proofs(input);
+let zkv_proof = Proof {
+    shard_proof,
+    vk,
+    vk_merkle_proof: proof_with_vk_and_merkle.merkle_val.vk_merkle_proofs[0].clone(),
+}
 ```
 
 ### Verification Key
 
-The SP1 verification pallet accepts verification keys hashed with the `hash_babybear` method, and serialized as little endian bytes. Here's a code snippet showing the process:
+The SP1 verification pallet accepts verification keys hashed with the `hash_babybear` method, and serialized as big-endian bytes. `sp1_sdk` already provides the `HashableKey::hash_bytes` method for doing this operation:
 
 ```rust
-use p3_field::PrimeField32; // for the `as_canonical_u32` method.
-use sp1_sdk::HashableKey;   // for the `hash_babybear` method.
+use sp1_sdk::HashableKey;   // for the `hash_bytes` method.
 
 // `vk` is the verification key obtained from `ProverClient::setup` method.
-let vk_hash: [u8; 32] = vk
-    .hash_babybear()
-    .iter()
-    .flat_map(|el| el.as_canonical_u32().to_le_bytes())
-    .collect::<Vec<_>>()
-    .try_into()
-    .unwrap();
+let vk_hash: = vk.hash_bytes();
 ```
 
 ### Public Values
@@ -420,13 +427,13 @@ Regardless the proof conversion method used (with or without `sp1_zkv_sdk`), bef
 - with `bincode` v1:
 
   ```rust
-  let serialized_proof = bincode::serialize(&shrunk_proof).expect("failed to serialize proof");
+  let serialized_proof = bincode::serialize(&zkv_proof).expect("failed to serialize proof");
   ```
 
 - with `bincode` v2 (requires the `serde` and `alloc` features):
 
   ```rust
-  let serialized_proof = bincode::serde::encode_to_vec(&shrunk_proof, bincode::config::legacy())
+  let serialized_proof = bincode::serde::encode_to_vec(&zkv_proof, bincode::config::legacy())
       .expect("failed to serialize proof");
   ```
 

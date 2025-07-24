@@ -7,4 +7,4 @@
 | **Noir UltraPlonk** | >= v0.31.0, bbup \<\= v0.76.4 | **Public Inputs:** 32                                                                                  |
 | **Risc0**           | >= v2.1                       | **Max Public Inputs Size:** 2052 bytes (2048 bytes user input), **Format:** cbor                       |
 | **Plonky2**         | Keccak256, Poseidon           | **Max number of Public Inputs:** 64, **Max Proof Size:** 256 KiB, **Max Verification Key Size:** 50 KB |
-| **SP1**             | v5.0.5                        | **Max Public Inputs Size:** 2048 bytes                                                                 |
+| **SP1**             | v5.x                          | **Max Public Inputs Size:** 2048 bytes                                                                 |
