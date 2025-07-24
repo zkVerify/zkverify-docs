@@ -30,9 +30,13 @@ Future plans to fully open up the chain are under evaluation. Make sure to follo
 - The gas price is updated according to the congestion of network (i.e. block fullness) and follows the same [rules](https://research.web3.foundation/Polkadot/overview/token-economics#2-slow-adjusting-mechanism) as the fee multiplier update in zkVerify.
 - Some futher adjustments to the gas consumption were required in order to prevent excessive growth of the storage and Parachain blocks
 
-### Substrate <> EVM Equivalence
+### Substrate - EVM Equivalence
 
-Please note that VFlow is a fully-fledged EVM chain, but it is also a Substrate chain !
+Please note that VFlow is a fully-fledged EVM chain, but it is also a Substrate chain ! As such, it's important to clarify that:
+- The chain exposes EVM-style addresses by default. An unique mapping between Substrate and EVM addresses is handled automatically and transparently for the user.
+- You could also connect a Substrate wallet (an EVM-style address will be used anyway) and call extrinsics and Substrate RPCs
+    - These extrinsics will be executed normally and produce the expected effects; however they won't show up if you are using an EVM-style block explorer/monitoring tool.
+- The possibility to perform EVM calls via Substrate extrinisics (which would be possible with the Frontier pallets) is **disabled** as to avoid the aforementioned situations.
 
 ## Governance
 
