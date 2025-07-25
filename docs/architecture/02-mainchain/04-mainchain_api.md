@@ -248,6 +248,7 @@ Register a verification key that can be used later in submit proof calls and emi
 
 - [settlementGroth16Pallet](#settlementgroth16pallet-types)
 - [settlementRisc0Pallet](#settlementrisc0pallet-types)
+- [settlementUltrahonkPallet](#settlementultrahonkpallet-types)
 - [settlementUltraplonkPallet](#settlementultraplonkpallet-types)
 - [settlementPlonky2Pallet](#settlementplonky2pallet-types)
 - [settlementSp1Pallet](#settlementsp1pallet-types)
@@ -301,12 +302,20 @@ pub type Vk = H256;
 pub type Pubs = Vec<u8>;  // Limited on a configurable max size
 ```
 
+#### settlementUltrahonkPallet Types
+
+```rust
+pub type Proof = Vec<u8>;
+pub type Vk = [u8; 1760];
+pub type Pubs = Vec<[u8; 32]>;
+```
+
 #### settlementUltraplonkPallet Types
 
 ```rust
 pub type Proof = Vec<u8>;
 pub type Vk = [u8; 1719];
-pub type Pubs = [u8; 32];
+pub type Pubs = Vec<[u8; 32]>;
 ```
 
 #### settlementPlonky2Pallet Types

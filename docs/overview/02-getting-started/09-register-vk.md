@@ -30,7 +30,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
 import dotenv from 'dotenv';
@@ -53,7 +60,14 @@ import fs from "fs";
 const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the Risc Zero tutorial
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+import fs from "fs";
+const bufvk = fs.readFileSync("../target/vk");
+const base64Vk = bufvk.toString("base64");
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 import fs from "fs";
 const bufvk = fs.readFileSync("../target/vk");
@@ -104,7 +118,18 @@ regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
 });
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+const {regevent} = await session.registerVerificationKey().ultrahonk({numberOfPublicInputs:2}).execute(base64Vk); // Make sure to replace the numberOfPublicInputs field as per your circuit
+
+regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
+    console.log('Registration finalized:', eventData);
+    fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
+    return eventData.statementHash
+});
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 const {regevent} = await session.registerVerificationKey().ultraplonk({numberOfPublicInputs:2}).execute(base64Vk); // Make sure to replace the numberOfPublicInputs field as per your circuit
 
@@ -157,7 +182,18 @@ const {events} = await session.verify().risc0()
     }, domainId: 0})
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+const {events} = await session.verify()
+    .ultrahonk({numberOfPublicInputs: 2}) // Make sure to replace the numberOfPublicInputs field as per your circuit 
+    .withRegisteredVk() 
+    .execute({proofData: {
+        vk: vkey.hash,
+        proof: base64Proof,
+    }, domainId: 0});
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 const {events} = await session.verify()
     .ultraplonk({numberOfPublicInputs: 2}) // Make sure to replace the numberOfPublicInputs field as per your circuit 

@@ -52,3 +52,4 @@ Some pallets have been developed to accommodate the requirements:
   - [**ultraplonk**](./07-verification_pallets/05-ultraplonk.md)
   - [**plonky2**](./07-verification_pallets/07-plonky2.md)
   - [**sp1**](./07-verification_pallets/08-sp1.md)
+  - [**ultrahonk**](./07-verification_pallets/09-ultrahonk.md)
