@@ -10,9 +10,10 @@ This guide will walk you through the process of generating compatible proofs whi
 <Tabs groupId="generate">
 
 <TabItem value="groth16" label="Groth16">
-We will be implementing a simple hash verification circuit with Circom and will use zkVerify to verify these proofs. The circuit we will be building is very simple where it takes a private input and a public input and just checks if the public input is the same as the Poseidon hash of the private input. 
+We will be implementing a simple hash verification circuit with Circom and will use zkVerify to verify these proofs. The circuit we will be building is very simple where it takes a private input and a public input and just checks if the public input is the same as the Poseidon hash of the private input.
 
 ## Steps Involved
+
 - Creating the required circom circuit, downloading the artifacts and generating a proof
 - Registering our verification key with zkVerify
 - Verifying our zk proof and getting proof receipts
@@ -21,7 +22,7 @@ We will be implementing a simple hash verification circuit with Circom and will 
 To start this tutorial, we will create our circuits using [zkRepl](https://zkrepl.dev/), which is very beginner-friendly. We won’t be diving deep into Circom DSL, but we will explore all the required code snippets.
 As explained earlier, we will be having two inputs for our zk circuit in which one will be public and one will be private. And we will be using Poseidon Hash as our hash function in our circuit. To implement Poseidon Hash, we need to import corresponding libraries from circomlib.
 
-Here’s the snippet of the implemented circuit :- 
+Here’s the snippet of the implemented circuit :-
 
 ```circom
 pragma circom 2.1.6;
@@ -33,7 +34,7 @@ template Example () {
    // Getting the inputs needed for our circuit
    signal input a; // Actual Message
    signal input b; // Poseidon hash of the message
-  
+
    component hash = Poseidon(1); // Creating our Poseidon component with one input
    hash.inputs[0] <== a;
    log(hash.out);
@@ -55,22 +56,22 @@ Then compile this circuit with zkRepl and get the required arctifacts. Next to g
 
 ![alt_text](img/circom-tutorial-zkrepl.png)
 
-Specify your inputs and generate proof on this page. Then save the proof in proof.json file and public signals in public.json file. These files will be helpful while submitting our proofs for verification using zkVerify. Also, make sure to download main.groth16.vkey.json from zkRepl as well. 
+Specify your inputs and generate proof on this page. Then save the proof in proof.json file and public signals in public.json file. These files will be helpful while submitting our proofs for verification using zkVerify. Also, make sure to download main.groth16.vkey.json from zkRepl as well.
 
 ![alt_text](img/circom-tutorial-proof-generate.png)
 </TabItem>
 
-<TabItem value="noir" label="Noir">
-We will use the quickstart Noir Lang guide to generate an UltraPlonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
+<TabItem value="ultrahonk" label="Ultrahonk">
+We will use the quickstart Noir Lang guide to generate an UltraHonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved
-- Installing Noir using noirup, and also installing bb(Barretenberg's Backend) using bbup 
-- Generating Noir UltraPlonk proofs
-- Converting the proof and vk to required hex format using Noir-CLI
+- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup 
+- Generating Noir UltraHonk proofs
+- Converting the proof, vk, and public inputs to required hex format using Bash
 - Verifying our proofs on zkVerify and getting proof receipts
 - Verifying the proof receipts on Ethereum
 
-To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements :
+To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements:
 
 1. Install noirup by running the following command:
 ```bash
@@ -86,12 +87,6 @@ noirup
 ```bash
 curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
 ```
-:::warning
-Starting from [bbup v.0.87.0](https://github.com/AztecProtocol/aztec-packages/pull/13800) Ultraplonk has been officially deprecated.
-To keep submitting Noir proofs via zkVerify, please switch to a previous bbup version(recommended 0.76.4).
-You can do this via the command:
-`bbup -v <version>`
-:::
 
 4. Install Barretenberg's Backend by running bbup command:
 ```bash
@@ -103,9 +98,9 @@ bbup -v <version>
 nargo new hello_world
 ```
 
-After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hellow_world project.
+After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
 
-To generate proofs, first we need to create a ``` Prover.Toml``` file, which will hold our inputs for the hello_world noir circuit. Populate the ```Prover.Toml``` file with the inputs given below :
+To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below :
 ```toml
 x = "1"
 y = "2"
@@ -116,7 +111,96 @@ Let's execute our hello_world circuit and get our witness value, which will be u
 nargo execute
 ```
 
-Once we have generated our witness, we can generate proof and vk using bb toolkit. Use the follwing command to generate the required files:
+Once we have generated our witness, we can generate proof and vk using the bb toolkit. Use the following command to generate the required files:
+```bash
+# To generate proof
+bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target/proof --oracle_hash keccak --zk
+
+# To generate vk
+bb write_vk -s ultra_honk -b ./target/hello_world.json -o ./target/vk --oracle_hash keccak
+
+```
+
+After running these commands, you will have three files, namely: `proof`, `public_inputs`, and `vk` inside the `target` folder which will be used for verification.
+
+To convert the three files into hex format, run the following Bash commands:
+```bash
+# Convert proof to hexadecimal format
+{ printf "0x"; xxd -p -c 256 "./target/proof" | tr -d '\n'; echo; } > "./target/zkv_proof.hex"
+
+# Convert vk to hexadecimal format
+{ printf "0x"; xxd -p -c 256 "./target/vk" | tr -d '\n'; echo; } > "./target/zkv_vk.hex"
+
+# Convert public inputs to hexadecimal format
+{ printf "0x"; xxd -p -c 256 "./target/public_inputs" | tr -d '\n'; echo; } > "./target/zkv_pubs.hex"
+
+```
+</TabItem>
+
+<TabItem value="ultraplonk" label="Ultraplonk">
+We will use the quickstart Noir Lang guide to generate an UltraPlonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
+
+## Steps Involved
+- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup 
+- Generating Noir UltraPlonk proofs
+- Converting the proof and vk to required hex format using Noir-CLI
+- Verifying our proofs on zkVerify and getting proof receipts
+- Verifying the proof receipts on Ethereum
+
+To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements:
+
+1. Install noirup by running the following command:
+
+```bash
+curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
+```
+
+2. Running noirup will install the latest version of Noir Toolkit
+
+```bash
+noirup
+```
+
+3. Install bbup by running the following command:
+
+```bash
+curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
+```
+
+:::warning
+Starting from [bbup v.0.87.0](https://github.com/AztecProtocol/aztec-packages/pull/13800) Ultraplonk has been officially deprecated.
+To keep submitting Noir proofs via zkVerify, please switch to a previous bbup version(recommended 0.76.4).
+You can do this via the command:
+`bbup -v <version>`
+:::
+
+4. Install Barretenberg's Backend by running bbup command:
+
+```bash
+bbup -v <version>
+```
+
+5. Create hello_world noir project using the following command:
+
+```bash
+nargo new hello_world
+```
+
+After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
+
+To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below:
+```toml
+x = "1"
+y = "2"
+```
+
+Let's execute our hello_world circuit and get our witness value, which will be used to generate proofs and vk. Use the following command to execute:
+
+```bash
+nargo execute
+```
+
+Once we have generated our witness, we can generate proof and vk using the bb toolkit. Use the following command to generate the required files:
 ```bash
 # To generate proof
 bb prove -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target/proof
@@ -126,7 +210,7 @@ bb write_vk -b ./target/hello_world.json -o ./target/vk
 
 ```
 
-After running these commands, you will be having two files namely ``proof`` and ``vk`` inside the ``target`` folder which will be used for verification.
+After running these commands, you will have two files, namely: `proof` and `vk` inside the `target` folder which will be used for verification.
 </TabItem>
 
 <TabItem value="risc-zero" label="Risc Zero">
@@ -144,7 +228,7 @@ Check out [this section](https://dev.risczero.com/api/zkvm/) of Risc0 documentat
 
 :::tip[**Toolchain version**]
 
-Note this tutorial is based on version `2.1.0` of Risc0 toolchain. Very likely you should be able to follow it using a more recent version, but in case you encounter any issue you can explicitly target that version with command `rzup --version 2.1.0`.
+Note this tutorial is based on version `2.2.0` of Risc0 toolchain. Very likely you should be able to follow it using a more recent version, but in case you encounter any issue you can explicitly target that version with command `rzup --version 2.2.0`.
 
 :::
 
@@ -154,7 +238,7 @@ In this tutorial you will build an application which receives a string as input,
 
 :::tip[**Don't get confused with terminology!**]
 
-Make sure not to make confusion between *application inputs* and *verification public inputs*. When you run the application it is supposed you are in a private environment, you provide it with whatever application inputs you want and you have to keep them private; after the run, you get back the proof of execution and the outputs of the execution. The outputs can be safely shared with other parties, indeed they become the public inputs of the verification phase (performed by other parties).
+Make sure not to make confusion between _application inputs_ and _verification public inputs_. When you run the application it is supposed you are in a private environment, you provide it with whatever application inputs you want and you have to keep them private; after the run, you get back the proof of execution and the outputs of the execution. The outputs can be safely shared with other parties, indeed they become the public inputs of the verification phase (performed by other parties).
 
 :::
 
@@ -170,6 +254,7 @@ In order to build the application, go through the following steps:
   This will be your working directory.
 
 - Modify the host program (just consider it as the code that is running the zkVM):
+
   - Open the file `hasher/host/Cargo.toml` with a text editor and add at the bottom the following lines:
 
     ```rust
@@ -238,6 +323,7 @@ In order to build the application, go through the following steps:
   In this way you have prepared the host to easily receive command-line argument and to save the proof json data in `proof.json`, which will be useful in a later step when you need to submit them on the zkVerify Mainchain.
 
 - Modify the guest program (just consider it as the code whose execution you want to prove and you want other to verify):
+
   - Open the file `hasher/methods/guest/Cargo.toml` with a text editor and add at the bottom the following line:
 
     ```rust
@@ -258,7 +344,7 @@ In order to build the application, go through the following steps:
         hasher.update(input.as_bytes()); // Update the hasher with the input bytes
         let result = hasher.finalize(); // Get the hash digest
         let output = format!("{:x}", result); // Convert the hash digest to a hexadecimal string
-        
+
         // write public output to the journal
         env::commit(&output);
     }
@@ -303,58 +389,205 @@ They will be used respectively as proof, public inputs and verification key duri
 Now that you have learned how to set up and run your Risc0 zkVM application you can play a bit with the guest program code and modify the execution logic.
 </TabItem>
 
-<TabItem value="sxt" label="SxT">
-We are going to use the [`sxt-proof-of-sql` library developed by Space and Time Labs](https://github.com/spaceandtimelabs/sxt-proof-of-sql) to generate a zk-proof of the simple SQL query
-```sql
-SELECT a, b, c, d, e, f, g, h FROM table WHERE a = 2
-```
-on the following table
+<TabItem value="sp1" label="SP1">
 
-| a   | b     | c   | d      | e    | f    | g    | h     |
-| --- | ----- | --- | ------ | ---- | ---- | ---- | ----- |
-| 1   | hello | foo | dc     | hide | yin  | chip | vim   |
-| 2   | bye   | bar | marvel | seek | yang | dale | emacs |
+Submitting a SP1 proof to zkVerify SP1 verification pallet requires first to generate a compressed SP1 proof.
+To quickly try this out, you can follow the [official SP1 quickstart guide](https://docs.succinct.xyz/docs/sp1/getting-started/quickstart) for creating an example fibonacci application, and then execute the following code, in place of the provided `script/main.rs`:
 
-whose result is the table
+```rust
+use sp1_sdk::{include_elf, Prover, ProverClient, SP1Stdin};
 
-| a   | b   | c   | d      | e    | f    | g    | h     |
-| --- | --- | --- | ------ | ---- | ---- | ---- | ----- |
-| 2   | bye | bar | marvel | seek | yang | dale | emacs |
+pub const FIBONACCI_ELF: &[u8] = include_elf!("fibonacci-program");
 
-Then you will send the proof to zkVerify for on-chain verification.
+fn main() {
+    // Setup the inputs.
+    let mut stdin = SP1Stdin::new();
+    let n: u32 = 20;
+    stdin.write(&n);
 
-## Requirements
+    // Setup the prover client.
+    let client = ProverClient::from_env();
 
-In order to follow this tutorial, you should have:
-- A copy of the [`Horizenlabs/proof-of-sql-verifier`](https://github.com/HorizenLabs/proof-of-sql-verifier) repository:
-    * if you have `git` installed on your system, you can just issue the command
+    // Setup the program for proving.
+    let (pk, vk) = client.setup(FIBONACCI_ELF);
 
-    ```bash
-    git clone https://github.com/HorizenLabs/proof-of-sql-verifier.git
-    ```
-    * otherwise, you can download a [zipped version](https://github.com/HorizenLabs/proof-of-sql-verifier/archive/refs/heads/main.zip) of the repository, and uncompress it
-- A recent version of the rust toolchain (version `>=1.81.0`). See the [official instructions](https://www.rust-lang.org/tools/install) for instructions on how to install
-
-## Generating the proving artifacts
-
-In order to generate the zk-proof, go into the `proof-of-sql-verifier` directory
-```bash
-cd proof-of-sql-verifier
+    // Generate the SP1 proof in compressed mode.
+    let proof = client
+        .prove(&pk, &stdin)
+        .compressed()
+        .run()
+        .expect("failed to generate proof");
+}
 ```
 
-and run the command
-```bash
-cargo run --bin generate-sample-proof --features="rand test clap" -- --max-nu=4
+<Tabs groupId="sp1-zkv-sdk">
+<TabItem value="with-sdk" label="With sp1_zkv_sdk">
+
+After having obtained a compressed proof, it's necessary to post-process the proof (alongside the verification key, and public inputs) to obtain a `serialized_proof`, a `vk_hash`, and `public_values` as required by the SP1 verification pallet.
+The [`sp1_zkv_sdk`](https://github.com/zkVerify/sp1-verifier/tree/main/sp1-zkv-sdk) crate contains utility functions to perform the relevant conversions.
+
+Add these following dependencies below the `[dependencies]` tab in your Cargo.toml file of the script folder:
+```toml
+bincode = { version = "2", features = ["serde"] }
+sp1-zkv-sdk = { git="https://github.com/zkVerify/sp1-verifier" }
 ```
 
-This command can take a while to run, especially the first time, since it must compile the project from scratch. At the end it should generate three files: `VALID_PROOF_MAX_NU_4.bin`, `VALID_VK_MAX_NU_4.bin`, and `VALID_PUBS_MAX_NU_4.bin`.
+And then add the following imports to your `script/Cargo.toml`:
+```rust
+use sp1_zkv_sdk::*; // for the `convert_to_zkv` and `hash_bytes` methods.
+use std::{fs::File, io::Write};
+use serde::{Deserialize, Serialize};
 
-If you happen to know a bit of Rust and SQL, you can take a look into `src/bin/generate-sample-proof.rs` source code and try modifying the table and query. If your table has more than `2^(4*2) = 256` rows, you may need to increase the value of the `max-nu` parameter accordingly. At the moment, we support a value of `max-nu` up to 8, corresponding to `2^(8*2) = 65536`, and tables with up to 8 columns.
+// Struct of the output we need
+#[derive(Serialize, Deserialize)]
+struct Output{
+    image_id: String,
+    pub_inputs: String,
+    proof: String
+}
+
+// Helper function to get hex strings
+fn to_hex_with_prefix(bytes: &[u8]) -> String {
+    let hex_string: String = bytes.iter()
+        .map(|b| format!("{:02x}", b))
+        .collect();
+    format!("0x{}", hex_string)
+}
+```
+
+Now, add these lines after the proof is generated by the SP1 prover sdk:
+```rust
+// Convert proof and vk into a zkVerify-compatible proof.
+let SP1ZkvProofWithPublicValues {
+    proof: shrunk_proof,
+    public_values,
+} = client
+    .convert_proof_to_zkv(proof, Default::default())
+    .unwrap();
+let vk_hash = vk.hash_bytes();
+
+// Serialize the proof
+let serialized_proof = bincode::serde::encode_to_vec(&shrunk_proof, bincode::config::legacy())
+    .expect("failed to serialize proof");
+
+// Convert to required struct
+let output = Output{
+    proof: to_hex_with_prefix(&serialized_proof),
+    image_id: to_hex_with_prefix(&vk_hash),
+    pub_inputs: to_hex_with_prefix(&public_values),
+};
+
+// Convert to JSON and store in the file
+let json_string = serde_json::to_string_pretty(&output)
+    .expect("Failed to serialize to JSON.");
+
+let mut file = File::create("proof.json").unwrap();
+file.write_all(json_string.as_bytes()).unwrap();
+```
+</TabItem>
+<TabItem value="without-sdk" label="Without sp1_zkv_sdk">
+If you'd rather not depend on `sp1_zkv_sdk` in your application, the following sections show code snippets to perform the required conversions.
+First you would need to add these following dependencies below the `[dependencies]` tab in your Cargo.toml file of the script folder:
+```toml
+p3-field = { version = "=0.2.3-succinct" }
+bincode = { version = "2", features = ["serde"] }
+```
+
+Next we need to import all the important modules and create a structure to store our proof. Add these following lines after all the imports in ``script/Cargo.toml`` file:
+```rust
+use p3_field::PrimeField32; // for the `as_canonical_u32` method.
+use sp1_sdk::HashableKey;   // for the `hash_babybear` method.
+use std::{fs::File, io::Write};
+use serde::{Deserialize, Serialize};
+
+// Struct of the output we need
+#[derive(Serialize, Deserialize)]
+struct Output{
+    image_id: String,
+    pub_inputs: String,
+    proof: String
+}
+
+// Helper function to get hex strings
+fn to_hex_with_prefix(bytes: &[u8]) -> String {
+    let hex_string: String = bytes.iter()
+        .map(|b| format!("{:02x}", b))
+        .collect();
+    format!("0x{}", hex_string)
+}
+```
+
+### Proof
+
+The SP1 verification pallet supports shrunk STARK proofs. Here's the code to generate it from the `proof` obtained in the section `Proof generation`, you need to paste this after the proof is generated by the SP1 prover SDK:
+
+```rust
+// Extract the inner compressed proof.
+let compressed_proof = proof
+    .proof
+    .try_as_compressed()
+    .expect("proof is not compressed");
+
+// Shrink the compressed proof.
+let shrunk_proof = client
+    .inner()
+    .shrink(*compressed_proof, Default::default())
+    .expect("failed to shrink")
+    .proof;
+
+// Serialize the shrunk_proof
+let serialized_proof = bincode::serde::encode_to_vec(&shrunk_proof, bincode::config::legacy())
+  .expect("failed to serialize proof");
+
+```
+
+### Verification Key
+
+The SP1 verification pallet accepts verification keys hashed with the `hash_babybear` method, and serialized as little endian bytes. Here's a code snippet showing the process:
+
+```rust
+// `vk` is the verification key obtained from `ProverClient::setup` method.
+let vk_hash: [u8; 32] = vk
+    .hash_babybear()
+    .iter()
+    .flat_map(|el| el.as_canonical_u32().to_le_bytes())
+    .collect::<Vec<_>>()
+    .try_into()
+    .unwrap();
+```
+
+### Public Values
+
+SP1 verification pallet accepts public inputs expressed as a vector of bytes, which can be retrieved from the initial `SP1ProofWithPublicValues` proof:
+
+```rust
+let public_values = proof.public_values.to_vec();
+```
+
+### Storing the output
+
+Once we have generated all the proof artifacts, we will store it in a json file which will be used later while verification. Paste the following code snippet to store your artifacts into the required structure:
+```rust
+let output = Output{
+    proof: to_hex_with_prefix(&serialized_proof),
+    image_id: to_hex_with_prefix(&vk_hash),
+    pub_inputs: to_hex_with_prefix(&public_values),
+};
+
+let json_string = serde_json::to_string_pretty(&output)
+    .expect("Failed to serialize to JSON.");
+
+let mut file = File::create("proof.json").unwrap();
+file.write_all(json_string.as_bytes()).unwrap();
+```
+</TabItem>
+</Tabs>
 </TabItem>
 
 </Tabs>
 
 After generating proofs, there are multiple ways in which you can verify it on [zkVerify](https://zkverify.io). The recommended way to verify proofs on zkVerify is by using the [zkVerifyJS package](./06-zkverify-js.md). You can verify proofs using anyone of the following :-
+
 1. Using [Relayer Service](./05-relayer.md)
 2. Using [zkVerifyJS package](./06-zkverify-js.md)
 3. Using [Polkadot.js frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
