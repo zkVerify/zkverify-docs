@@ -37,6 +37,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 </TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
+```
+</TabItem>
 </Tabs>
 
 We would also need to import the required verification key which we have already generated in previous tutorials. Use the following code snippets :
@@ -58,6 +65,12 @@ const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Follow
 import fs from "fs";
 const bufvk = fs.readFileSync("../target/vk");
 const base64Vk = bufvk.toString("base64");
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+import fs from "fs";
+const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the SP1 tutorial
 ```
 </TabItem>
 </Tabs>
@@ -107,6 +120,17 @@ regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
 <TabItem value="noir" label="Noir">
 ```js
 const {regevent} = await session.registerVerificationKey().ultraplonk({numberOfPublicInputs:2}).execute(base64Vk); // Make sure to replace the numberOfPublicInputs field as per your circuit
+
+regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
+    console.log('Registration finalized:', eventData);
+    fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
+    return eventData.statementHash
+});
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+const {regevent} = await session.registerVerificationKey().sp1().execute(proof.image_id);
 
 regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
     console.log('Registration finalized:', eventData);
@@ -168,7 +192,17 @@ const {events} = await session.verify()
     }, domainId: 0});
 ```
 </TabItem>
-
+<TabItem value="sp1" label="SP1">
+```js
+const {events} = await session.verify().sp1()
+    .withRegisteredVk()
+    .execute({proofData:{
+        proof: proof.proof,
+        vk: vkey.hash,
+        publicSignals: proof.pub_inputs,
+    }, domainId: 0})
+```
+</TabItem>
 </Tabs>
 
 Now you can run this script using the command ``node index.js``. After running the script a new file named ``aggregation.json`` would have been created, which has the all the details required to verify the aggregation on the target chain. You would find something like the following:
