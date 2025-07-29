@@ -77,6 +77,11 @@ const base64Proof = bufproof.toString("base64");
 const base64Vk = bufvk.toString("base64");
 ```
 </TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the SP1 tutorial
+```
+</TabItem>
 </Tabs>
 
 :::info
@@ -176,6 +181,31 @@ if(!fs.existsSync("noir-vkey.json")){
 const vk = JSON.parse(fs.readFileSync("noir-vkey.json"));
 ```
 </TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+if(!fs.existsSync("sp1-vkey.json")){
+    // Registering the verification key
+    try{
+        const regParams = {
+            "proofType": "sp1",
+            "vk": proof.image_id
+        }
+        const regResponse = await axios.post(`${API_URL}/register-vk/${process.env.API_KEY}`, regParams);
+        fs.writeFileSync(
+            "sp1-vkey.json",
+            JSON.stringify(regResponse.data)
+        );
+    }catch(error){
+        fs.writeFileSync(
+            "sp1-vkey.json",
+            JSON.stringify(error.response.data)
+        );
+    }
+}
+
+const vk = JSON.parse(fs.readFileSync("sp1-vkey.json"));
+```
+</TabItem>
 </Tabs>
 
 After registering our verification key, we will start the verification process by calling a ``POST`` endpoint named ``submit-proof``. We will also need to create a params object with all the necessary information about the proof and the vkHash we got after registering our verification key, which will be sent in the API call. If you want to aggregate the verified proof(want to verify the proof aggregation on connected chains like Sepolia, Base Sepolia etc) check the code snippets with aggregation.
@@ -231,6 +261,22 @@ const params = {
     },
     "proofData": {
         "proof": base64Proof,
+        "vk": vk.vkHash || vk.meta.vkHash
+    }
+}
+
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
+console.log(requestResponse.data)
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+const params = {
+    "proofType": "sp1",
+    "vkRegistered": true,
+    "proofData": {
+        "proof": proof.proof,
+        "publicSignals": proof.pub_inputs,
         "vk": vk.vkHash || vk.meta.vkHash
     }
 }
@@ -296,6 +342,23 @@ const params = {
     },
     "proofData": {
         "proof": base64Proof,
+        "vk": vk.vkHash || vk.meta.vkHash
+    }
+}
+
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
+console.log(requestResponse.data)
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+const params = {
+    "proofType": "sp1",
+    "vkRegistered": true,
+    "chainId": 11155111,
+    "proofData": {
+        "proof": proof.proof,
+        "publicSignals": proof.pub_inputs,
         "vk": vk.vkHash || vk.meta.vkHash
     }
 }

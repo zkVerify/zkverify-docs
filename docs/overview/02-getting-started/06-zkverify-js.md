@@ -64,6 +64,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 </TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
+```
+</TabItem>
 </Tabs>
 
 We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets :
@@ -90,6 +97,12 @@ const bufvk = fs.readFileSync("../target/vk");
 const bufproof = fs.readFileSync("../target/proof");
 const base64Proof = bufproof.toString("base64");
 const base64Vk = bufvk.toString("base64");
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+import fs from "fs";
+const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the SP1 tutorial
 ```
 </TabItem>
 </Tabs>
@@ -224,6 +237,44 @@ const {events} = await session.verify()
         vk: base64Vk,
         proof: base64Proof,
     }, domainId: 0});
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```js
+let statement, aggregationId;
+
+session.subscribe([
+  {
+    event: ZkVerifyEvents.NewAggregationReceipt,
+    callback: async (eventData) => {
+      console.log("New aggregation receipt:", eventData);
+      if(aggregationId == parseInt(eventData.data.aggregationId.replace(/,/g, ''))){
+        let statementpath = await session.getAggregateStatementPath(
+          eventData.blockHash,
+          parseInt(eventData.data.domainId),
+          parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+          statement
+        );
+        console.log("Statement path:", statementpath);
+        const statementproof = {
+          ...statementpath,
+          domainId: parseInt(eventData.data.domainId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+        };
+        fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
+    }
+    },
+    options: { domainId: 0 },
+  },
+]);
+
+const {events} = await session.verify()
+    .sp1()
+    .execute({proofData:{
+        proof: proof.proof,
+        vk: proof.image_id,
+        publicSignals: proof.pub_inputs,
+    }, domainId: 0})
 ```
 </TabItem>
 </Tabs>
