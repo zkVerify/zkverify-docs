@@ -28,14 +28,14 @@ RPC methods can be used to query the Mainchain node for information or to submit
 All the standard calls are available in the [official documentation](https://polkadot.js.org/docs/substrate/rpc).
 Mainchain nodes currently expose only a subset of the Substrate RPC methods, in particular, the ones from the following pallets:
 
-- *author*
-- *chain*
-- *childstate*
-- *offchain*
-- *payment*
-- *rpc*
-- *state*
-- *system*
+- _author_
+- _chain_
+- _childstate_
+- _offchain_
+- _payment_
+- _rpc_
+- _state_
+- _system_
 
 In addition to these, nodes expose the following custom commands:
 
@@ -45,7 +45,7 @@ In addition to these, nodes expose the following custom commands:
 
 When a [`NewAggregationReceipt`](#newaggregationreceipt) event is emitted the aggregation pointed
 by this event is published on the [`Published`](#published) storage. This RPC can be used to get
-the Merkle proof of your proof by querying the [`Published`](#published) storage, retrieve the aggregation 
+the Merkle proof of your proof by querying the [`Published`](#published) storage, retrieve the aggregation
 and generate the proof:
 
 **Parameters**
@@ -64,12 +64,12 @@ and generate the proof:
 All the standard constants are available in the [official documentation](https://polkadot.js.org/docs/substrate/constants).
 Mainchain nodes currently use only a subset of the Substrate constants, in particular, the ones from the following pallets:
 
-- *balances*
-- *grandpa*
-- *staking*
-- *system*
-- *timestamp*
-- *transactionPayment*
+- _balances_
+- _grandpa_
+- _staking_
+- _system_
+- _timestamp_
+- _transactionPayment_
 
 ## [Storage](#storage)
 
@@ -78,18 +78,18 @@ Some endpoints may return also historical data (e.g. the list of validators at a
 Standard methods are available in the [official documentation](https://polkadot.js.org/docs/substrate/storage).
 Mainchain nodes currently use only a subset of these methods, in particular, the ones from the following pallets:
 
-- *authorship*
-- *babe*
-- *balances*
-- *grandpa*
-- *offences*
-- *session*
-- *staking*
-- *substrate*
-- *sudo*
-- *system*
-- *timestamp*
-- *transactionPayment*
+- _authorship_
+- _babe_
+- _balances_
+- _grandpa_
+- _offences_
+- _session_
+- _staking_
+- _substrate_
+- _sudo_
+- _system_
+- _timestamp_
+- _transactionPayment_
 
 In addition to them, the following custom methods are available:
 
@@ -116,14 +116,14 @@ value at the block where it has been published.
 Mainchain nodes support some of the most common extrinsics provided by Substrate (see the [official documentation](https://polkadot.js.org/docs/substrate/extrinsics)).
 The pallet currently included in the runtime are:
 
-- *balances*
-- *grandpa*
-- *imOnline*
-- *session*
-- *staking*
-- *sudo*
-- *system*
-- *timestamp*
+- _balances_
+- _grandpa_
+- _imOnline_
+- _session_
+- _staking_
+- _sudo_
+- _system_
+- _timestamp_
 
 In addition to them, the following custom extrinsics are available:
 
@@ -132,7 +132,7 @@ In addition to them, the following custom extrinsics are available:
 #### [aggregate](#aggregate_3)
 
 Publish the aggregation. This call is used to publish a new aggregation that is in
-the domain both in to be published queue or is still not completed. 
+the domain both in to be published queue or is still not completed.
 If everything is fine, it processes held funds for aggregation and delivery
 
 - `Aggregation`: Compensates the aggregator (the account calling the aggregate extrinsic) for the transaction costs and provides incentive.
@@ -170,7 +170,6 @@ Restrictions:
   - Managers can register domains with any destination type
 - Delivery owner must be specified (either explicitly or by caller)
 - Sufficient funds must be available for the domain storage deposit. Please refer to the runtime config types `AggregateBaseDeposit` and `AggregateByteDeposit`
-
 
 Arguments:
 
@@ -249,14 +248,15 @@ Register a verification key that can be used later in submit proof calls and emi
 
 - [settlementGroth16Pallet](#settlementgroth16pallet-types)
 - [settlementRisc0Pallet](#settlementrisc0pallet-types)
+- [settlementUltrahonkPallet](#settlementultrahonkpallet-types)
 - [settlementUltraplonkPallet](#settlementultraplonkpallet-types)
-- [settlementProofOfSQLPallet](#settlementproofofsqlpallet-types)
 - [settlementPlonky2Pallet](#settlementplonky2pallet-types)
+- [settlementSp1Pallet](#settlementsp1pallet-types)
 
 ##### settlementGroth16Pallet Types
 
-Support is provided for both the *BN254* curve used in Ethereum, and the *BLS12-381* curve. The details about how `G1`/`G2` elliptic
-curve points and scalars are actually encoded can be found in the 
+Support is provided for both the _BN254_ curve used in Ethereum, and the _BLS12-381_ curve. The details about how `G1`/`G2` elliptic
+curve points and scalars are actually encoded can be found in the
 [Groth16 pallet documentation](../07-verification_pallets/04-groth16.md#encodings)
 
 ```rust
@@ -302,20 +302,20 @@ pub type Vk = H256;
 pub type Pubs = Vec<u8>;  // Limited on a configurable max size
 ```
 
+#### settlementUltrahonkPallet Types
+
+```rust
+pub type Proof = Vec<u8>;
+pub type Vk = [u8; 1760];
+pub type Pubs = Vec<[u8; 32]>;
+```
+
 #### settlementUltraplonkPallet Types
 
 ```rust
 pub type Proof = Vec<u8>;
 pub type Vk = [u8; 1719];
-pub type Pubs = [u8; 32];
-```
-
-#### settlementProofOfSQLPallet Types
-
-```rust
-pub type Proof = Vec<u8>;
-pub struct Vk<T>(Vec<u8>, PhantomData<T>);
-pub type Pubs = Vec<u8>;
+pub type Pubs = Vec<[u8; 32]>;
 ```
 
 #### settlementPlonky2Pallet Types
@@ -337,6 +337,14 @@ pub struct Vk<T> {
     pub bytes: Vec<u8>,
     _marker: PhantomData<T>,
 }
+pub type Pubs = Vec<u8>;
+```
+
+##### settlementSp1Pallet Types
+
+```rust
+pub type Proof = Vec<u8>;
+pub type Vk = H256;
 pub type Pubs = Vec<u8>;
 ```
 
@@ -460,7 +468,7 @@ till at least one aggregation is published
 ##### Fields
 
 - `hash: H256` The hash of the registered verification key that can be used later in the `submitProof`
-exstrinsic calls of the same verifier pallet
+  exstrinsic calls of the same verifier pallet
 
 #### [ProofVerified](#proofverified)
 
@@ -478,6 +486,7 @@ In addition to them, the following custom errors have been defined:
 ### aggregate
 
 #### [BadOrigin](#badorigin)
+
 If caller lacks permission
 
 #### [UnknownDomainId](#unknowndomainid)

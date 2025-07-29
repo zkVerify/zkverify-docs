@@ -423,6 +423,7 @@ fn main() {
 <Tabs groupId="sp1-zkv-sdk">
 <TabItem value="with-sdk" label="With sp1_zkv_sdk">
 
+
 After having obtained a compressed proof, it's necessary to post-process the proof (alongside the verification key, and public inputs) to obtain a `serialized_proof`, a `vk_hash`, and `public_values` as required by the SP1 verification pallet.
 The [`sp1_zkv_sdk`](https://github.com/zkVerify/sp1-verifier/tree/main/sp1-zkv-sdk) crate contains utility functions to perform the relevant conversions.
 
