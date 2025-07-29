@@ -489,13 +489,11 @@ file.write_all(json_string.as_bytes()).unwrap();
 If you'd rather not depend on `sp1_zkv_sdk` in your application, the following sections show code snippets to perform the required conversions.
 First you would need to add these following dependencies below the `[dependencies]` tab in your Cargo.toml file of the script folder:
 ```toml
-p3-field = { version = "=0.2.3-succinct" }
 bincode = { version = "2", features = ["serde"] }
 ```
 
 Next we need to import all the important modules and create a structure to store our proof. Add these following lines after all the imports in ``script/Cargo.toml`` file:
 ```rust
-use p3_field::PrimeField32; // for the `as_canonical_u32` method.
 use sp1_sdk::HashableKey;   // for the `hash_babybear` method.
 use std::{fs::File, io::Write};
 use serde::{Deserialize, Serialize};
@@ -529,14 +527,27 @@ let compressed_proof = proof
     .expect("proof is not compressed");
 
 // Shrink the compressed proof.
-let shrunk_proof = client
+let SP1ReduceProof {
+    vk,
+    proof: shard_proof,
+} = client
     .inner()
     .shrink(*compressed_proof, Default::default())
-    .expect("failed to shrink")
-    .proof;
+    .expect("failed to shrink");
+
+let input = SP1CompressWitnessValues {
+    vks_and_proofs: vec![(vk.clone(), shard_proof.clone())],
+    is_complete: true,
+};
+let proof_with_vk_and_merkle = self.inner().make_merkle_proofs(input);
+let zkv_proof = Proof {
+    shard_proof,
+    vk,
+    vk_merkle_proof: proof_with_vk_and_merkle.merkle_val.vk_merkle_proofs[0].clone(),
+}
 
 // Serialize the shrunk_proof
-let serialized_proof = bincode::serde::encode_to_vec(&shrunk_proof, bincode::config::legacy())
+let serialized_proof = bincode::serde::encode_to_vec(&zkv_proof, bincode::config::legacy())
   .expect("failed to serialize proof");
 
 ```
@@ -547,13 +558,7 @@ The SP1 verification pallet accepts verification keys hashed with the `hash_baby
 
 ```rust
 // `vk` is the verification key obtained from `ProverClient::setup` method.
-let vk_hash: [u8; 32] = vk
-    .hash_babybear()
-    .iter()
-    .flat_map(|el| el.as_canonical_u32().to_le_bytes())
-    .collect::<Vec<_>>()
-    .try_into()
-    .unwrap();
+let vk_hash: [u8; 32] = vk.hash_bytes();
 ```
 
 ### Public Values
