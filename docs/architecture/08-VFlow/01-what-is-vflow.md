@@ -3,7 +3,7 @@ title: What is VFlow ?
 ---
 
 VFlow is the first zkVerify System Parachain specifically designed to act as a gateway, for zkVerify, to the EVM world.
-The primary purpose of VFlow is to enable bridging back and forth, from zkVerify to any EVM Chain, the VFY Token, leveraging Layer Zero.
+The primary purpose of VFlow is to enable bridging the VFY Token from zkVerify to EVM Chains 
 
 - VFlow is a *permissioned* EVM blockchain.
 - VFlow was built starting from the [OpenZeppelin EVM Template](https://github.com/OpenZeppelin/polkadot-runtime-templates/tree/main/evm-template) and [Moonbeam](https://moonbeam.network/) [fork](https://github.com/moonbeam-foundation/frontier) of [Frontier](https://github.com/polkadot-evm/frontier).
@@ -22,7 +22,6 @@ An independent set of *collators* is in charge of producing the blocks that are 
 ## Permissioned EVM
 
 Only a specific set of addresses is allowed to deploy smart contracts on VFlow. Any other user action is, instead, allowed.
-Future plans to fully open up the chain are under evaluation. Make sure to follow our channels for updates in this regard.
 
 ### Gas-nomics
 
@@ -69,4 +68,3 @@ VFlow is a System Parachain of zkVerify and shares the same native token (VFY). 
 - [Connect a wallet to VFlow and setup an account](./02-connect-a-wallet.md)
 - [Teleport VFY from zkVerify to VFlow](./03-VFY-Bridging/01-token-teleport.md)
 - [Relevant links](./05-vflow-hub.md)
-
