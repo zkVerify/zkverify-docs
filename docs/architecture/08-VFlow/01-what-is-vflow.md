@@ -67,6 +67,6 @@ VFlow is a System Parachain of zkVerify and shares the same native token (VFY). 
 ### What to do next
 
 - [Connect a wallet to VFlow and setup an account](./02-connect-a-wallet.md)
-- [Teleport VFY from zkVerify to VFlow](./02-VFY-Bridging/01-token-teleport.md)
+- [Teleport VFY from zkVerify to VFlow](./03-VFY-Bridging/01-token-teleport.md)
 - [Relevant links](./05-vflow-hub.md)
 
