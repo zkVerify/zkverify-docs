@@ -36,5 +36,3 @@ To confirm you're connected:
 ## What’s Next?
 
 Once connected, you can interact with VFlow-based applications, sign transactions, and query data using the VFlow RPC endpoint.
-
-If you're a developer, head over to the [VFlow architecture section](../) to learn more about how the protocol works under the hood.
