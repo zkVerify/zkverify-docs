@@ -19,7 +19,7 @@ Once MetaMask is installed:
 | Field                   | Value                               |
 |-------------------------|-------------------------------------|
 | **Network Name**        | VFlow                               |
-| **RPC URL**             | https://vflow-rpc.zkverify.io       |
+| **RPC URL**             | https://vflow-volta-rpc.zkverify.io       |
 | **Chain ID**            | 1409                                |
 | **Currency Symbol**     | tVFY (optional)                     |
 | **Block Explorer URL**  | https://vflow-testnet.subscan.io/   |

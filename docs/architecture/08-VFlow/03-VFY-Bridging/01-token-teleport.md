@@ -108,7 +108,7 @@ Then click on the `Submission` tab and change the values you need (like the Para
 ### From VFlow to zkVerify via PolkadotJS-UI
 
 The process here is exactly a mirror of what we did on zkVerify side.
-From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvflow-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `zkvXcm` pallet and the `teleportAssets` extrinsic.
+From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvflow-volta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `zkvXcm` pallet and the `teleportAssets` extrinsic.
 
 ![alt_text](./img/extrinsic_para.png)
 
@@ -180,7 +180,7 @@ Contract is deployed at address `2060`. Here is an example script leveraging `we
 const { Web3 } = require('web3');
 
 // Configuration
-const RPC_URL = 'wss://vflow-rpc.zkverify.io'; // VFlow RPC endpoint
+const RPC_URL = 'wss://vflow-volta-rpc.zkverify.io'; // VFlow RPC endpoint
 const PRIVATE_KEY = ''; // Your Ethereum account private key
 const PRECOMPILE_ADDRESS = '0x000000000000000000000000000000000000080C'; // XCM Teleport precompile address
 
