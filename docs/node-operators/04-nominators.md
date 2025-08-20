@@ -10,7 +10,7 @@ zkVerify is a blockchain developed using the Substrate framework, operating on t
 2. Nominators, on the other hand, delegate their stake to a selected group of reliable validators and receive a portion of the rewards earned by those validators. Unlike validators, nominators do not need to run any software.
 
 ## How to nominate Validators ? 
-You will need to visit [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-zkverify-volta-rpc.zkverify.io#/explorer) and navigate to ``Network`` > ``Staking`` > ``Account``. Over there you can find an option to nominate validators shown as ``+ Nominator``. Click on that to proceed further.
+You will need to visit [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/explorer) and navigate to ``Network`` > ``Staking`` > ``Account``. Over there you can find an option to nominate validators shown as ``+ Nominator``. Click on that to proceed further.
 
 ![alt_text](./img/nominators.png)
 

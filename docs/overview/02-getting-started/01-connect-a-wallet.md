@@ -25,7 +25,7 @@ Below are the zkVerify Testnet RPC URL and zkVerify Testnet Explorer URL that wi
 
 | <!-- -->                  | <!-- -->                             |
 | ------------------------- | ------------------------------------ |
-| zkVerify Testnet RPC URL  | wss://zkverify-zkverify-volta-rpc.zkverify.io        |
+| zkVerify Testnet RPC URL  | wss://zkverify-volta-rpc.zkverify.io        |
 | zkVerify Testnet Explorer | https://zkverify-testnet.subscan.io/ |
 
 Follow the instructions below to set up your wallet with these variables and start exploring the zkVerify Testnet blockchain.
