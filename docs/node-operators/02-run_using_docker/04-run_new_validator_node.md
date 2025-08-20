@@ -106,7 +106,7 @@ Secret phrase:       demise trumpet minor soup worth airport minor height sauce 
   SS58 Address:      5CNiZaphDhE8gT7cCDNZrXkd6vFfsuPjNQqdS8eEEw8mroHp
 ```
 
-The `Public key(hex)` field is the required Grandpa key. Once we have these three keys, we are ready to register our node. Next you need to visit [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/explorer) and call the ``setKeys`` extrinsic under ``sessions`` module.
+The `Public key(hex)` field is the required Grandpa key. Once we have these three keys, we are ready to register our node. Next you need to visit [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-zkverify-volta-rpc.zkverify.io#/explorer) and call the ``setKeys`` extrinsic under ``sessions`` module.
 
 In order to fill the `keys` field we need to concatenate the `Babe` key, followed by the `Grandpa` key (without the `0x` at the beginning), followed by all the other keys (without the `0x` at the beginning). Considering the ones we have generated before, the value for the `keys` field will be the following:
 

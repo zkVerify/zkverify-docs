@@ -596,5 +596,5 @@ After generating proofs, there are multiple ways in which you can verify it on [
 
 1. Using [Relayer Service](./05-relayer.md)
 2. Using [zkVerifyJS package](./06-zkverify-js.md)
-3. Using [Polkadot.js frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
+3. Using [Polkadot.js frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-zkverify-volta-rpc.zkverify.io#/extrinsics)
 4. Using the [subxt](https://github.com/paritytech/subxt) rust crate
