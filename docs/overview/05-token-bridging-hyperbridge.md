@@ -10,7 +10,7 @@ In the future more networks will be supported and this documentation will be upd
 
 ### From zkVerify to Sepolia ETH
 
-From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvolta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `tokenGateway` pallet and the `teleport` extrinsic.
+From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `tokenGateway` pallet and the `teleport` extrinsic.
 
 This call is used to initialize a cross-chain asset transfer. Any provided assets are custodied by the pallet and a cross-chain request is dispatched to the destination supported chain.
 

@@ -5,13 +5,13 @@ title: Verifying proofs with PolkadotJS
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-In this tutorial we'll go through the process of submitting compatible ZK proofs to the zkVerify chain using [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics). You can navigate through all the supported proof types using the tabs below.
+In this tutorial we'll go through the process of submitting compatible ZK proofs to the zkVerify chain using [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics). You can navigate through all the supported proof types using the tabs below.
 
 <Tabs groupId="verify-polkadotjs">
 
 <TabItem value="groth16" label="Groth16">
 
-1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
+1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
 2. Select your account (you must have some tVFY).
 3. Choose the `settlementGroth16Pallet`, and the `submitProof` extrinsic.
 4. Inside the field `vkOrHash` select `Vk`
@@ -24,7 +24,7 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 </TabItem>
 
 <TabItem value="ultrahonk" label="Ultrahonk">
-1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
+1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
 2. Select your account (you must have some tVFY).
 3. Choose the `settlementUltrahonkPallet`, and the `submitProof` extrinsic.
 4. Inside the field `vkOrHash` select `Vk`
@@ -38,7 +38,7 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 </TabItem>
 
 <TabItem value="ultraplonk" label="Ultraplonk">
-1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics)
+1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
 2. Select your account (you must have some tVFY).
 3. Choose the `settlementUltraplonkPallet`, and the `submitProof` extrinsic.
 4. Inside the field `vkOrHash` select `Vk`
@@ -52,7 +52,7 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 
 <TabItem value="risc-zero" label="Risc Zero">
 
-1. Head over to [PolkadotJs frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftestnet-rpc.zkverify.io#/extrinsics) and select your account (you must have some tVFY).
+1. Head over to [PolkadotJs frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics) and select your account (you must have some tVFY).
 2. Choose the `settlementRisc0Pallet` and the call `submitProof`.
 3. Inside the field `vkOrHash` select `Vk` and paste the verification key (i.e. the image id of the code whose execution you want to verify), making sure to prepend it with hexadecimal prefix `0x`.
 4. Inside the field `proof` choose the risc0 version used to generate the proof and load the binary file or paste the proof bytes, making sure to prepend it with hexadecimal prefix `0x`.
