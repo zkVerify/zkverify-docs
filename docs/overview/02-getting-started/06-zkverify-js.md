@@ -57,7 +57,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
 import dotenv from 'dotenv';
@@ -90,7 +97,15 @@ import fs from "fs";
 const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the Risc Zero tutorial
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+import fs from "fs";
+const proof = fs.readFileSync('../target/zkv_proof.hex', 'utf-8');
+const publicInputs = fs.readFileSync('../target/zkv_pubs.hex', 'utf-8');
+const vk = fs.readFileSync('../target/zkv_vk.hex', 'utf-8');
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 import fs from "fs";
 const bufvk = fs.readFileSync("../target/vk");
@@ -130,7 +145,6 @@ Next we will send a proof verification request to the Volta testnet, with all th
 <TabItem value="groth16" label="Circom">
 ```js
 let statement, aggregationId;
-
 
 session.subscribe([
   {
@@ -202,7 +216,45 @@ const {events} = await session.verify().risc0({ version: Risc0Version.V2_1} ) //
 }, domainId: 0})
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="Ultrahonk" label="Ultrahonk">
+```js
+let statement, aggregationId;
+
+session.subscribe([
+  {
+    event: ZkVerifyEvents.NewAggregationReceipt,
+    callback: async (eventData) => {
+      console.log("New aggregation receipt:", eventData);
+      if(aggregationId == parseInt(eventData.data.aggregationId.replace(/,/g, ''))){
+        let statementpath = await session.getAggregateStatementPath(
+          eventData.blockHash,
+          parseInt(eventData.data.domainId),
+          parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+          statement
+        );
+        console.log("Statement path:", statementpath);
+        const statementproof = {
+          ...statementpath,
+          domainId: parseInt(eventData.data.domainId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+        };
+        fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
+    }
+    },
+    options: { domainId: 0 },
+  },
+]);
+
+const {events} = await session.verify()
+    .ultrahonk()
+    .execute({proofData: {
+        vk: vk.split("\n")[0],
+        proof: proof.split("\n")[0],
+        publicSignals: publicInputs.split("\n").slice(0,-1)
+    }, domainId: 0});
+```
+</TabItem>
+<TabItem value="Ultraplonk" label="Ultraplonk">
 ```js
 let statement, aggregationId;
 
@@ -315,8 +367,14 @@ You can check details about the verified proofs using the ``txHash`` on our [zkV
 <TabItem value="r0" label="Risc Zero">
 ![alt_text](./img/r0-explorer.png)
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+![alt_text](./img/ultrahonk-zkverifyjs.png)
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ![alt_text](./img/noir-explorer.png)
+</TabItem>
+<TabItem value="sp1" label="SP1">
+![alt_text](./img/sp1-zkverifyjs.png)
 </TabItem>
 </Tabs>
 

@@ -70,8 +70,7 @@ const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Follow
 <TabItem value="ultrahonk" label="Ultrahonk">
 ```js
 import fs from "fs";
-const bufvk = fs.readFileSync("../target/vk");
-const base64Vk = bufvk.toString("base64");
+const vk = fs.readFileSync('../target/zkv_vk.hex', 'utf-8');
 ```
 </TabItem>
 <TabItem value="ultraplonk" label="Ultraplonk">
@@ -133,7 +132,7 @@ regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
 </TabItem>
 <TabItem value="ultrahonk" label="Ultrahonk">
 ```js
-const {regevent} = await session.registerVerificationKey().ultrahonk({numberOfPublicInputs:2}).execute(base64Vk); // Make sure to replace the numberOfPublicInputs field as per your circuit
+const {regevent} = await session.registerVerificationKey().ultrahonk().execute(vk.split("\n")[0]); 
 
 regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
     console.log('Registration finalized:', eventData);
@@ -209,11 +208,12 @@ const {events} = await session.verify().risc0()
 <TabItem value="ultrahonk" label="Ultrahonk">
 ```js
 const {events} = await session.verify()
-    .ultrahonk({numberOfPublicInputs: 2}) // Make sure to replace the numberOfPublicInputs field as per your circuit 
+    .ultrahonk() // Make sure to replace the numberOfPublicInputs field as per your circuit 
     .withRegisteredVk() 
     .execute({proofData: {
         vk: vkey.hash,
-        proof: base64Proof,
+        proof: proof.split("\n")[0],
+        publicSignals: publicInputs.split("\n").slice(0,-1)
     }, domainId: 0});
 ```
 </TabItem>

@@ -40,9 +40,19 @@ bytes32 public constant PROVING_SYSTEM_ID = keccak256(abi.encodePacked("groth16"
 bytes32 public constant PROVING_SYSTEM_ID = keccak256(abi.encodePacked("risc0"));
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```solidity
+bytes32 public constant PROVING_SYSTEM_ID = keccak256(abi.encodePacked("ultrahonk"));
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```solidity
 bytes32 public constant PROVING_SYSTEM_ID = keccak256(abi.encodePacked("ultraplonk"));
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```solidity
+bytes32 public constant PROVING_SYSTEM_ID = keccak256(abi.encodePacked("sp1"));
 ```
 </TabItem>
 </Tabs>
@@ -60,7 +70,17 @@ bytes32 public constant VERSION_HASH = sha256(abi.encodePacked(""));
 bytes32 public constant VERSION_HASH = sha256(abi.encodePacked("risc0:v1.1"));
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```solidity
+bytes32 public constant VERSION_HASH = sha256(abi.encodePacked(""));
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
+```solidity
+bytes32 public constant VERSION_HASH = sha256(abi.encodePacked(""));
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
 ```solidity
 bytes32 public constant VERSION_HASH = sha256(abi.encodePacked(""));
 ```
@@ -93,6 +113,19 @@ We will also need to store the some details like zkVerifier contract address and
     // vkey for our circuit
     bytes32 public vkey;
 
+    constructor(address _zkVerify, bytes32 _vkey) {
+        zkVerify = _zkVerify;
+        vkey = _vkey;
+    }
+```
+</TabItem>
+<TabItem value="ultrahonk" label="Ultrahonk">
+```solidity
+// zkVerify contract
+    address public zkVerify;
+
+    // vkey for our circuit
+    bytes32 public vkey;
 
     constructor(address _zkVerify, bytes32 _vkey) {
         zkVerify = _zkVerify;
@@ -100,7 +133,21 @@ We will also need to store the some details like zkVerifier contract address and
     }
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultraplonk" label="Ultraplonk">
+```solidity
+// zkVerify contract
+    address public zkVerify;
+
+    // vkey for our circuit
+    bytes32 public vkey;
+
+    constructor(address _zkVerify, bytes32 _vkey) {
+        zkVerify = _zkVerify;
+        vkey = _vkey;
+    }
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
 ```solidity
 // zkVerify contract
     address public zkVerify;
@@ -179,9 +226,19 @@ bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH,
 bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_hash))));
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
 ```solidity
 bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_input))));
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
+```solidity
+bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_input))));
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```solidity
+bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_hash))));
 ```
 </TabItem>
 </Tabs>
@@ -238,10 +295,58 @@ function checkHash(
 }
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
 ```solidity
 function checkHash(
     bytes32 _hash,
+    uint256 _aggregationId,
+    uint256 _domainId,
+    bytes32[] calldata _merklePath,
+    uint256 _leafCount,
+    uint256 _index
+) public {
+
+    bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_hash))));
+
+    require(IVerifyProofAggregation(zkVerify).verifyProofAggregation(
+        _domainId,
+        _aggregationId,
+        leaf,
+        _merklePath,
+        _leafCount,
+        _index
+    ), "Invalid proof");
+}
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
+```solidity
+function checkHash(
+    bytes32 _hash,
+    uint256 _aggregationId,
+    uint256 _domainId,
+    bytes32[] calldata _merklePath,
+    uint256 _leafCount,
+    uint256 _index
+) public {
+
+    bytes32 leaf = keccak256(abi.encodePacked(PROVING_SYSTEM_ID, vkey, VERSION_HASH, keccak256(abi.encodePacked(_hash))));
+
+    require(IVerifyProofAggregation(zkVerify).verifyProofAggregation(
+        _domainId,
+        _aggregationId,
+        leaf,
+        _merklePath,
+        _leafCount,
+        _index
+    ), "Invalid proof");
+}
+```
+</TabItem>
+<TabItem value="sp1" label="SP1">
+```solidity
+function checkHash(
+    bytes memory _hash,
     uint256 _aggregationId,
     uint256 _domainId,
     bytes32[] calldata _merklePath,
