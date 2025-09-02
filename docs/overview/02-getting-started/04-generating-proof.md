@@ -88,6 +88,10 @@ noirup
 curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
 ```
 
+:::warning
+Recommended bb version 0.84.0
+:::
+
 4. Install Barretenberg's Backend by running bbup command:
 ```bash
 bbup -v <version>
@@ -114,10 +118,10 @@ nargo execute
 Once we have generated our witness, we can generate proof and vk using the bb toolkit. Use the following command to generate the required files:
 ```bash
 # To generate proof
-bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target/proof --oracle_hash keccak --zk
+bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak --zk
 
 # To generate vk
-bb write_vk -s ultra_honk -b ./target/hello_world.json -o ./target/vk --oracle_hash keccak
+bb write_vk -s ultra_honk -b ./target/hello_world.json -o ./target --oracle_hash keccak
 
 ```
 

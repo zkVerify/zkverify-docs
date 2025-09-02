@@ -68,8 +68,14 @@ const key = JSON.parse(fs.readFileSync("./data/main.groth16.vkey.json"));
 const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the Risc Zero tutorial
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
-
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+const proof = fs.readFileSync('../target/zkv_proof.hex', 'utf-8');
+const publicInputs = fs.readFileSync('../target/zkv_pubs.hex', 'utf-8');
+const vkey = fs.readFileSync('../target/zkv_vk.hex', 'utf-8');
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 const bufvk = fs.readFileSync("./assets/noir/vk");
 const bufproof = fs.readFileSync("./assets/noir/proof");
@@ -154,7 +160,31 @@ if(!fs.existsSync("r0-vkey.json")){
 const vk = JSON.parse(fs.readFileSync("r0-vkey.json"));
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+if(!fs.existsSync("noir-vkey.json")){
+    // Registering the verification key
+    try{
+        const regParams = {
+            "proofType": "ultrahonk",
+            "vk": vkey.split("\n")[0]
+        }
+        const regResponse = await axios.post(`${API_URL}/register-vk/${process.env.API_KEY}`, regParams);
+        fs.writeFileSync(
+            "noir-vkey.json",
+            JSON.stringify(regResponse.data)
+        );
+    }catch(error){
+        fs.writeFileSync(
+            "noir-vkey.json",
+            JSON.stringify(error.response.data)
+        );
+    }
+}
+const vk = JSON.parse(fs.readFileSync("noir-vkey.json"));
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 if(!fs.existsSync("noir-vkey.json")){
     // Registering the verification key
@@ -251,7 +281,23 @@ const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.
 console.log(requestResponse.data)
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+const params = {
+    "proofType": "ultrahonk",
+    "vkRegistered": true,
+    "proofData": {
+        "proof": proof.split("\n")[0],
+        "vk": vk.vkHash || vk.meta.vkHash,
+        "publicSignals": publicInputs.split("\n").slice(0,-1)
+    }
+}
+
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
+console.log(requestResponse.data)
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 const params = {
     "proofType": "ultraplonk",
@@ -331,7 +377,24 @@ const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.
 console.log(requestResponse.data)
 ```
 </TabItem>
-<TabItem value="noir" label="Noir">
+<TabItem value="ultrahonk" label="Ultrahonk">
+```js
+const params = {
+    "proofType": "ultrahonk",
+    "vkRegistered": true,
+    "chainId": 11155111,
+    "proofData": {
+        "proof": proof.proof,
+        "publicSignals": proof.pub_inputs,
+        "vk": vk.vkHash || vk.meta.vkHash
+    }
+}
+
+const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
+console.log(requestResponse.data)
+```
+</TabItem>
+<TabItem value="ultraplonk" label="Ultraplonk">
 ```js
 const params = {
     "proofType": "ultraplonk",
