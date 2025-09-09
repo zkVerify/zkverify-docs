@@ -8,14 +8,14 @@ Token bridging is a component offered by **Hyperbridge**. \
 Currently native token tVFY can be teleported to **Ethereum Sepolia** and back as well. \
 In the future more networks will be supported and this documentation will be updated, as a lot of the values presented are EVM network specific.
 
-### From zkVerify to Sepolia Ethereum Testnet
+### 1. From zkVerify to Sepolia Ethereum Testnet
 
 From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `tokenGateway` pallet and the `teleport` extrinsic.
 
 This call is used to initialize a cross-chain asset transfer. Any provided assets are custodied by the pallet and a cross-chain request is dispatched to the destination supported chain.
 
 
-#### Parameters Definitions
+#### 1.1 Parameters Definitions
 
 - `assetId`: the local asset Id registered on Hyperbridge and that should be transferred.
 - `destination`: Destination state machine that should receive the funds, defined by its chain type and chain id. 
@@ -26,7 +26,7 @@ This call is used to initialize a cross-chain asset transfer. Any provided asset
 - `relayer_fee`: The amount to be paid to relayers for delivering the request, a value of zero means the dispatcher is responsible for relaying the request. For now it's okay to leave it to 0.
 - `redeem`: Boolean specifying if we are redeeming an existing ERC20. 
 
-#### Parameters Template
+#### 1.2 Parameters Template
 
 | Parameter      | Example Value                              | Customizable | Comments                                                                                                                                        |
 |----------------|--------------------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -39,7 +39,7 @@ This call is used to initialize a cross-chain asset transfer. Any provided asset
 | `relayer_fee`  | 0                                          | No           | 0 means the dispatcher is responsible for relaying the request, we can leave it as it is for now.                                               |
 | `redeem`       | false                                      | No           | we will not deploy ERC20 on our own so always false.                                                                                            | 
 
-#### Parameters Template hex-encoded call
+#### 1.3 Parameters Template hex-encoded call
 
 Instead of copying each value at a time from the previous you can decode a complete extrinsic example and only change the values you need.
 For this purpose, go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex
@@ -48,19 +48,19 @@ For this purpose, go to `Developer -> Extrinsics -> Decode` and copy/paste the f
 
 Then click on the `Submission` tab and change the values you need. 
 
-#### Check results
+#### 1.4 Check results
 When the tx succeeds, the extrinsic from zkVerify side looks like following https://polkadot.js.org/apps/#/explorer/query/0x12a55ba61173598626f29d3e17b297d2b1981686b0adeaa04564840aed99b7bd
 
 And then from EVM Ethereum Sepolia side, this is the transaction we can expect https://sepolia.etherscan.io/tx/0x2eb78b880b1f11793ddeb792b42d6a0b97e6e840e5214bcf0865745c400dec43
 Also, we can check the balance of EVM tVFY tokens of the recipient address to check it increased https://sepolia.etherscan.io/address/0x22d10f789847833607a28769cedd2778ebfba429#readContract
 
-### From Sepolia Ethereum Testnet to zkVerify
+### 2. From Sepolia Ethereum Testnet to zkVerify
 
-#### Prerequisites
+#### 2.1 Prerequisites
 
 Before starting to build our teleport call, we need to drip some Hyper USD tokens. This token is needed as it acts as fee token to teleport assets.
 
-##### Approve spender (Hyper USD)
+##### 2.1.1 Approve spender (Hyper USD)
 First we need to approve the tokengateway contract as spender of Hyper USD tokens.
 Go to https://sepolia.etherscan.io/address/0xa801da100bf16d07f668f4a49e1f71fc54d05177#writeContract
 Connect your account you'll be using to teleport tokens from.
@@ -69,7 +69,7 @@ Connect your account you'll be using to teleport tokens from.
 - `spender` The tokengateway contract address ***0xFcDa26cA021d5535C3059547390E6cCd8De7acA6***
 - `amount`: Max uint256 value ***115792089237316195423570985008687907853269984665640564039457584007913129639935***
 
-##### Drip Hyper USD tokens
+##### 2.1.2 Drip Hyper USD tokens
 
 Go to https://sepolia.etherscan.io/address/0x1794ab22388303ce9cb798be966eeebefe59c3a3#writeContract
 
@@ -77,7 +77,7 @@ Go to https://sepolia.etherscan.io/address/0x1794ab22388303ce9cb798be966eeebefe5
 The only argument is token address, enter ***0xA801da100bF16D07F668F4A49E1f71fc54D05177*** which is the Hyper USD token address.
 FYI, you need some Sepolia ETH tokens to pay the fees.
 
-##### Teleport your tokens
+#### 2.2 Teleport your tokens
 Go to the ***Tokengateway Ethereum sepolia contract***
 
 https://sepolia.etherscan.io/address/0xFcDa26cA021d5535C3059547390E6cCd8De7acA6#writeContract
@@ -85,7 +85,7 @@ https://sepolia.etherscan.io/address/0xFcDa26cA021d5535C3059547390E6cCd8De7acA6#
 Teleporting tokens back to zkVerify is done through the write method `teleport`.
 
 
-#### Parameters Definitions
+#### 2.3 Parameters Definitions
 
 - `amount`: amount to be sent, in wei unit of ether (18 decimals)
 - `relayerFee`: The amount to be paid to relayers for delivering the request.
@@ -97,7 +97,7 @@ Teleporting tokens back to zkVerify is done through the write method `teleport`.
 - `nativeCost`: Amount of native token to pay for dispatching the request. If 0 will use the `IIsmpHost.feeToken`
 - `data`: Destination contract call data
 
-#### Parameters Template
+#### 2.4 Parameters Template
 
 | Parameter    | Example Value                                                      | Customizable | Comments                                                                                        |
 |--------------|--------------------------------------------------------------------|--------------|-------------------------------------------------------------------------------------------------|
@@ -112,7 +112,7 @@ Teleporting tokens back to zkVerify is done through the write method `teleport`.
 | `data`       | 0x                                                                 | No           |                                                                                                 | 
 
 
-#### Parameter computation
+#### 2.5 Parameter computation
 ##### `assetId`
 This is calculated by executing the following solidity operation
 
@@ -153,7 +153,7 @@ return bytes(string.concat("SUBSTRATE-", string(abi.encodePacked(id))));
 
 In this case, zkVerify bytes representation is ***0x5355425354524154452d7a6b765f***
 
-#### Check results
+#### 2.6 Check results
 
 When the tx succeeds, the transaction from EVM side looks like following https://sepolia.etherscan.io/tx/0x3112a43a76019ae77fee56d7721a3fface395ae70d014affe3d17792d16ed3f1
 
