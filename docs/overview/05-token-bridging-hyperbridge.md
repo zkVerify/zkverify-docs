@@ -8,7 +8,7 @@ Token bridging is a component offered by **Hyperbridge**. \
 Currently native token tVFY can be teleported to **Ethereum Sepolia** and back as well. \
 In the future more networks will be supported and this documentation will be updated, as a lot of the values presented are EVM network specific.
 
-### 1. From zkVerify to Sepolia Ethereum Testnet
+### 1. From zkVerify (Volta Testnet) to Ethereum (Sepolia Testnet)
 
 From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `tokenGateway` pallet and the `teleport` extrinsic.
 
@@ -54,7 +54,7 @@ When the tx succeeds, the extrinsic from zkVerify side looks like following http
 And then from EVM Ethereum Sepolia side, this is the transaction we can expect https://sepolia.etherscan.io/tx/0x2eb78b880b1f11793ddeb792b42d6a0b97e6e840e5214bcf0865745c400dec43
 Also, we can check the balance of EVM tVFY tokens of the recipient address to check it increased https://sepolia.etherscan.io/address/0x22d10f789847833607a28769cedd2778ebfba429#readContract
 
-### 2. From Sepolia Ethereum Testnet to zkVerify
+### 2. From Ethereum (Sepolia Testnet) to zkVerify (Volta Testnet)
 
 #### 2.1 Prerequisites
 
@@ -129,7 +129,7 @@ First install [Subkey CLI](https://paritytech.github.io/polkadot-sdk/master/subk
 
 ```cargo install subkey --locked```
 
-Then run the following command
+Next, for the example zkVerify address (xpisMVzVEZnbYfz5QfFhKUQVPD2L6TdZRVxnmZG2YBKTmEPq5), run the following command to get the Public key (hex):
 
 ```bash
 subkey inspect xpisMVzVEZnbYfz5QfFhKUQVPD2L6TdZRVxnmZG2YBKTmEPq5
