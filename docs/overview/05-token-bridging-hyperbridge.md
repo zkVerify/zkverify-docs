@@ -84,9 +84,8 @@ https://sepolia.etherscan.io/address/0xFcDa26cA021d5535C3059547390E6cCd8De7acA6#
 
 Teleporting tokens back to zkVerify is done through the write method `teleport`.
 
-
 #### 2.3 Parameters Definitions
-
+- ***Note:*** There's a top-level parameter, `teleport`: [payableAmount(ether)]. Enter 0 here. 
 - `amount`: amount to be sent, in wei unit of ether (18 decimals)
 - `relayerFee`: The amount to be paid to relayers for delivering the request.
 - `assetId`: this is the bytes32 representation of the token symbol of the source EVM token.
