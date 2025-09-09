@@ -56,12 +56,6 @@ Also, we can check the balance of EVM tVFY tokens of the recipient address to ch
 
 ### From Sepolia Ethereum Testnet to zkVerify
 
-Got to the ***Tokengateway Ethereum sepolia contract***
-
-https://sepolia.etherscan.io/address/0xFcDa26cA021d5535C3059547390E6cCd8De7acA6#writeContract
-
-Teleporting tokens back to zkVerify is done through the write method `teleport`.
-
 #### Prerequisites
 
 Before starting to build our teleport call, we need to drip some Hyper USD tokens. This token is needed as it acts as fee token to teleport assets.
@@ -82,6 +76,13 @@ Go to https://sepolia.etherscan.io/address/0x1794ab22388303ce9cb798be966eeebefe5
 `drip` write method. Connect your account you'll be using to teleport tokens from.
 The only argument is token address, enter ***0xA801da100bF16D07F668F4A49E1f71fc54D05177*** which is the Hyper USD token address.
 FYI, you need some Sepolia ETH tokens to pay the fees.
+
+##### Teleport your tokens
+Go to the ***Tokengateway Ethereum sepolia contract***
+
+https://sepolia.etherscan.io/address/0xFcDa26cA021d5535C3059547390E6cCd8De7acA6#writeContract
+
+Teleporting tokens back to zkVerify is done through the write method `teleport`.
 
 
 #### Parameters Definitions
