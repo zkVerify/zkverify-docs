@@ -125,7 +125,9 @@ In this case, the result is ***0xbce67a4632d733ff3d4599502fc9c8812688ce39220e430
 ##### `to`
 
 This param has to be given in public hex format. To convert your SS58 address to public hex key address.
-First install Subkey CLI https://paritytech.github.io/polkadot-sdk/master/subkey/index.html
+First install [Subkey CLI](https://paritytech.github.io/polkadot-sdk/master/subkey/index.html): 
+
+```cargo install subkey --locked```
 
 Then run the following command
 
