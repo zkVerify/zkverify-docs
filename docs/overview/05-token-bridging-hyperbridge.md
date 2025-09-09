@@ -8,7 +8,7 @@ Token bridging is a component offered by **Hyperbridge**. \
 Currently native token tVFY can be teleported to **Ethereum Sepolia** and back as well. \
 In the future more networks will be supported and this documentation will be updated, as a lot of the values presented are EVM network specific.
 
-### From zkVerify to Sepolia ETH
+### From zkVerify to Sepolia Ethereum Testnet
 
 From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `tokenGateway` pallet and the `teleport` extrinsic.
 
@@ -31,11 +31,11 @@ This call is used to initialize a cross-chain asset transfer. Any provided asset
 | Parameter      | Example Value                              | Customizable | Comments                                                                                                                                        |
 |----------------|--------------------------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
 | `assetId`      | 0                                          | No           | native token tVFY asset Id is 0                                                                                                                 |
-| `destination`  | Evm -> 11155111                            | No           | Eth Sepolia chain ID                                                                                                                            |
+| `destination`  | Evm -> 11155111                            | No           | Ethereum Sepolia chain ID                                                                                                                            |
 | `recipient`    | 0x000000000000000000000000[ADDRESS]        | Yes          | Address should be left padded with zeros to fit into the required 32 bytes. Copy paste the example + append your address (remove the 0x though) |
 | `amount`       | 1000000000000000000                        | Yes          | tVFY token has 18 decimals                                                                                                                      |
 | `timeout`      | 7200                                       | Yes          | Can be custom but recommend to put 7200 seconds (2 hours).                                                                                      |
-| `tokengateway` | 0xFcDa26cA021d5535C3059547390E6cCd8De7acA6 | No           | Contract address for ETH sepolia                                                                                                                |
+| `tokengateway` | 0xFcDa26cA021d5535C3059547390E6cCd8De7acA6 | No           | Contract address for Ethereum Sepolia                                                                                                                |
 | `relayer_fee`  | 0                                          | No           | 0 means the dispatcher is responsible for relaying the request, we can leave it as it is for now.                                               |
 | `redeem`       | false                                      | No           | we will not deploy ERC20 on our own so always false.                                                                                            | 
 
@@ -51,12 +51,12 @@ Then click on the `Submission` tab and change the values you need.
 #### Check results
 When the tx succeeds, the extrinsic from zkVerify side looks like following https://polkadot.js.org/apps/#/explorer/query/0x12a55ba61173598626f29d3e17b297d2b1981686b0adeaa04564840aed99b7bd
 
-And then from EVM ETH Sepolia side, this is the transaction we can expect https://sepolia.etherscan.io/tx/0x2eb78b880b1f11793ddeb792b42d6a0b97e6e840e5214bcf0865745c400dec43
+And then from EVM Ethereum Sepolia side, this is the transaction we can expect https://sepolia.etherscan.io/tx/0x2eb78b880b1f11793ddeb792b42d6a0b97e6e840e5214bcf0865745c400dec43
 Also, we can check the balance of EVM tVFY tokens of the recipient address to check it increased https://sepolia.etherscan.io/address/0x22d10f789847833607a28769cedd2778ebfba429#readContract
 
-### From Sepolia ETH to zkVerify
+### From Sepolia Ethereum Testnet to zkVerify
 
-Got to the ***Tokegateway ETH sepolia contract***
+Got to the ***Tokengateway Ethereum sepolia contract***
 
 https://sepolia.etherscan.io/address/0xFcDa26cA021d5535C3059547390E6cCd8De7acA6#writeContract
 
