@@ -16,6 +16,58 @@ APIs follow the Substrate typical format, and for this reason, they are categori
 - **[Events](#events)**
 - **[Errors](#errors)**
 
+Also along with our own custom verification pallets, we use the following standard pallets for our chain:
+<table>
+  <tr>
+    <td>BABE</td>
+    <td>Balances</td>
+    <td>Bounties</td>
+    <td>ChildBounties</td>
+    <td>Claim</td>
+    <td>Configuration</td>
+  </tr>
+  <tr>
+    <td>ConvictionVoting</td>
+    <td>Coretime</td>
+    <td>GRANDPA</td>
+    <td>HRMP</td>
+    <td>Initializer</td>
+    <td>Ismp</td>
+  </tr>
+  <tr>
+    <td>Ismp GRANDPA</td>
+    <td>Multisig</td>
+    <td>Offences</td>
+    <td>Paras</td>
+    <td>Preimage</td>
+    <td>Proxy</td>
+  </tr>
+  <tr>
+    <td>Referenda</td>
+    <td>Registrar</td>
+    <td>Scheduler</td>
+    <td>Session</td>
+    <td>Slots</td>
+    <td>Staking</td>
+  </tr>
+  <tr>
+    <td>Sudo</td>
+    <td>Timestamp</td>
+    <td>Token Gateway</td>
+    <td>Transaction Payment</td>
+    <td>Treasury</td>
+    <td>Vesting</td>
+  </tr>
+  <tr>
+    <td>Voterlist</td>
+    <td>XcmPallet</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
 ## [Runtime](#runtime)
 
 Some calls are available to interact directly with the Mainchain runtime.
@@ -26,16 +78,6 @@ Availability of these calls may vary depending on the Mainchain runtime configur
 
 RPC methods can be used to query the Mainchain node for information or to submit commands.
 All the standard calls are available in the [official documentation](https://polkadot.js.org/docs/substrate/rpc).
-Mainchain nodes currently expose only a subset of the Substrate RPC methods, in particular, the ones from the following pallets:
-
-- _author_
-- _chain_
-- _childstate_
-- _offchain_
-- _payment_
-- _rpc_
-- _state_
-- _system_
 
 In addition to these, nodes expose the following custom commands:
 
@@ -62,34 +104,12 @@ and generate the proof:
 ## [Constants](#constants)
 
 All the standard constants are available in the [official documentation](https://polkadot.js.org/docs/substrate/constants).
-Mainchain nodes currently use only a subset of the Substrate constants, in particular, the ones from the following pallets:
-
-- _balances_
-- _grandpa_
-- _staking_
-- _system_
-- _timestamp_
-- _transactionPayment_
 
 ## [Storage](#storage)
 
 The node's storage can be queried to retrieve information about the current chain state.
 Some endpoints may return also historical data (e.g. the list of validators at a specific block), but availability depends on the specific query and the configuration of the node (e.g. standard vs archive node).
 Standard methods are available in the [official documentation](https://polkadot.js.org/docs/substrate/storage).
-Mainchain nodes currently use only a subset of these methods, in particular, the ones from the following pallets:
-
-- _authorship_
-- _babe_
-- _balances_
-- _grandpa_
-- _offences_
-- _session_
-- _staking_
-- _substrate_
-- _sudo_
-- _system_
-- _timestamp_
-- _transactionPayment_
 
 In addition to them, the following custom methods are available:
 
@@ -114,16 +134,6 @@ value at the block where it has been published.
 ## [Extrinsics](#extrinsics)
 
 Mainchain nodes support some of the most common extrinsics provided by Substrate (see the [official documentation](https://polkadot.js.org/docs/substrate/extrinsics)).
-The pallet currently included in the runtime are:
-
-- _balances_
-- _grandpa_
-- _imOnline_
-- _session_
-- _staking_
-- _sudo_
-- _system_
-- _timestamp_
 
 In addition to them, the following custom extrinsics are available:
 
