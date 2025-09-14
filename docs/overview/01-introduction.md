@@ -3,7 +3,7 @@ slug: /
 ---
 # What is zkVerify
 
-zkVerify is a high-performant, public, and decentralized blockchain dedicated to zero-knowledge proof verification. It provides a modular and composable approach for ZK apps to verify proofs. 
+zkVerify is a high-performance, public, and decentralized blockchain dedicated to zero-knowledge proof verification. It provides a modular and composable approach for ZK apps to verify proofs. 
 
 ## Goals of zkVerify
 
@@ -18,7 +18,7 @@ Both steps are essential to confirm that the computation is correct. While many 
 
 zkVerify solves this by accepting proofs, verifying them, and recording both the proof and its verification on the blockchain for future reference.
 
-## What is zkVerify trying to solve ?
+## What is zkVerify trying to solve?
 
 ### Proof verification costs
 
