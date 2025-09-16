@@ -37,9 +37,7 @@
   position: fixed;
   bottom: 90px;
   right: 20px;
-  width: 380px;
-  height: 500px;
-  background: var(--ifm-background-color);
+  background: #ffffff;
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -48,12 +46,26 @@
   z-index: 999;
   overflow: hidden;
   animation: slideUp 0.3s ease-out;
+  resize: none; /* Disable browser default resize */
+  opacity: 1; /* Ensure full opacity */
+  backdrop-filter: none; /* Remove any backdrop effects */
+}
+
+/* Dark theme override */
+[data-theme="dark"] .chatWidget {
+  background: #1b1b1d;
+}
+
+.chatWidget.resizing {
+  user-select: none;
+  pointer-events: auto;
 }
 
 .chatHeader {
   background: var(--ifm-color-primary);
   color: white;
   padding: 1rem;
+  padding-left: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -83,6 +95,12 @@
 .chatContainer {
   flex: 1;
   overflow: hidden;
+  background: #ffffff;
+  opacity: 1;
+}
+
+[data-theme="dark"] .chatContainer {
+  background: #1b1b1d;
 }
 
 /* Override chatbot styles when used in widget */
@@ -90,10 +108,64 @@
   height: 100%;
   border: none;
   border-radius: 0;
+  background: #ffffff !important;
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] .chatContainer :global(.chatbot) {
+  background: #1b1b1d !important;
 }
 
 .chatContainer :global(.header) {
   display: none;
+}
+
+/* Ensure messages area is opaque */
+.chatContainer :global(.messages) {
+  background: #ffffff !important;
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] .chatContainer :global(.messages) {
+  background: #1b1b1d !important;
+}
+
+/* Resize Handle */
+.resizeHandle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  cursor: nw-resize;
+  z-index: 1001;
+}
+
+.resizeHandle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  background-image: url('/resize_icon.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: scaleX(-1); /* Horizontally flips the SVG to reverse arrow directions */
+  filter: brightness(0) invert(1); /* Makes it white */
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.resizeHandle:hover::before {
+  opacity: 1;
+}
+
+/* Visual feedback during resize */
+.chatWidget.resizing {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  border-color: var(--ifm-color-primary);
 }
 
 /* Animations */
@@ -116,8 +188,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
     border-radius: 0;
     animation: slideUpMobile 0.3s ease-out;
   }
@@ -127,6 +199,11 @@
     right: 16px;
     width: 56px;
     height: 56px;
+  }
+
+  /* Hide resize handle on mobile */
+  .resizeHandle {
+    display: none;
   }
 }
 

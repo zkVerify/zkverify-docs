@@ -1,21 +1,159 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Chatbot from '../Chatbot';
 import styles from './styles.module.css';
 
+// Default and limit constants
+const DEFAULT_WIDTH = 400;
+const DEFAULT_HEIGHT = 550;
+const MIN_WIDTH = 300;
+const MIN_HEIGHT = 350;
+const MAX_WIDTH = 600;
+const MAX_HEIGHT = window.innerHeight * 0.8;
+
+// Version for localStorage - increment when changing defaults
+const CHAT_WIDGET_VERSION = 8;
+
 const FloatingChatWidget: React.FC = () => {
   const { siteConfig } = useDocusaurusContext();
   const [isOpen, setIsOpen] = useState(false);
+  const [size, setSize] = useState({ width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT });
+  const [isResizing, setIsResizing] = useState(false);
+  const chatWidgetRef = useRef<HTMLDivElement>(null);
+  const resizeStartPos = useRef({ x: 0, y: 0, width: 0, height: 0 });
+
+  // Load saved size from localStorage with version check
+  useEffect(() => {
+    const savedData = localStorage.getItem('chatWidgetSize');
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+
+        // Check if version matches current version
+        if (parsed.version === CHAT_WIDGET_VERSION && parsed.width && parsed.height) {
+          setSize({
+            width: Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, parsed.width)),
+            height: Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, parsed.height))
+          });
+        } else {
+          // Version mismatch or invalid data, use new defaults and update version
+          const newSizeData = {
+            width: DEFAULT_WIDTH,
+            height: DEFAULT_HEIGHT,
+            version: CHAT_WIDGET_VERSION
+          };
+          localStorage.setItem('chatWidgetSize', JSON.stringify(newSizeData));
+          setSize({ width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT });
+        }
+      } catch (e) {
+        // Invalid saved data, use defaults and set version
+        const newSizeData = {
+          width: DEFAULT_WIDTH,
+          height: DEFAULT_HEIGHT,
+          version: CHAT_WIDGET_VERSION
+        };
+        localStorage.setItem('chatWidgetSize', JSON.stringify(newSizeData));
+        setSize({ width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT });
+      }
+    } else {
+      // No saved data, use defaults and set version
+      const newSizeData = {
+        width: DEFAULT_WIDTH,
+        height: DEFAULT_HEIGHT,
+        version: CHAT_WIDGET_VERSION
+      };
+      localStorage.setItem('chatWidgetSize', JSON.stringify(newSizeData));
+    }
+  }, []);
+
+  // Save size to localStorage when it changes
+  useEffect(() => {
+    const sizeData = {
+      width: size.width,
+      height: size.height,
+      version: CHAT_WIDGET_VERSION
+    };
+    localStorage.setItem('chatWidgetSize', JSON.stringify(sizeData));
+  }, [size]);
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
   };
 
+  // Resize functionality
+  const handleResizeStart = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+    resizeStartPos.current = {
+      x: e.clientX,
+      y: e.clientY,
+      width: size.width,
+      height: size.height
+    };
+  }, [size]);
+
+  const handleResizeMove = useCallback((e: MouseEvent) => {
+    if (!isResizing) return;
+
+    // Calculate deltas - positive means mouse moved right/down
+    const deltaX = e.clientX - resizeStartPos.current.x;
+    const deltaY = e.clientY - resizeStartPos.current.y;
+
+    // For top-left resize handle:
+    // - Moving right/down should shrink the window
+    // - Moving left/up should grow the window
+    const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, resizeStartPos.current.width - deltaX));
+    const newHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, resizeStartPos.current.height - deltaY));
+
+    setSize({ width: newWidth, height: newHeight });
+  }, [isResizing]);
+
+  const handleResizeEnd = useCallback(() => {
+    setIsResizing(false);
+  }, []);
+
+  // Add/remove event listeners for resizing
+  useEffect(() => {
+    if (isResizing) {
+      document.addEventListener('mousemove', handleResizeMove);
+      document.addEventListener('mouseup', handleResizeEnd);
+      document.body.style.cursor = 'nw-resize';
+      document.body.style.userSelect = 'none';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleResizeMove);
+      document.removeEventListener('mouseup', handleResizeEnd);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing, handleResizeMove, handleResizeEnd]);
+
+  // Handle auto-resize based on content
+  const handleContentChange = useCallback((idealHeight: number) => {
+    // Only auto-resize if the user hasn't manually resized recently
+    const shouldAutoResize = !isResizing && idealHeight > size.height;
+
+    if (shouldAutoResize) {
+      const newHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, idealHeight));
+      if (newHeight !== size.height) {
+        setSize(prev => ({ ...prev, height: newHeight }));
+      }
+    }
+  }, [size.height, isResizing]);
+
   return (
     <>
       {/* Chat Widget */}
       {isOpen && (
-        <div className={styles.chatWidget}>
+        <div
+          ref={chatWidgetRef}
+          className={`${styles.chatWidget} ${isResizing ? styles.resizing : ''}`}
+          style={{
+            width: size.width,
+            height: size.height
+          }}
+        >
           <div className={styles.chatHeader}>
             <span>zkVerify AI</span>
             <button
@@ -32,8 +170,15 @@ const FloatingChatWidget: React.FC = () => {
               title=""
               placeholder="Ask me about zkVerify..."
               token={siteConfig.customFields?.chatApiToken as string}
+              onContentChange={handleContentChange}
             />
           </div>
+          {/* Resize Handle */}
+          <div
+            className={styles.resizeHandle}
+            onMouseDown={handleResizeStart}
+            title="Drag to resize"
+          />
         </div>
       )}
 

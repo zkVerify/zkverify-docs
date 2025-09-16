@@ -14,6 +14,7 @@ interface ChatbotProps {
   placeholder?: string;
   title?: string;
   token?: string;
+  onContentChange?: (contentHeight: number) => void;
 }
 
 // Generate a simple session ID for this chat session
@@ -25,7 +26,8 @@ const Chatbot: React.FC<ChatbotProps> = ({
   apiEndpoint = 'https://ai-agents.horizenlabs.io/webhook/chat',
   placeholder = 'Ask me anything...',
   title = 'Chat Assistant',
-  token
+  token,
+  onContentChange
 }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -47,6 +49,23 @@ const Chatbot: React.FC<ChatbotProps> = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Notify parent of content changes for auto-resize
+  useEffect(() => {
+    if (onContentChange && messagesEndRef.current) {
+      const messagesContainer = messagesEndRef.current.parentElement;
+      if (messagesContainer) {
+        // Calculate ideal height based on content
+        const headerHeight = title ? 60 : 0; // Header height if present
+        const inputHeight = 80; // Input area height
+        const padding = 32; // Total padding
+        const messagesHeight = messagesContainer.scrollHeight;
+
+        const idealHeight = headerHeight + messagesHeight + inputHeight + padding;
+        onContentChange(idealHeight);
+      }
+    }
+  }, [messages, onContentChange, title]);
 
   const sendMessage = async () => {
     if (!inputValue.trim()) return;
