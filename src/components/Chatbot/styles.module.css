@@ -10,7 +10,7 @@
   background: var(--ifm-background-color);
 }
 
-/* When used in floating widget, adjust styles */
+
 .chatbot:not(:has(.header)) {
   height: 100%;
   border: none;
@@ -265,6 +265,6 @@
   }
 
   .input {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
   }
 }

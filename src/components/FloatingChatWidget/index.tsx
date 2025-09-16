@@ -3,7 +3,6 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Chatbot from '../Chatbot';
 import styles from './styles.module.css';
 
-// Default and limit constants
 const DEFAULT_WIDTH = 400;
 const DEFAULT_HEIGHT = 550;
 const MIN_WIDTH = 300;
@@ -95,13 +94,9 @@ const FloatingChatWidget: React.FC = () => {
   const handleResizeMove = useCallback((e: MouseEvent) => {
     if (!isResizing) return;
 
-    // Calculate deltas - positive means mouse moved right/down
     const deltaX = e.clientX - resizeStartPos.current.x;
     const deltaY = e.clientY - resizeStartPos.current.y;
 
-    // For top-left resize handle:
-    // - Moving right/down should shrink the window
-    // - Moving left/up should grow the window
     const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, resizeStartPos.current.width - deltaX));
     const newHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, resizeStartPos.current.height - deltaY));
 

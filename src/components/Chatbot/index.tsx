@@ -55,8 +55,7 @@ const Chatbot: React.FC<ChatbotProps> = ({
     if (onContentChange && messagesEndRef.current) {
       const messagesContainer = messagesEndRef.current.parentElement;
       if (messagesContainer) {
-        // Calculate ideal height based on content
-        const headerHeight = title ? 60 : 0; // Header height if present
+        const headerHeight = title ? 60 : 0;
         const inputHeight = 80; // Input area height
         const padding = 32; // Total padding
         const messagesHeight = messagesContainer.scrollHeight;

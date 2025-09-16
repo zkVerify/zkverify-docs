@@ -46,9 +46,9 @@
   z-index: 999;
   overflow: hidden;
   animation: slideUp 0.3s ease-out;
-  resize: none; /* Disable browser default resize */
-  opacity: 1; /* Ensure full opacity */
-  backdrop-filter: none; /* Remove any backdrop effects */
+  resize: none;
+  opacity: 1;
+  backdrop-filter: none;
 }
 
 /* Dark theme override */
