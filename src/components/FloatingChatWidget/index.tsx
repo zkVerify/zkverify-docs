@@ -8,7 +8,6 @@ const DEFAULT_HEIGHT = 550;
 const MIN_WIDTH = 300;
 const MIN_HEIGHT = 350;
 const MAX_WIDTH = 600;
-const MAX_HEIGHT = window.innerHeight * 0.8;
 
 // Version for localStorage - increment when changing defaults
 const CHAT_WIDGET_VERSION = 1;
@@ -30,9 +29,10 @@ const FloatingChatWidget: React.FC = () => {
 
         // Check if version matches current version
         if (parsed.version === CHAT_WIDGET_VERSION && parsed.width && parsed.height) {
+          const maxHeight = typeof window !== 'undefined' ? window.innerHeight * 0.8 : 600;
           setSize({
             width: Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, parsed.width)),
-            height: Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, parsed.height))
+            height: Math.max(MIN_HEIGHT, Math.min(maxHeight, parsed.height))
           });
         } else {
           // Version mismatch or invalid data, use new defaults and update version
@@ -97,8 +97,9 @@ const FloatingChatWidget: React.FC = () => {
     const deltaX = e.clientX - resizeStartPos.current.x;
     const deltaY = e.clientY - resizeStartPos.current.y;
 
+    const maxHeight = typeof window !== 'undefined' ? window.innerHeight * 0.8 : 600;
     const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, resizeStartPos.current.width - deltaX));
-    const newHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, resizeStartPos.current.height - deltaY));
+    const newHeight = Math.max(MIN_HEIGHT, Math.min(maxHeight, resizeStartPos.current.height - deltaY));
 
     setSize({ width: newWidth, height: newHeight });
   }, [isResizing]);
@@ -130,7 +131,8 @@ const FloatingChatWidget: React.FC = () => {
     const shouldAutoResize = !isResizing && idealHeight > size.height;
 
     if (shouldAutoResize) {
-      const newHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, idealHeight));
+      const maxHeight = typeof window !== 'undefined' ? window.innerHeight * 0.8 : 600;
+      const newHeight = Math.max(MIN_HEIGHT, Math.min(maxHeight, idealHeight));
       if (newHeight !== size.height) {
         setSize(prev => ({ ...prev, height: newHeight }));
       }
