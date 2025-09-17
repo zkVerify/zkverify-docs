@@ -11,7 +11,7 @@ const MAX_WIDTH = 600;
 const MAX_HEIGHT = window.innerHeight * 0.8;
 
 // Version for localStorage - increment when changing defaults
-const CHAT_WIDGET_VERSION = 8;
+const CHAT_WIDGET_VERSION = 9;
 
 const FloatingChatWidget: React.FC = () => {
   const { siteConfig } = useDocusaurusContext();
