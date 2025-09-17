@@ -92,7 +92,8 @@ From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvflow-volta-rpc.
 ![alt_text](./img/extrinsic_para.png)
 
 Like before we need to supply 4 parameters: `dest`, `beneficiary`, `assets` and `feeAssetItem`.
-If you don't want to bother with the construction of this complex extrinsic read the section below, otherwise skip to the `Destination` section.
+You can either use the `Quick Teleport Guide` or follow starting from the `Destination` section.
+
 
 #### Quick Teleport Guide
 
