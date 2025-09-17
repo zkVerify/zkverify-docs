@@ -23,15 +23,17 @@ From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-r
 ![alt_text](./img/extrinsic_relay.png)
 
 You can see that we need to supply 4 parameters: `dest`, `beneficiary`, `assets` and `feeAssetItem`.
-If you don't want to bother with the construction of this complex extrinsic read the section below, otherwise skip to the `Destination` section.
+You can either use the `Quick Teleport Guide` or follow starting from the `Destination` section.
 
 #### Quick Teleport Guide
 
 Go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
 
-`0x69028400486b90dbf0cb9bfe92b6ba7d4942019a17ada772ab5fa9258ac3df821daca54d0186a4c5711073978f36dd5b6c42f421fcd5fe5d3fbbc89011380e62cfb2247729970ccae4d50757ca313d06e97c58fcc1aa6aedc380d55f024d3204aef76ec18ec5027c00008c0105000100040500010300b311b8f3eb086477244cb1e198c697ee0d699d9105040000001300004c31b8d9a79800000000`
+`0x8c0105000100040500010300000000000000000000000000000000000000000005040000000000000000`
 
-You might want to change the following parameters:
+Then from `Decode` move to `Submission`
+
+You need to change the following parameters:
 
 - `beneficiary -> V5 -> X1 -> AccountKey20 -> key: [u8, 20]`: with the EVM address of the receiver on VFlow
 - `assets -> V5 -> 0 -> id -> fun -> Fungible: Compact<u128>`: with the amount of VFY tokens you want to teleport to VFlow (specified with 18 digits)
@@ -44,10 +46,10 @@ Click on `submitTransaction` and then `sign And Submit` on the new window that w
 
 This parameter specifies the target chain where the assets are being teleported. Let's select:
 
-- `dest: XcmVersionedLocation` as `v5` from the scroll-down menu. New fields will pop-up. Let's set:
-    - `parents` as `0`
-    - `interior` as `X1` from the scroll-down menu. Then new fields will appear. Let's set:
-        - `Parachain` as `0` field, from the scroll-down menu
+- For `dest: XcmVersionedLocation` select `V5` from the scroll-down menu. New fields will pop-up. Let's set:
+    - For `parents` input `0`
+    - For `interior` select `X1` from the scroll-down menu. Then new fields will appear. Let's set:
+        -For `0` select `Parachain` from the scroll-down menu
         - We need finally to insert the ID of the VFlow `Parachain`, which is `1`.
 
 #### Beneficiary
@@ -56,11 +58,11 @@ This parameter specifies the target chain where the assets are being teleported.
 
 This specifies the account that will receive the assets on the destination chain. Let's set:
 
-- `v5` as `beneficiary: XcmVersionedMultiLocation` from the scroll-down menu. New fields will pop-up. Let's set:
-    - `parents` as `0`
-    - `interior` as `X1` from the scroll-down menu. Then new fields will appear. Let's set:
-        - `AccountKey20` as `0` field, from the scroll-down menu
-        - We need finally to insert the address of the Ethereum account we want to receive the assets on VFlow. 
+- For `beneficiary: XcmVersionedMultiLocation` select `V5` from the scroll-down menu. New fields will pop-up. Let's set:
+    - For `parents` input `0`
+    - For `interior` input `X1` from the scroll-down menu. Then new fields will appear. Let's set:
+        - For `0` select `AccountKey20` from the scroll-down menu
+        - For `key` input the address of the Ethereum account you want to receive the assets on VFlow. 
 
 #### Assets
 
@@ -68,11 +70,11 @@ This specifies the account that will receive the assets on the destination chain
 
 This defines the actual asset(s) and the amount(s) you are sending. Let's set:
 
-- `v5` as `assets: XcmVersionedMultiAsset` from the scroll-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
-    - `parents` as `0`
-    - `interior` as `Here` from the scroll-down menu. Then new fields will appear. Let's set:
-        - `Fungible` as `fun` field, from the scroll-down menu
-        - We need finally to insert the amount of assets we want to send in the `Fungible` field. In this case we are sending 1 VFY so, remembering that the token has 18 decimals, this will be a 1 followed by 18 zeros: `1000000000000000000`.
+- For `assets: XcmVersionedMultiAsset` select `v5` from the scroll-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
+    - For `parents` input `0`
+    - For `interior` select  `Here` from the scroll-down menu. Then new fields will appear. Let's set:
+        - For `fun` select `Fungible` from the scroll-down menu
+        - For `Fungible` input the amount of assets you want to send. e.g. to send 1 VFY , remembering that the token has 18 decimals, it's: `1000000000000000000`.
 
 #### Fee Asset Item
 
@@ -96,9 +98,9 @@ If you don't want to bother with the construction of this complex extrinsic read
 
 Go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
 
-`0x5d0284e07fcda4d3142f9e2c12cea25e418d18492a3781db9a6d3e84d2331a3b02c371f782180d79c4ed54bebac862cdae663527e47b4405dde8273edde4ec218e4f2fd4300df9ca09ec35be66137cad5ad1c3fe16004b0025010800001f010501000500010100486b90dbf0cb9bfe92b6ba7d4942019a17ada772ab5fa9258ac3df821daca54d050401000013000064a7b3b6e00d00000000`
+`0x6449595d731d231ccc6624a532469697b10dfea29e2843cc171ba7bdcde1c4cd`
 
-You might want to change the following parameters:
+You need to change the following parameters:
 
 - `beneficiary -> V5 -> X1 -> AccountId32 -> id: [u8, 32]`: with the address of the receiver on zkVerify
 - `assets -> V5 -> 0 -> id -> fun -> Fungible: Compact<u128>`: with the amount of VFY tokens you want to teleport to zkVerify (specified with 18 digits)
@@ -111,9 +113,9 @@ Let's start with the `dest` parameter:
 
 ![alt_text](./img/dest_para.png)
 
-- `v5` as `dest: XcmVersionedLocation` from the scroll-down menu. New fields will pop-up. Let's set:
-    - `parents` as `1`
-    - `interior` as `Here` from the scroll-down menu. Then new fields will appear. Let's set:
+- For `dest: XcmVersionedLocation` select `V5` from the scroll-down menu. New fields will pop-up. Let's set:
+    - For `parents` input `1`
+    - For `interior` select `Here` from the scroll-down menu. Then new fields will appear. Let's set:
 
 #### Beneficiary
 
@@ -121,11 +123,11 @@ Let's set the `beneficiary` parameter as follows:
 
 ![alt_text](./img/beneficiary_para.png)
 
-- `v5` as `beneficiary: XcmVersionedMultiLocation` from the scroll-down menu. New fields will pop-up. Let's set:
-    - `parents` as `0`
-    - `interior` as `X1` from the scroll-down menu. Then new fields will appear. Let's set:
-        - `AccountId32` as `0` field, from the scroll-down menu
-        - We need finally to insert the address of the zkVerify account we want to receive the assets on zkVerify.
+- For `beneficiary: XcmVersionedMultiLocation` select `V5` from the scroll-down menu. New fields will pop-up. Let's set:
+    - For `parents` input `0`
+    - For `interior` select `X1` from the scroll-down menu. Then new fields will appear. Let's set:
+        - For `0` select `AccountId32` from the scroll-down menu
+        - For `id` input the address of the zkVerify account you want to receive the assets on zkVerify.
 
 #### Assets
 
@@ -133,11 +135,11 @@ Let's set the `assets` parameter as follows:
 
 ![alt_text](./img/assets_para.png)
 
-- `v5` as `assets: XcmVersionedMultiAsset` from the scroll-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
-    - `parents` as `1`
-    - `interior` as `Here` from the scroll-down menu. Then new fields will appear. Let's set:
-        - `Fungible` as `fun` field, from the scroll-down menu
-        - We need finally to insert the amount of assets we want to send in the `Fungible` field. In this case we are sending 1 VFY so, remembering that the token has 18 decimals, this will be a 1 followed by 18 zeros: `1000000000000000000`.
+- For `assets: XcmVersionedMultiAsset` select `V5` from the scroll-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
+    - For `parents` input `1`
+    - For `interior` select `Here` from the scroll-down menu. Then new fields will appear. Let's set:
+        - For `fun` select `Fungible` from the scroll-down menu
+        - For `fun` input the amount of assets you want to send. e.g. to send 1 VFY , remembering that the token has 18 decimals, it's: `1000000000000000000`.
 
 #### Fee Asset Item
 
