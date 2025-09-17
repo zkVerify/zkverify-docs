@@ -1,0 +1,252 @@
+/* Floating Button */
+.floatingButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.floatingButton:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.floatingButton.open {
+  background: var(--ifm-color-danger);
+}
+
+.floatingButton.open:hover {
+  background: var(--ifm-color-danger-dark);
+}
+
+/* Chat Widget */
+.chatWidget {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  background: #ffffff;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+  resize: none;
+  opacity: 1;
+  backdrop-filter: none;
+}
+
+/* Dark theme override */
+[data-theme="dark"] .chatWidget {
+  background: #1b1b1d;
+}
+
+.chatWidget.resizing {
+  user-select: none;
+  pointer-events: auto;
+}
+
+.chatHeader {
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  position: relative;
+  min-height: 48px; /* Ensures consistent height */
+  font-size: 0.95rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.chatHeader span {
+  flex: 1;
+  text-align: center;
+  margin: 0 1rem; /* Equal margins from both icons */
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-weight: normal;
+  line-height: 1;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.closeButton:active {
+  transform: scale(0.95);
+}
+
+.chatContainer {
+  flex: 1;
+  overflow: hidden;
+  background: #ffffff;
+  opacity: 1;
+}
+
+[data-theme="dark"] .chatContainer {
+  background: #1b1b1d;
+}
+
+/* Override chatbot styles when used in widget */
+.chatContainer :global(.chatbot) {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background: #ffffff !important;
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] .chatContainer :global(.chatbot) {
+  background: #1b1b1d !important;
+}
+
+.chatContainer :global(.header) {
+  display: none;
+}
+
+/* Ensure messages area is opaque */
+.chatContainer :global(.messages) {
+  background: #ffffff !important;
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] .chatContainer :global(.messages) {
+  background: #1b1b1d !important;
+}
+
+/* Resize Handle */
+.resizeHandle {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 20px;
+  height: 20px;
+  cursor: nw-resize;
+  z-index: 1001;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.resizeHandle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.resizeHandle::before {
+  content: '';
+  position: relative;
+  width: 14px;
+  height: 14px;
+  background-image: url('/resize_icon.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: scaleX(-1); /* Horizontally flips the SVG to reverse arrow directions */
+  filter: brightness(0) invert(1); /* Makes it white */
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.resizeHandle:hover::before {
+  opacity: 1;
+}
+
+/* Visual feedback during resize */
+.chatWidget.resizing {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  border-color: var(--ifm-color-primary);
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .chatWidget {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0;
+    animation: slideUpMobile 0.3s ease-out;
+  }
+
+  .floatingButton {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+
+  /* Hide resize handle on mobile */
+  .resizeHandle {
+    display: none;
+  }
+}
+
+@keyframes slideUpMobile {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .chatWidget {
+  border-color: var(--ifm-color-emphasis-300);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure the widget appears above docusaurus elements */
+.floatingButton,
+.chatWidget {
+  z-index: 9999;
+}
