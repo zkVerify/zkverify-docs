@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Chatbot from '../Chatbot';
 import styles from './styles.module.css';
@@ -12,6 +12,28 @@ const MAX_WIDTH = 600;
 // Version for localStorage - increment when changing defaults
 const CHAT_WIDGET_VERSION = 1;
 
+// Debounce utility function
+const debounce = (func: Function, delay: number) => {
+  let timeoutId: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(null, args), delay);
+  };
+};
+
+// Icon components
+const CloseIcon: React.FC = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+  </svg>
+);
+
+const ChatIcon: React.FC = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+  </svg>
+);
+
 const FloatingChatWidget: React.FC = () => {
   const { siteConfig } = useDocusaurusContext();
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +41,14 @@ const FloatingChatWidget: React.FC = () => {
   const [isResizing, setIsResizing] = useState(false);
   const chatWidgetRef = useRef<HTMLDivElement>(null);
   const resizeStartPos = useRef({ x: 0, y: 0, width: 0, height: 0 });
+
+  // Debounced localStorage save function
+  const debouncedSave = useMemo(
+    () => debounce((sizeData: any) => {
+      localStorage.setItem('chatWidgetSize', JSON.stringify(sizeData));
+    }, 300),
+    []
+  );
 
   // Load saved size from localStorage with version check
   useEffect(() => {
@@ -65,18 +95,18 @@ const FloatingChatWidget: React.FC = () => {
     }
   }, []);
 
-  // Save size to localStorage when it changes
+  // Save size to localStorage when it changes (debounced)
   useEffect(() => {
     const sizeData = {
       width: size.width,
       height: size.height,
       version: CHAT_WIDGET_VERSION
     };
-    localStorage.setItem('chatWidgetSize', JSON.stringify(sizeData));
-  }, [size]);
+    debouncedSave(sizeData);
+  }, [size, debouncedSave]);
 
   const toggleChat = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(isOpen => !isOpen);
   };
 
   // Resize functionality
@@ -155,7 +185,7 @@ const FloatingChatWidget: React.FC = () => {
             <span>zkVerify AI</span>
             <button
               className={styles.closeButton}
-              onClick={toggleChat}
+              onClick={() => setIsOpen(false)}
               aria-label="Close chat"
             >
               ×
@@ -185,15 +215,7 @@ const FloatingChatWidget: React.FC = () => {
         onClick={toggleChat}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
-        {isOpen ? (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        ) : (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
-          </svg>
-        )}
+        {isOpen ? <CloseIcon /> : <ChatIcon />}
       </button>
     </>
   );
