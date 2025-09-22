@@ -81,79 +81,10 @@ Before sending the proof for verification, we will register our verification key
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Buffer } from "buffer";
-
-const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse){
-    
-    if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Method not allowed' });
-    }
-    try{
-
-        const proofUint8 = new Uint8Array(Object.values(req.body.proof));
-
-        const params = {
-            "proofType": "ultraplonk",
-            "vkRegistered": false,
-            "proofOptions": {
-                "numberOfPublicInputs": 1 
-            },
-            "proofData": {
-                "proof": Buffer.from(concatenatePublicInputsAndProof(req.body.publicInputs, proofUint8)).toString("base64"),
-                "vk": req.body.vk
-            }    
-        }
-
-        const requestResponse = await axios.post(`${API_URL}/submit-proof/${process.env.API_KEY}`, params)
-        console.log(requestResponse.data)
-
-        if(requestResponse.data.optimisticVerify != "success"){
-            console.error("Proof verification, check proof artifacts");
-            return;
-        }
-
-        while(true){
-            const jobStatusResponse = await axios.get(`${API_URL}/job-status/${process.env.API_KEY}/${requestResponse.data.jobId}`);
-            if(jobStatusResponse.data.status === "IncludedInBlock"){
-                console.log("Job Included in Block successfully");
-                res.status(200).json(jobStatusResponse.data);
-                return;
-            }else{
-                console.log("Job status: ", jobStatusResponse.data.status);
-                console.log("Waiting for job to finalize...");
-                await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before checking again
-            }
-        }
-    }catch(error){
-        console.log(error)
-    }
-}
-
-function hexToUint8Array(hex: any) {
-  if (hex.startsWith('0x')) hex = hex.slice(2);
-  if (hex.length % 2 !== 0) hex = '0' + hex;
-
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
-  }
-  return bytes;
-}
-
-function concatenatePublicInputsAndProof(publicInputsHex: any, proofUint8: any) {
-  const publicInputBytesArray = publicInputsHex.flatMap((hex: any) =>
-    Array.from(hexToUint8Array(hex))
-  );
-
-  const publicInputBytes = new Uint8Array(publicInputBytesArray);
-
-  console.log(publicInputBytes.length, proofUint8.length)
-import axios from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
-import { Buffer } from "buffer";
 import fs from "fs";
 import path from "path";
+
+const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
     
@@ -252,8 +183,6 @@ function concatenatePublicInputsAndProof(publicInputsHex: any, proofUint8: any) 
 }
 
 async function registerVk(vk: any){
-
-  const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
 
   const params = {
     proofType: "ultraplonk",
@@ -366,7 +295,7 @@ export default function ProofComponent() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-4xl font-bold mb-6">zkVerify Noir NextJS</h1>
+      <h1 className="text-4xl font-bold mb-6 text-black">zkVerify Noir NextJS</h1>
 
       {/* Inputs */}
       <div className="flex flex-col space-y-4 w-64 mb-6">
@@ -375,21 +304,21 @@ export default function ProofComponent() {
           placeholder="Enter value x"
           value={x}
           onChange={(e) => setX(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white placeholder-gray-500"
         />
         <input
           type="number"
           placeholder="Enter value y"
           value={y}
           onChange={(e) => setY(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white placeholder-gray-500"
         />
         <input
           type="number"
           placeholder="Enter value x * y"
           value={result}
           onChange={(e) => setResult(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white placeholder-gray-500"
         />
       </div>
 
@@ -438,7 +367,7 @@ export default function ProofComponent() {
       {proofResult && (
         <div className="mt-8 bg-white shadow-md p-4 rounded-lg w-full max-w-xl">
           <h2 className="text-xl font-bold mb-2 text-green-700">✅ Proof Generated</h2>
-          <pre className="text-sm overflow-x-auto whitespace-pre-wrap break-words">
+          <pre className="text-sm overflow-x-auto whitespace-pre-wrap break-words text-black">
             {JSON.stringify(proofResult, null, 2)}
           </pre>
         </div>
