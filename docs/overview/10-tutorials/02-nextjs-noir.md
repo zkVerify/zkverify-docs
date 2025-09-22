@@ -82,7 +82,7 @@ import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Buffer } from "buffer";
 
-const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
+const API_URL = "https://relayer-api-testnet.horizenlabs.io/api/v1";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
     
@@ -253,7 +253,7 @@ function concatenatePublicInputsAndProof(publicInputsHex: any, proofUint8: any) 
 
 async function registerVk(vk: any){
 
-  const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
+  const API_URL = "https://relayer-api-testnet.horizenlabs.io/api/v1";
 
   const params = {
     proofType: "ultraplonk",

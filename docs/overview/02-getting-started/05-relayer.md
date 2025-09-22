@@ -48,9 +48,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 
-After this let's initialize our API URL. You can also check the Swagger docs for the Relayer API [here](https://relayer-api.horizenlabs.io/docs) 
+After this let's initialize our API URL. You can also check the Swagger docs for the Relayer API [here](https://relayer-api-testnet.horizenlabs.io/docs) 
 ```js
-const API_URL = 'https://relayer-api.horizenlabs.io/api/v1';
+const API_URL = 'https://relayer-api-testnet.horizenlabs.io/api/v1';
 ```
 
 We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets :
