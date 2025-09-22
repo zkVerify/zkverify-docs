@@ -25,6 +25,10 @@ const config: Config = {
     locales: ['en'],
   },
 
+  customFields: {
+    chatApiToken: process.env.CHAT_API_TOKEN,
+  },
+
   presets: [
     [
       'classic',
