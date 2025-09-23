@@ -2,6 +2,8 @@
 title: Teleport Token across zkVerify Parachains
 ---
 
+This guide provides step-by-step instructions to teleport tokens across zkVerify Parachains. Before you begin, please [ensure you have a wallet setup correctly and ready to interact with Polkadot-JS](docs/overview/02-getting-started/01-connect-a-wallet.md). 
+
 ## XCM Teleport
 
 A **teleport** is a powerful Cross-Consensus Message (XCM) instruction that facilitates the movement of assets between zkVerify Relay Chain and its System Parachains.
@@ -10,15 +12,15 @@ A teleport of an asset (VFY token) is an operation performed in two stages by an
 
 ![alt_text](./img/xcm-asset-teleportation.png)
 
-[Image Source](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwiki.polkadot.network%2Flearn%2Flearn-xcm-usecases%2F&psig=AOvVaw21L2fcOzDMDt-zhRvkjJuv&ust=1752589475818000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMip9OHGvI4DFQAAAAAdAAAAABA8)
+[Image Source](https://wiki.polkadot.network/learn/learn-xcm-usecases/)
 
-In this guide, we will be using teleport to move VFY tokens from zkVerify to VFlow and viceversa.
+In this guide, we will be using teleport to move VFY tokens from zkVerify (Substrate-based) to VFlow (EVM-compatbile) and vice versa.
 
 You can find more information on XCM [here](https://polkadot.com/blog/xcm-the-cross-consensus-message-format/).
 
 ### From zkVerify to VFlow via PolkadotJS-UI
 
-From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `xcmPallet` pallet and the `teleportAssets` extrinsic:
+From PolkadotJS navigate to `Developer-> Extrinsics` and select the `xcmPallet` pallet and the `teleportAssets` extrinsic:
 
 ![alt_text](./img/extrinsic_relay.png)
 
@@ -38,7 +40,7 @@ You need to change the following parameters:
 - `beneficiary -> V5 -> X1 -> AccountKey20 -> key: [u8, 20]`: with the EVM address of the receiver on VFlow
 - `assets -> V5 -> 0 -> id -> fun -> Fungible: Compact<u128>`: with the amount of VFY tokens you want to teleport to VFlow (specified with 18 digits)
 
-Click on `submitTransaction` and then `sign And Submit` on the new window that will appear to conclude the teleport.
+Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the teleport.
 
 #### Destination
 
@@ -46,10 +48,10 @@ Click on `submitTransaction` and then `sign And Submit` on the new window that w
 
 This parameter specifies the target chain where the assets are being teleported. Let's select:
 
-- For `dest: XcmVersionedLocation` select `V5` from the scroll-down menu. New fields will pop-up. Let's set:
+- For `dest: XcmVersionedLocation` select `V5` from the drop-down menu. New fields will pop-up. Let's set:
     - For `parents` input `0`
-    - For `interior` select `X1` from the scroll-down menu. Then new fields will appear. Let's set:
-        -For `0` select `Parachain` from the scroll-down menu
+    - For `interior` select `X1` from the drop-down menu. Then new fields will appear. Let's set:
+        - For `0` select `Parachain` from the drop-down menu
         - We need finally to insert the ID of the VFlow `Parachain`, which is `1`.
 
 #### Beneficiary
@@ -58,10 +60,10 @@ This parameter specifies the target chain where the assets are being teleported.
 
 This specifies the account that will receive the assets on the destination chain. Let's set:
 
-- For `beneficiary: XcmVersionedMultiLocation` select `V5` from the scroll-down menu. New fields will pop-up. Let's set:
+- For `beneficiary: XcmVersionedLocation` select `V5` from the drop-down menu. New fields will pop-up. Let's set:
     - For `parents` input `0`
-    - For `interior` input `X1` from the scroll-down menu. Then new fields will appear. Let's set:
-        - For `0` select `AccountKey20` from the scroll-down menu
+    - For `interior` input `X1` from the drop-down menu. Then new fields will appear. Let's set:
+        - For `0` select `AccountKey20` from the drop-down menu
         - For `key` input the address of the Ethereum account you want to receive the assets on VFlow. 
 
 #### Assets
@@ -70,11 +72,15 @@ This specifies the account that will receive the assets on the destination chain
 
 This defines the actual asset(s) and the amount(s) you are sending. Let's set:
 
-- For `assets: XcmVersionedMultiAsset` select `v5` from the scroll-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
+- For `assets: XcmVersionedAssets` select `V5` from the drop-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
     - For `parents` input `0`
-    - For `interior` select  `Here` from the scroll-down menu. Then new fields will appear. Let's set:
-        - For `fun` select `Fungible` from the scroll-down menu
-        - For `Fungible` input the amount of assets you want to send. e.g. to send 1 VFY , remembering that the token has 18 decimals, it's: `1000000000000000000`.
+    - For `interior` select  `Here` from the drop-down menu. Then new fields will appear. Let's set:
+        - For `fun` select `Fungible` from the drop-down menu
+        - For `Fungible` input the amount of assets you want to send.
+        - Note: on-chain, amounts use 18 decimals. So if you want 1 VFY, you need to input 1 * 10^18 = `1000000000000000000`.
+          - Example:
+            - 1 VFY → `1000000000000000000`
+            - 0.5 VFY → `500000000000000000`
 
 #### Fee Asset Item
 
@@ -82,12 +88,25 @@ This is simply the index of the asset in the `assets` array that will be used to
 
 #### Submitting the Extrinsic
 
-Click on `submitTransaction` and then `sign And Submit` on the new window that will appear to conclude the teleport.
+Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the teleport.
 
 ### From VFlow to zkVerify via PolkadotJS-UI
 
+**Note:** if you want to bridge tokens back that you previously sent to an address living in Metamask, you must first export your private key from Metamask. You will then need to import this key into a wallet with full EVM and Substrate support, such as SubWallet (or Talisman).
+
+To setup a SubWallet or Talisman wallet please refer to the [documentation to setup a wallet ready to interact with Polkadot-JS](docs/overview/02-getting-started/01-connect-a-wallet.md). 
+
+---
+
 The process here is exactly a mirror of what we did on zkVerify side.
-From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fvflow-volta-rpc.zkverify.io#/explorer) navigate to `Developer-> Extrinsics` and select the `zkvXcm` pallet and the `teleportAssets` extrinsic.
+
+The first thing you must do, is to connect to the VFlow parachain. Supposed you're already connected to zkVerify, click on the zkVerify logo top left of the screen, scroll down and find `VFlow`, then click on it, scroll up again and click `Switch` to connect. 
+
+In the case multiple EVM accounts are detected, you can select the beneficiary by clicking on the current selected account `0x...` (under `free balance`), and choose from the drop-down menu. 
+
+![alt_text](./img/select_EVM_address.png)
+
+Now that you're connected, from PolkadotJS navigate to `Developer-> Extrinsics` and select the `zkvXcm` pallet and the `teleportAssets` extrinsic.
 
 ![alt_text](./img/extrinsic_para.png)
 
@@ -99,14 +118,14 @@ You can either use the `Quick Teleport Guide` or follow starting from the `Desti
 
 Go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
 
-`0x6449595d731d231ccc6624a532469697b10dfea29e2843cc171ba7bdcde1c4cd`
+`0x1f010501000500010100486b90dbf0cb9bfe92b6ba7d4942019a17ada772ab5fa9258ac3df821daca54d050401000013000064a7b3b6e00d00000000`
 
 You need to change the following parameters:
 
 - `beneficiary -> V5 -> X1 -> AccountId32 -> id: [u8, 32]`: with the address of the receiver on zkVerify
 - `assets -> V5 -> 0 -> id -> fun -> Fungible: Compact<u128>`: with the amount of VFY tokens you want to teleport to zkVerify (specified with 18 digits)
 
-Click on `submitTransaction` and then `sign And Submit` on the new window that will appear to conclude the teleport. 
+Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the teleport. 
 
 #### Destination
 
@@ -114,9 +133,9 @@ Let's start with the `dest` parameter:
 
 ![alt_text](./img/dest_para.png)
 
-- For `dest: XcmVersionedLocation` select `V5` from the scroll-down menu. New fields will pop-up. Let's set:
+- For `dest: XcmVersionedLocation` select `V5` from the drop-down menu. New fields will pop-up. Let's set:
     - For `parents` input `1`
-    - For `interior` select `Here` from the scroll-down menu. Then new fields will appear. Let's set:
+    - For `interior` select `Here` from the drop-down menu. Then new fields will appear. Let's set:
 
 #### Beneficiary
 
@@ -124,10 +143,10 @@ Let's set the `beneficiary` parameter as follows:
 
 ![alt_text](./img/beneficiary_para.png)
 
-- For `beneficiary: XcmVersionedMultiLocation` select `V5` from the scroll-down menu. New fields will pop-up. Let's set:
+- For `beneficiary: XcmVersionedLocation` select `V5` from the drop-down menu. New fields will pop-up. Let's set:
     - For `parents` input `0`
-    - For `interior` select `X1` from the scroll-down menu. Then new fields will appear. Let's set:
-        - For `0` select `AccountId32` from the scroll-down menu
+    - For `interior` select `X1` from the drop-down menu. Then new fields will appear. Let's set:
+        - For `0` select `AccountId32` from the drop-down menu
         - For `id` input the address of the zkVerify account you want to receive the assets on zkVerify.
 
 #### Assets
@@ -136,10 +155,10 @@ Let's set the `assets` parameter as follows:
 
 ![alt_text](./img/assets_para.png)
 
-- For `assets: XcmVersionedMultiAsset` select `V5` from the scroll-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
+- For `assets: XcmVersionedAssets` select `V5` from the drop-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
     - For `parents` input `1`
-    - For `interior` select `Here` from the scroll-down menu. Then new fields will appear. Let's set:
-        - For `fun` select `Fungible` from the scroll-down menu
+    - For `interior` select `Here` from the drop-down menu. Then new fields will appear. Let's set:
+        - For `fun` select `Fungible` from the drop-down menu
         - For `fun` input the amount of assets you want to send. e.g. to send 1 VFY , remembering that the token has 18 decimals, it's: `1000000000000000000`.
 
 #### Fee Asset Item
@@ -148,7 +167,7 @@ This is simply the index of the asset in the `assets` array that will be used to
 
 #### Submitting the extrinsic
 
-Click on `submitTransaction` and then `sign And Submit` on the new window that will appear to conclude our teleport.
+Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude our teleport.
 
 ### From VFlow to zkVerify via EVM Tooling
 
@@ -231,7 +250,7 @@ testTeleport();
 A couple of important notes:
 - In this case, the `amount` to be sent, doesn't require to specify 18 decimals.
 - The `destinationAccount` is an hex public key of zkVerify. While from PolkadotJS-UI you can use the AccountID and PolkadotJS automatically performs the conversion to the correct format, in this case you need to do it manually.
-From [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/explorer) navigate to `Developer-> Utilities` and select the `Convert Address` tab:
+From PolkadotJS navigate to `Developer-> Utilities` and select the `Convert Address` tab:
 
 ![alt_text](./img/convert_address.png)
 
