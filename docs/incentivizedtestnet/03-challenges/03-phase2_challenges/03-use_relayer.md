@@ -17,7 +17,7 @@ This is a technical challenge within the zkVerify Incentivized Testnet Phase 2. 
 - Relayer usage is tracked via your API key. To use the Relayer API, you will need an API key. Contact a zkVerify team member or open a ticket on Discord to request a unique API key.
 - Power users can reach out to us on Discord to adjust their rate limits; participants should specify their use cases and/ or apps they’re working on that uses the ZKVerify integration and we will determine the rate limit increase accordingly.
 
-<i>To earn zkVerify Incentivized Testnet Points, this requires creating a new circuit, registering your verification key, and submitting unique proofs. The proof types we support are: Groth16, UltraHonk, UltraPlonk, Risc0, Plonky2, SP1.</i><br/>
+<i>To earn zkVerify Incentivized Testnet Points, this requires creating a new circuit, registering your verification key, and submitting unique proofs. The proof types we support are: Groth16, UltraHonk, UltraPlonk, Risc0, Plonky2, SP1, and EZKL.</i><br/>
 
 <br />
 
