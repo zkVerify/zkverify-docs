@@ -24,7 +24,8 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 </TabItem>
 
 <TabItem value="ultrahonk" label="Ultrahonk">
-1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
+
+1. Head to [PolkadotJs frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
 2. Select your account (you must have some tVFY).
 3. Choose the `settlementUltrahonkPallet`, and the `submitProof` extrinsic.
 4. Inside the field `vkOrHash` select `Vk`
@@ -38,7 +39,8 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 </TabItem>
 
 <TabItem value="ultraplonk" label="Ultraplonk">
-1. Head to [polkadot.js.org frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
+
+1. Head to [PolkadotJs frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
 2. Select your account (you must have some tVFY).
 3. Choose the `settlementUltraplonkPallet`, and the `submitProof` extrinsic.
 4. Inside the field `vkOrHash` select `Vk`
@@ -61,6 +63,21 @@ In this tutorial we'll go through the process of submitting compatible ZK proofs
 7. Click on `submitTransaction`.
 
 ![alt_text](./img/risc0-proof.png)
+</TabItem>
+
+<TabItem value="ezkl" label="Ezkl">
+
+1. Head to [PolkadotJs frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
+2. Select your account (you must have some tVFY).
+3. Choose the `settlementEzklPallet`, and the `submitProof` extrinsic.
+4. Inside the field `vkOrHash` select `Vk`
+5. Fill in all the required fields by copy-pasting them from the hex files obtained in the previous step. You will need to fill the Vk, proof and public inputs. If you have more than one public inputs, you can click on the `Add Item` option to add more public inputs.
+6. Enter the Domain ID corresponding to the domain you want to aggregate the proof for. Think of the Domain ID as the target chain for aggregation. You can find a list of available domains [here](../../architecture/04-proof-aggregation/05-domain-management.md).
+
+7. Click on the `submitTransaction` button.
+
+
+![Submit Proof](./img/ezkl-proof-explorer.png)
 </TabItem>
 
 </Tabs>
