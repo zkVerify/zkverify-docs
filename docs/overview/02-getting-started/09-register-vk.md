@@ -51,6 +51,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 </TabItem>
+<TabItem value="ezkl" label="Ezkl">
+```js
+import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
+```
+</TabItem>
 </Tabs>
 
 We would also need to import the required verification key which we have already generated in previous tutorials. Use the following code snippets :
@@ -84,6 +91,12 @@ const base64Vk = bufvk.toString("base64");
 ```js
 import fs from "fs";
 const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the SP1 tutorial
+```
+</TabItem>
+<TabItem value="ezkl" label="Ezkl">
+```js
+import fs from "fs";
+const vk = fs.readFileSync('../target/zkv_vk.hex', 'utf-8');
 ```
 </TabItem>
 </Tabs>
@@ -155,6 +168,17 @@ regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
 <TabItem value="sp1" label="SP1">
 ```js
 const {regevent} = await session.registerVerificationKey().sp1().execute(proof.image_id);
+
+regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
+    console.log('Registration finalized:', eventData);
+    fs.writeFileSync("vkey.json", JSON.stringify({"hash": eventData.statementHash}, null, 2));
+    return eventData.statementHash
+});
+```
+</TabItem>
+<TabItem value="ezkl" label="Ezkl">
+```js
+const {regevent} = await session.registerVerificationKey().ezkl().execute(vk.split("\n")[0]); 
 
 regevent.on(ZkVerifyEvents.Finalized, (eventData) => {
     console.log('Registration finalized:', eventData);
@@ -237,6 +261,18 @@ const {events} = await session.verify().sp1()
         vk: vkey.hash,
         publicSignals: proof.pub_inputs,
     }, domainId: 0})
+```
+</TabItem>
+<TabItem value="ezkl" label="Ezkl">
+```js
+const {events} = await session.verify()
+    .ezkl()
+    .withRegisteredVk() 
+    .execute({proofData: {
+        vk: vkey.hash,
+        proof: proof.split("\n")[0],
+        publicSignals: publicInputs.split("\n").slice(0,-1)
+    }, domainId: 0});
 ```
 </TabItem>
 </Tabs>
