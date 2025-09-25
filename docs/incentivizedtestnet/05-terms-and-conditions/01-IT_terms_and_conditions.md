@@ -1,5 +1,5 @@
 ---
-title: Terms and Conditions
+title: Incentivized Testnet T&Cs
 ---
 
 # zkVerify Incentivized Testnet Terms of Use
