@@ -85,7 +85,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import path from "path";
 
-const API_URL = "https://relayer-api.horizenlabs.io/api/v1";
+const API_URL = "https://relayer-api-testnet.horizenlabs.io/api/v1";
 
 export default async function handler(
   req: NextApiRequest,
