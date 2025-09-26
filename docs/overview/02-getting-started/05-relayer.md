@@ -50,7 +50,7 @@ dotenv.config();
 
 After this let's initialize our API URL. 
 
-For tesnet:  
+For testnet:  
 ```js
 const API_URL = 'https://relayer-api-testnet.horizenlabs.io/api/v1';
 ```
