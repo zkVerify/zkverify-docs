@@ -598,9 +598,9 @@ file.write_all(json_string.as_bytes()).unwrap();
 We will use the quickstart Noir guide by zkonduit to generate an EZKL proof and will verify it on zkVerify. We will not be going into detail about EZKL's implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved
-- Installing EZKL
+- Installing EZKL and dependencies
 - Generating EZKL proofs
-- Converting the proof, vk, and public inputs to required hex format using Bash
+- Converting the proof, vk, and instances (public inputs) to required hex format using Bash
 - Verifying our proofs on zkVerify and getting proof receipts
 - Verifying the proof receipts on Ethereum
 
@@ -734,7 +734,7 @@ You are almost set. The artifacts `proof.json` and `vka.bytes` contain all the i
 To accomplish this, run the following Bash commands:
 ```bash
 # Convert vka to hexadecimal format
-tail -c +9 vka.bytes | xxd -p | tr -d '\n' | sed 's/.*/"0x&"/' > zkv_vk.hex
+tail -c +9 vka.bytes | xxd -p | tr -d '\n' | sed 's/.*/`{"vkBytes": "0x&"}`/' > zkv_vk.hex
 
 # Convert proof to hexadecimal format
 jq -r '.proof[] | select(type == "number")' proof.json | awk 'BEGIN {printf "\"0x"} {printf "%02x", $1} END {printf "\"\n"}' > zkv_proof.hex
