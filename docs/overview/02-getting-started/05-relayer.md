@@ -88,6 +88,13 @@ const base64Vk = bufvk.toString("base64");
 const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the SP1 tutorial
 ```
 </TabItem>
+<TabItem value="ezkl" label="Ezkl">
+```js
+const proof = fs.readFileSync('../target/zkv_proof.hex', 'utf-8');
+const publicInputs = fs.readFileSync('../target/zkv_pubs.hex', 'utf-8');
+const vkey = fs.readFileSync('../target/zkv_vk.hex', 'utf-8');
+```
+</TabItem>
 </Tabs>
 
 :::info
