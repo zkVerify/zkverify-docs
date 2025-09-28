@@ -1,49 +1,24 @@
-# Website
+# zkVerify Loyalty (ProofPoints) — Ready-to-deploy repo
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This repository contains a small static frontend and a minimal Node.js demo backend to run a loyalty/airdrop claim flow.
 
-## Installation
+Structure:
+- `public/` - frontend (index.html, style.css, app.js)
+- `server/` - Node demo server (server.js, package.json)
 
-```
-$ yarn
-```
+Quick start (local):
+1. Copy `public` to your webserver root (or serve via the Node server).
+2. Run the demo Node server:
+   ```bash
+   cd server
+   npm install
+   node server.js
+   ```
+3. Visit `http://localhost:3000/` and connect a wallet.
 
-## Local Development
+Notes:
+- This is a demo. Do **not** use the JSON file DB in production.
+- Replace the claim handler to mint/transfer tokens or to create on-chain attestations.
+- Protect signer keys, use HTTPS, rate-limit, and integrate a proper DB.
 
-1. Copy the example .env file:
-
-```shell
-cp .env.template .env
-```
-
-* Note: The default values seem to work for local development but refer to KeePass for the actual ALGOLIA_APP_ID, ALGOLIA_API_KEY, and ALGOLIA_INDEX_NAME details.
-
-2. Start a local development server and open up a browser window. Most changes are reflected live without having to restart the server.
-
-```
-$ yarn start
-```
-
-## Build
-
-```
-$ yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+If you want: I can add Merkle-claim generator, a Solidity contract for on-chain claim, or convert the server to use PostgreSQL. Tell me which and I'll add it.

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>zkVerify ProofPoints — Loyalty</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Ethers + Web3Modal (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.8.0/dist/ethers.min.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3modal@2.8.0/dist/index.js"></script>
+</head>
+<body>
+  <main class="container">
+    <h1>zkVerify ProofPoints</h1>
+    <p id="desc">Connect your wallet to check loyalty points and claim rewards.</p>
+
+    <div id="wallet-card" class="card">
+      <div>Wallet: <span id="addr">Not connected</span></div>
+      <div>Points: <span id="points">—</span></div>
+      <div>Nonce: <span id="nonce">—</span></div>
+      <div class="actions">
+        <button id="connectBtn">Connect Wallet</button>
+        <button id="refreshBtn" disabled>Refresh</button>
+      </div>
+    </div>
+
+    <div id="claim-card" class="card">
+      <h3>Claim Points</h3>
+      <label>Amount to claim:
+        <input id="claimAmount" type="number" min="1" value="10" />
+      </label>
+      <div class="actions">
+        <button id="signBtn" disabled>Sign Claim</button>
+        <button id="submitBtn" disabled>Submit Claim</button>
+      </div>
+      <div id="status" class="status"></div>
+    </div>
+
+    <footer>Powered by zkVerify • <a href="/">Home</a></footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
