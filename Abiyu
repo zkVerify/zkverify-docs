@@ -1,0 +1,205 @@
+#![cfg_attr(not(feature = "std"), no_std)]
+
+//! A minimal Substrate FRAME pallet that stores a Groth16 verifying key and //! exposes an extrinsic to verify zk-SNARK proofs (Groth16) on-chain. //! //! IMPORTANT: This example uses arkworks types and serialization. Building //! this pallet into a runtime requires careful no_std configuration of the //! arkworks crates (enable no_std/r1cs_std-compatible features) or moving //! verification to an offchain worker/worker-verified runtime API.
+
+use frame_support::{dispatch::DispatchResult, pallet_prelude::, traits::Get}; use frame_system::pallet_prelude::; use sp_std::vec::Vec;
+
+// We only import these when the with_ark feature is enabled so the pallet // compiles for demonstration without arkworks if the feature is turned off. #[cfg(feature = "with_ark")] mod ark_impl { use super::*; // arkworks dependencies use ark_bn254::{Bls12_381, Fr}; // NOTE: choose an appropriate curve; here as example use ark_groth16::{verify_proof, VerifyingKey, Proof}; use ark_serialize::{CanonicalDeserialize, CanonicalSerialize}; use sp_std::io::Cursor;
+
+/// Attempt to deserialize a verifying key from bytes (canonical).
+pub fn vk_from_bytes(bytes: &[u8]) -> Result<VerifyingKey<Bls12_381>, &'static str> {
+    VerifyingKey::deserialize_unchecked(&mut Cursor::new(bytes)).map_err(|_| "VK deserialize failed")
+}
+
+/// Attempt to deserialize a proof from bytes.
+pub fn proof_from_bytes(bytes: &[u8]) -> Result<Proof<Bls12_381>, &'static str> {
+    Proof::deserialize_unchecked(&mut Cursor::new(bytes)).map_err(|_| "Proof deserialize failed")
+}
+
+/// Deserialize public inputs (field elements) from bytes. This expects the
+/// caller to encode each field element in canonical bytes. For a real
+/// product consider using a compact, well-documented ABI for inputs.
+pub fn public_inputs_from_bytes(bytes: &[u8]) -> Result<Vec<Fr>, &'static str> {
+    let mut cursor = Cursor::new(bytes);
+    let mut res = Vec::new();
+    while (cursor.position() as usize) < bytes.len() {
+        let mut fe = Fr::zero();
+        fe.deserialize_unchecked(&mut cursor).map_err(|_| "Public input deserialize failed")?;
+        res.push(fe);
+    }
+    Ok(res)
+}
+
+/// Verify using arkworks groth16.
+pub fn verify_groth16(
+    vk_bytes: &[u8],
+    proof_bytes: &[u8],
+    public_inputs_bytes: &[u8],
+) -> Result<bool, &'static str> {
+    let vk = vk_from_bytes(vk_bytes)?;
+    let proof = proof_from_bytes(proof_bytes)?;
+    let public_inputs = public_inputs_from_bytes(public_inputs_bytes)?;
+    // Convert Fr values to field elements in the expected vector form
+    // For ark_groth16::verify_proof the inputs are `&[Fr]` for this curve.
+    verify_proof(&vk, &proof, &public_inputs).map_err(|_| "Proof verify returned error")
+}
+
+}
+
+#[frame_support::pallet] pub mod pallet { use super::*;
+
+#[pallet::config]
+pub trait Config: frame_system::Config {
+    /// The overarching event type.
+    type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+
+    /// Maximum length in bytes for stored verifying keys.
+    #[pallet::constant]
+    type MaxVkBytes: Get<u32>;
+
+    /// Maximum length for proofs and public inputs in submitted extrinsics.
+    #[pallet::constant]
+    type MaxProofBytes: Get<u32>;
+}
+
+#[pallet::pallet]
+#[pallet::generate_store(pub(super) trait Store)]
+pub struct Pallet<T>(_);
+
+/// The stored verifying key bytes (settable by root/origin).
+#[pallet::storage]
+#[pallet::getter(fn verifying_key)]
+pub type VerifyingKeyBytes<T: Config> = StorageValue<_, Vec<u8>, OptionQuery>;
+
+/// Events emitted by the pallet.
+#[pallet::event]
+#[pallet::generate_deposit(pub(super) fn deposit_event)]
+pub enum Event<T: Config> {
+    /// A verifying key was set (by the origin) - stores its length in bytes.
+    VerifyingKeySet(u32),
+    /// A proof was verified successfully.
+    ProofVerified(T::AccountId),
+    /// A proof verification failed.
+    ProofFailed(T::AccountId),
+}
+
+#[pallet::error]
+pub enum Error<T> {
+    /// No verifying key is set.
+    NoVerifyingKey,
+    /// Provided key or proof is too large.
+    TooLarge,
+    /// Deserialization or verification failed.
+    DeserializeOrVerifyFailed,
+    /// The verifier feature is disabled at compile time.
+    VerifierNotEnabled,
+}
+
+#[pallet::call]
+impl<T: Config> Pallet<T> {
+    /// Set the verifying key bytes. Only callable by root.
+    ///
+    /// The runtime operator should supply a canonical-serialized verifying
+    /// key (curve-specific). Size must be <= MaxVkBytes.
+    #[pallet::weight(10_000)]
+    pub fn set_verifying_key(origin: OriginFor<T>, vk: Vec<u8>) -> DispatchResult {
+        ensure_root(origin)?;
+        ensure!((vk.len() as u32) <= T::MaxVkBytes::get(), Error::<T>::TooLarge);
+        VerifyingKeyBytes::<T>::put(vk.clone());
+        Self::deposit_event(Event::VerifyingKeySet(vk.len() as u32));
+        Ok(())
+    }
+
+    /// Submit a proof and public inputs (both raw bytes). The pallet will
+    /// attempt to verify them against the stored verifying key.
+    ///
+    /// `proof` and `public_inputs` must be pre-serialized in the same
+    /// canonical way used during setup (see README/integration notes).
+    #[pallet::weight(100_000)]
+    pub fn verify_proof(
+        origin: OriginFor<T>,
+        proof: Vec<u8>,
+        public_inputs: Vec<u8>,
+    ) -> DispatchResult {
+        let who = ensure_signed(origin)?;
+        ensure!((proof.len() as u32) <= T::MaxProofBytes::get(), Error::<T>::TooLarge);
+        ensure!((public_inputs.len() as u32) <= T::MaxProofBytes::get(), Error::<T>::TooLarge);
+
+        let vk = VerifyingKeyBytes::<T>::get().ok_or(Error::<T>::NoVerifyingKey)?;
+
+        // If the runtime was compiled without `with_ark` feature, we return an error.
+        #[cfg(not(feature = "with_ark"))]
+        {
+            // Runtime didn't enable arkworks verification; tell the caller.
+            Self::deposit_event(Event::ProofFailed(who.clone()));
+            return Err(Error::<T>::VerifierNotEnabled.into());
+        }
+
+        #[cfg(feature = "with_ark")]
+        {
+            use crate::ark_impl::verify_groth16;
+            match verify_groth16(&vk, &proof, &public_inputs) {
+                Ok(true) => {
+                    Self::deposit_event(Event::ProofVerified(who));
+                    Ok(())
+                }
+                Ok(false) | Err(_) => {
+                    Self::deposit_event(Event::ProofFailed(who));
+                    Err(Error::<T>::DeserializeOrVerifyFailed.into())
+                }
+            }
+        }
+    }
+}
+
+}
+
+// --- End of pallet
+
+/* Integration notes (not part of the pallet file):
+
+1. Cargo.toml (runtime and pallet):
+
+
+
+[pallet] name = "pallet-zkverify" version = "0.1.0" authors = ["You you@example.com"]
+
+[dependencies] frame-support = { version = "4.0", default-features = false } frame-system = { version = "4.0", default-features = false } sp-std = { version = "4.0", default-features = false }
+
+Optional arkworks (enable via feature = "with_ark")
+
+ark-std = { package = "ark-std", version = "0.3", default-features = false, optional = true } ark-serialize = { package = "ark-serialize", version = "0.3", default-features = false, optional = true } ark-groth16 = { package = "ark-groth16", version = "0.3", default-features = false, optional = true } ark-bn254 = { package = "ark-bn254", version = "0.3", default-features = false, optional = true }
+
+[features] default = [] with_ark = ["ark-std","ark-serialize","ark-groth16","ark-bn254"]
+
+2. Runtime integration:
+
+
+
+Add the pallet to your runtime's Cargo.toml and enable with_ark only if you ensure arkworks crates build to no_std for Wasm. Many arkworks crates need std and can inflate wasm size significantly. If wasm size is a concern, consider doing verification off-chain via an offchain worker or RPC.
+
+In runtime/src/lib.rs:
+
+
+impl pallet_zkverify::Config for Runtime { type Event = Event; type MaxVkBytes = consts::U1024; // configure a const or use frame_support::pallet_prelude::Get implementation type MaxProofBytes = consts::U2048; }
+
+construct_runtime!(... PalletZkVerify: pallet_zkverify, ... );
+
+3. Serialization/ABI contract between prover and runtime:
+
+
+
+The prover must serialize the verifying key, proof and public inputs using the same canonical serialization used by arkworks (CanonicalSerialize/CanonicalDeserialize).
+
+Public inputs layout must be documented for integrators: e.g. each field element is stored as its canonical byte representation one after another.
+
+
+4. Gas/weight considerations:
+
+
+
+On-chain verification can be costly. Start with conservative weights and run benchmarks. Consider moving heavy verification to an offchain worker or verify via runtime API called by an offchain worker.
+
+
+*/
+
