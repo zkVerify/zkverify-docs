@@ -108,7 +108,7 @@ const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Follow
 Next we will be writing the core logic to send proofs to zkVerify for verification.
 All the following code snippets should be inserted within async main function.
 ```js
-async function main(){
+async function main() {
   // Required code
 }
 
@@ -121,8 +121,8 @@ Once you have all the requirements imported, we will start by registering our ve
 <Tabs groupId="register-vk">
 <TabItem value="circom" label="Circom">
 ```js
-if(!fs.existsSync("circom-vkey.json")){
-    try{
+if(!fs.existsSync("circom-vkey.json")) {
+    try {
         const regParams = {
             "proofType": "groth16",
             "proofOptions": {
@@ -136,7 +136,7 @@ if(!fs.existsSync("circom-vkey.json")){
             "circom-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "circom-vkey.json",
             JSON.stringify(error.response.data)
@@ -148,9 +148,9 @@ const vk = JSON.parse(fs.readFileSync("circom-vkey.json"));
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
-if(!fs.existsSync("r0-vkey.json")){
+if (!fs.existsSync("r0-vkey.json")) {
     // Registering the verification key
-    try{
+    try {
         const regParams = {
             "proofType": "risc0",
             "proofOptions": {
@@ -163,7 +163,7 @@ if(!fs.existsSync("r0-vkey.json")){
             "r0-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "r0-vkey.json",
             JSON.stringify(error.response.data)
@@ -176,9 +176,9 @@ const vk = JSON.parse(fs.readFileSync("r0-vkey.json"));
 </TabItem>
 <TabItem value="ultrahonk" label="Ultrahonk">
 ```js
-if(!fs.existsSync("noir-vkey.json")){
+if(!fs.existsSync("noir-vkey.json")) {
     // Registering the verification key
-    try{
+    try {
         const regParams = {
             "proofType": "ultrahonk",
             "vk": vkey.split("\n")[0]
@@ -188,7 +188,7 @@ if(!fs.existsSync("noir-vkey.json")){
             "noir-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "noir-vkey.json",
             JSON.stringify(error.response.data)
@@ -200,9 +200,9 @@ const vk = JSON.parse(fs.readFileSync("noir-vkey.json"));
 </TabItem>
 <TabItem value="ultraplonk" label="Ultraplonk">
 ```js
-if(!fs.existsSync("noir-vkey.json")){
+if (!fs.existsSync("noir-vkey.json")) {
     // Registering the verification key
-    try{
+    try {
         const regParams = {
             "proofType": "ultraplonk",
             "proofOptions": {
@@ -215,7 +215,7 @@ if(!fs.existsSync("noir-vkey.json")){
             "noir-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "noir-vkey.json",
             JSON.stringify(error.response.data)
@@ -227,9 +227,9 @@ const vk = JSON.parse(fs.readFileSync("noir-vkey.json"));
 </TabItem>
 <TabItem value="sp1" label="SP1">
 ```js
-if(!fs.existsSync("sp1-vkey.json")){
+if (!fs.existsSync("sp1-vkey.json")) {
     // Registering the verification key
-    try{
+    try {
         const regParams = {
             "proofType": "sp1",
             "vk": proof.image_id
@@ -239,7 +239,7 @@ if(!fs.existsSync("sp1-vkey.json")){
             "sp1-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "sp1-vkey.json",
             JSON.stringify(error.response.data)
@@ -454,12 +454,12 @@ After sending the verification request to the relayer, we can fetch the status o
 <Tabs groupId="aggregated-listening">
 <TabItem value="without-aggregation" label="Without Aggregation">
 ```js
-if(requestResponse.data.optimisticVerify != "success"){
+if (requestResponse.data.optimisticVerify !== "success") {
     console.error("Proof verification, check proof artifacts");
     return;
 }
 
-while(true){
+while(true) {
     const jobStatusResponse = await axios.get(`${API_URL}/job-status/${process.env.API_KEY}/${requestResponse.data.jobId}`);
     if(jobStatusResponse.data.status === "Finalized"){
         console.log("Job finalized successfully");
@@ -502,19 +502,19 @@ Job finalized successfully
 </TabItem>
 <TabItem value="with-aggregation" label="With Aggregation">
 ```js
-if(requestResponse.data.optimisticVerify != "success"){
+if(requestResponse.data.optimisticVerify !== "success"){
     console.error("Proof verification, check proof artifacts");
     return;
 }
 
-while(true){
+while(true) {
     const jobStatusResponse = await axios.get(`${API_URL}/job-status/${process.env.API_KEY}/${requestResponse.data.jobId}`);
-    if(jobStatusResponse.data.status === "Aggregated"){
+    if (jobStatusResponse.data.status === "Aggregated") {
         console.log("Job aggregated successfully");
         console.log(jobStatusResponse.data);
         fs.writeFileSync("aggregation.json", JSON.stringify({...jobStatusResponse.data.aggregationDetails, aggregationId: jobStatusResponse.data.aggregationId}))
         break;
-    }else{
+    } else {
         console.log("Job status: ", jobStatusResponse.data.status);
         console.log("Waiting for job to aggregated...");
         await new Promise(resolve => setTimeout(resolve, 20000)); // Wait for 5 seconds before checking again
