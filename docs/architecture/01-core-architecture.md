@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Core Architecture
 
 ![alt_text](./img/zkVerify-workflow.jpg)
@@ -22,7 +25,18 @@ The aggregation proofs system is designed to be permissionless and everyone can 
 
 Users submits a Merkle Proof to the zkVerify contract on-chain in order to verify that their proof was indeed verified in the zkVerify Blockchain. Currently, our contracts are deployed on the following chains:
 
+<Tabs groupId="networks">
+<TabItem value="mainnet" label="Mainnet">
 - Base  
+</TabItem>
+<TabItem value="testnet" label="Testnet">
+- Sepolia Testnet
+- Base Sepolia Testnet
+- Arbitrum Sepolia Testnet
+- Optimism Sepolia Testnet
+- EDU Chain Testnet
+</TabItem>
+</Tabs>
 
 ## Verifier Pallets
 
