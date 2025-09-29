@@ -35,9 +35,10 @@ Install axios and dotenv:
 npm i axios dotenv
 ```
 
-Let's create a ``.env`` file to store our ``API_KEY``, which will be used later to send proofs for verification using Relayer. Use the following code snippet to fill up your ``.env`` file. To use the relayer you need to get an ``API Key``. You can try to contact any of the team members or open a ticket on our [Discord](https://discord.gg/zkverify). 
+Let's create a ``.env`` file to store our ``API_KEY``, which will be used later to send proofs for verification using Relayer. Use the following code snippet to fill up your ``.env`` file. To use the relayer you need an ``API Key``. 
+Create your own API key by signing up [here for mainnet](https://relayer.horizenlabs.io) or [here for testnet](https://relayer-testnet.horizenlabs.io). 
 ```bash
-API_KEY = "get your API Key from Horizen Labs team"
+API_KEY = "generate your API key"
 ```
 
 Create a new file named ``index.js`` as the entrypoint for our application. Open ``index.js`` in your IDE and start with import neccesary packages :
@@ -48,12 +49,25 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 
-After this let's initialize our API URL. You can also check the Swagger docs for the Relayer API [here](https://relayer-api-testnet.horizenlabs.io/docs) 
+After this let's initialize our API URL. 
+
+For mainnet:
+```js
+const API_URL = 'https://relayer-api-mainnet.horizenlabs.io/api/v1';
+```
+For testnet:  
 ```js
 const API_URL = 'https://relayer-api-testnet.horizenlabs.io/api/v1';
 ```
 
-We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets :
+**API Documentation**
+
+Swagger docs are available for both environments and provide detailed information about each endpoint, expected payloads, and responses.
+Refer to them when integrating or debugging your API calls:
+- Mainnet: https://relayer-api-mainnet.horizenlabs.io/docs
+- Testnet: https://relayer-api-testnet.horizenlabs.io/docs
+---
+We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets:
 
 <Tabs groupId="import-files">
 <TabItem value="circom" label="Circom">
@@ -94,7 +108,7 @@ const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Follow
 Next we will be writing the core logic to send proofs to zkVerify for verification.
 All the following code snippets should be inserted within async main function.
 ```js
-async function main(){
+async function main() {
   // Required code
 }
 
@@ -107,8 +121,8 @@ Once you have all the requirements imported, we will start by registering our ve
 <Tabs groupId="register-vk">
 <TabItem value="circom" label="Circom">
 ```js
-if(!fs.existsSync("circom-vkey.json")){
-    try{
+if(!fs.existsSync("circom-vkey.json")) {
+    try {
         const regParams = {
             "proofType": "groth16",
             "proofOptions": {
@@ -122,7 +136,7 @@ if(!fs.existsSync("circom-vkey.json")){
             "circom-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "circom-vkey.json",
             JSON.stringify(error.response.data)
@@ -134,9 +148,9 @@ const vk = JSON.parse(fs.readFileSync("circom-vkey.json"));
 </TabItem>
 <TabItem value="r0" label="Risc Zero">
 ```js
-if(!fs.existsSync("r0-vkey.json")){
+if (!fs.existsSync("r0-vkey.json")) {
     // Registering the verification key
-    try{
+    try {
         const regParams = {
             "proofType": "risc0",
             "proofOptions": {
@@ -149,7 +163,7 @@ if(!fs.existsSync("r0-vkey.json")){
             "r0-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "r0-vkey.json",
             JSON.stringify(error.response.data)
@@ -162,9 +176,9 @@ const vk = JSON.parse(fs.readFileSync("r0-vkey.json"));
 </TabItem>
 <TabItem value="ultrahonk" label="Ultrahonk">
 ```js
-if(!fs.existsSync("noir-vkey.json")){
+if(!fs.existsSync("noir-vkey.json")) {
     // Registering the verification key
-    try{
+    try {
         const regParams = {
             "proofType": "ultrahonk",
             "vk": vkey.split("\n")[0]
@@ -174,7 +188,7 @@ if(!fs.existsSync("noir-vkey.json")){
             "noir-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "noir-vkey.json",
             JSON.stringify(error.response.data)
@@ -186,9 +200,9 @@ const vk = JSON.parse(fs.readFileSync("noir-vkey.json"));
 </TabItem>
 <TabItem value="ultraplonk" label="Ultraplonk">
 ```js
-if(!fs.existsSync("noir-vkey.json")){
+if (!fs.existsSync("noir-vkey.json")) {
     // Registering the verification key
-    try{
+    try {
         const regParams = {
             "proofType": "ultraplonk",
             "proofOptions": {
@@ -201,7 +215,7 @@ if(!fs.existsSync("noir-vkey.json")){
             "noir-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "noir-vkey.json",
             JSON.stringify(error.response.data)
@@ -213,9 +227,9 @@ const vk = JSON.parse(fs.readFileSync("noir-vkey.json"));
 </TabItem>
 <TabItem value="sp1" label="SP1">
 ```js
-if(!fs.existsSync("sp1-vkey.json")){
+if (!fs.existsSync("sp1-vkey.json")) {
     // Registering the verification key
-    try{
+    try {
         const regParams = {
             "proofType": "sp1",
             "vk": proof.image_id
@@ -225,7 +239,7 @@ if(!fs.existsSync("sp1-vkey.json")){
             "sp1-vkey.json",
             JSON.stringify(regResponse.data)
         );
-    }catch(error){
+    } catch(error) {
         fs.writeFileSync(
             "sp1-vkey.json",
             JSON.stringify(error.response.data)
@@ -440,12 +454,12 @@ After sending the verification request to the relayer, we can fetch the status o
 <Tabs groupId="aggregated-listening">
 <TabItem value="without-aggregation" label="Without Aggregation">
 ```js
-if(requestResponse.data.optimisticVerify != "success"){
+if (requestResponse.data.optimisticVerify !== "success") {
     console.error("Proof verification, check proof artifacts");
     return;
 }
 
-while(true){
+while(true) {
     const jobStatusResponse = await axios.get(`${API_URL}/job-status/${process.env.API_KEY}/${requestResponse.data.jobId}`);
     if(jobStatusResponse.data.status === "Finalized"){
         console.log("Job finalized successfully");
@@ -488,19 +502,19 @@ Job finalized successfully
 </TabItem>
 <TabItem value="with-aggregation" label="With Aggregation">
 ```js
-if(requestResponse.data.optimisticVerify != "success"){
+if(requestResponse.data.optimisticVerify !== "success"){
     console.error("Proof verification, check proof artifacts");
     return;
 }
 
-while(true){
+while(true) {
     const jobStatusResponse = await axios.get(`${API_URL}/job-status/${process.env.API_KEY}/${requestResponse.data.jobId}`);
-    if(jobStatusResponse.data.status === "Aggregated"){
+    if (jobStatusResponse.data.status === "Aggregated") {
         console.log("Job aggregated successfully");
         console.log(jobStatusResponse.data);
         fs.writeFileSync("aggregation.json", JSON.stringify({...jobStatusResponse.data.aggregationDetails, aggregationId: jobStatusResponse.data.aggregationId}))
         break;
-    }else{
+    } else {
         console.log("Job status: ", jobStatusResponse.data.status);
         console.log("Waiting for job to aggregated...");
         await new Promise(resolve => setTimeout(resolve, 20000)); // Wait for 5 seconds before checking again
@@ -569,3 +583,10 @@ All the status mentioned below, would not be generated if chainId is not provide
 - Aggregated - Proof successfully aggregated and published
 - AggregationPublished - Proof aggregation successfully published to zkVerify contract on destination chain
 - Failed - Proof processing failed
+
+## Resources
+1. Submit feedback/ or an issue: [Relayer API: Feedback](https://forms.gle/Gn4dVoFsCPL6zuy17)
+
+2. Submit a new feature request: [Relayer API: New Feature Requests](https://forms.gle/xcrEChxv8b3EQZVs7)
+
+3. Reach out to us on [Discord](https://discord.gg/zkverify) or [relayer-support@horizenlabs.io](mailto:relayer-support@horizenlabs.io) if you like to discuss potential partnerships
