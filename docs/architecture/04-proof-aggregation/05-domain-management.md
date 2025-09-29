@@ -1,6 +1,8 @@
 ---
 title: Domain Management
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 A domain is identified by an identifier and defines a class of aggregation and its key properties
 
@@ -40,6 +42,13 @@ For each of these domains, we are providing the following guarantees:
 
 For the addresses of the contracts we have deployed on all the destination chains, please refer to the appropriate [section](../../overview/05-contract-addresses.md) of the docs.
 
+<Tabs groupId="networks">
+<TabItem value="mainnet" label="Mainnet">
+| Domain ID | Chain             | Mechanism   |
+| --------- | ----------------- | ----------- |
+| 1         | Base              | Bot         |
+</TabItem>
+<TabItem value="testnet" label="Testnet">
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
 | 113         | Horizen Testnet  | Bot         |
@@ -50,3 +59,6 @@ For the addresses of the contracts we have deployed on all the destination chain
 | 4         | Arbitrum Sepolia  | Bot         |
 | 5         | Arbitrum Sepolia  | Hyperbridge |
 | 56        | EDU Chain Testnet | Bot         |
+</TabItem>
+</Tabs>
+

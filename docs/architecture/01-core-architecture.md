@@ -1,10 +1,13 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Core Architecture
 
 ![alt_text](./img/zkVerify-workflow.jpg)
 
 ## Core Blockchain
 
-Our chain is an L1 proof of stake blockchain built on the Substrate framework. This chain is specialized in zk proofs verification, with built-in verifier pallets, each for a different type of zk proofs. tVFY is the token for our chain, and to verify proofs on our chain you will need tVFY.
+Our chain is an L1 proof of stake blockchain built on the Substrate framework. This chain is specialized in zk proofs verification, with built-in verifier pallets, each for a different type of zk proofs. VFY is the token for our chain, and to verify proofs on our chain you will need VFY.
 
 ## Proof Submission Interface
 
@@ -22,11 +25,18 @@ The aggregation proofs system is designed to be permissionless and everyone can 
 
 Users submits a Merkle Proof to the zkVerify contract on-chain in order to verify that their proof was indeed verified in the zkVerify Blockchain. Currently, our contracts are deployed on the following chains:
 
+<Tabs groupId="networks">
+<TabItem value="mainnet" label="Mainnet">
+- Base  
+</TabItem>
+<TabItem value="testnet" label="Testnet">
 - Sepolia Testnet
 - Base Sepolia Testnet
 - Arbitrum Sepolia Testnet
 - Optimism Sepolia Testnet
 - EDU Chain Testnet
+</TabItem>
+</Tabs>
 
 ## Verifier Pallets
 

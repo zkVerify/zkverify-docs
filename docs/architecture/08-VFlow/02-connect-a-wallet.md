@@ -2,6 +2,9 @@
 title:  Connect to VFlow
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 To interact with VFlow, you’ll need to connect your wallet (we’ll use MetaMask in this example) and manually add the VFlow network using the provided RPC endpoint and chain details.
 
 ## Step 1: Install MetaMask
@@ -16,6 +19,17 @@ Once MetaMask is installed:
 2. Select “Add network” or “Add network manually”.
 3. Fill in the following VFlow network details:
 
+<Tabs groupId="networks">
+<TabItem value="mainnet" label="Mainnet">
+| Field                   | Value                               |
+|-------------------------|-------------------------------------|
+| **Network Name**        | VFlow                               |
+| **RPC URL**             | https://vflow-rpc.zkverify.io      |
+| **Chain ID**            | 1408                                |
+| **Currency Symbol**     | VFY (optional)                     |
+| **Block Explorer URL**  | https://vflow.subscan.io   |
+</TabItem>
+<TabItem value="testnet" label="Testnet">
 | Field                   | Value                               |
 |-------------------------|-------------------------------------|
 | **Network Name**        | VFlow                               |
@@ -23,6 +37,9 @@ Once MetaMask is installed:
 | **Chain ID**            | 1409                                |
 | **Currency Symbol**     | tVFY (optional)                     |
 | **Block Explorer URL**  | https://vflow-testnet.subscan.io/   |
+</TabItem>
+</Tabs>
+
 
 4. Click “Save” to add the network.
 
