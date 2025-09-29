@@ -36,7 +36,7 @@ npm i axios dotenv
 ```
 
 Let's create a ``.env`` file to store our ``API_KEY``, which will be used later to send proofs for verification using Relayer. Use the following code snippet to fill up your ``.env`` file. To use the relayer you need an ``API Key``. 
-Create your own API key by signing up [here for mainnet](relayer.horizenlabs.io) or [here for testnet](relayer-testnet.horizenlabs.io). 
+Create your own API key by signing up [here for mainnet](https://relayer.horizenlabs.io) or [here for testnet](https://relayer-testnet.horizenlabs.io). 
 ```bash
 API_KEY = "generate your API key"
 ```
@@ -51,20 +51,23 @@ dotenv.config();
 
 After this let's initialize our API URL. 
 
-For testnet:  
-```js
-const API_URL = 'https://relayer-api-testnet.horizenlabs.io/api/v1';
-```
 For mainnet:
 ```js
 const API_URL = 'https://relayer-api-mainnet.horizenlabs.io/api/v1';
 ```
+For testnet:  
+```js
+const API_URL = 'https://relayer-api-testnet.horizenlabs.io/api/v1';
+```
 
-Swagger docs are also available:
+**API Documentation**
+
+Swagger docs are available for both environments and provide detailed information about each endpoint, expected payloads, and responses.
+Refer to them when integrating or debugging your API calls:
 - Mainnet: https://relayer-api-mainnet.horizenlabs.io/docs
 - Testnet: https://relayer-api-testnet.horizenlabs.io/docs
-
-We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets :
+---
+We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets:
 
 <Tabs groupId="import-files">
 <TabItem value="circom" label="Circom">
