@@ -1,6 +1,8 @@
 ---
 title: Connect a Wallet
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Connect a Wallet
 
@@ -55,14 +57,24 @@ Your EVM address (e.g. `0x...`) is a different format from your native Substrate
 - **Check Wallet Permissionss**: Open your wallet extension and ensure it has permission to connect to the Polkadot-JS site.
 - **Switch Networks**: Try switching to another network in Polkadot-JS and then switching back to zkVerify. This can sometimes force the interface to re-check for accounts.
 
-## Connecting to zkVerify Testnet
+## Connecting to zkVerify Network
 
-Below are the zkVerify Testnet RPC URL and zkVerify Testnet Explorer URL that will be used to configure the wallet connection, allowing you to interact with the testnet blockchain the recommended browser wallets:
+Below are the zkVerify RPC URL and zkVerify Explorer URL for both mainnet and testnet that will be used to configure the wallet connection, allowing you to interact with blockchain using recommended browser wallets:
 
+<Tabs groupId="networks">
+<TabItem value="mainnet" label="Mainnet">
+| <!-- -->                  | <!-- -->                             |
+| ------------------------- | ------------------------------------ |
+| zkVerify RPC URL  | wss://zkverify-rpc.zkverify.io        |
+| zkVerify Explorer | https://zkverify.subscan.io |
+</TabItem>
+<TabItem value="testnet" label="Testnet">
 | <!-- -->                  | <!-- -->                             |
 | ------------------------- | ------------------------------------ |
 | zkVerify Testnet RPC URL  | wss://zkverify-volta-rpc.zkverify.io        |
 | zkVerify Testnet Explorer | https://zkverify-testnet.subscan.io/ |
+</TabItem>
+</Tabs>
 
 Follow the instructions below to set up your wallet with these variables and start exploring the zkVerify Testnet blockchain.
 
