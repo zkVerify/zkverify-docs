@@ -2,6 +2,7 @@
 
 | Proof Type           | Supported Versions / Curves | Limits                                                                                                 |
 | -------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **EZKL**           | Reusable Verifier only (v0.1.0), Bn254 (Curve), BDFG21 (batch opening scheme), no accumulator                       | **Max number of Public Inputs:** 32                                                                                                                |
 | **Fflonk**           | Bn128                       | **Public Inputs:** 1                                                                                                                |
 | **Groth16**          | Bls12-381, Bn128            | **Public Inputs:** 64                                                                                  |
 | **Noir UltraHonk**  | Noir v1.0.0-beta.6, ZK, Keccak256                 | **Public Inputs:** 32                                                                                  |
