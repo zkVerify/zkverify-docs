@@ -42,11 +42,4 @@ For the addresses of the contracts we have deployed on all the destination chain
 
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
-| 113         | Horizen Testnet  | Bot         |
-| 0         | Ethereum Sepolia  | Bot         |
-| 1         | Ethereum Sepolia  | Hyperbridge |
-| 2         | Base Sepolia      | Bot         |
-| 3         | Optimism Sepolia  | Bot         |
-| 4         | Arbitrum Sepolia  | Bot         |
-| 5         | Arbitrum Sepolia  | Hyperbridge |
-| 56        | EDU Chain Testnet | Bot         |
+| 1         | Base              | Bot         |
