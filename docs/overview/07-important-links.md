@@ -2,6 +2,9 @@
 title: Resources
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 | Product                                                     | Link                                                                                                                                                                                                             |
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Github                                                      | https://github.com/zkVerify/zkVerify                                                                                                                                                                             |
@@ -29,5 +32,13 @@ Without an API key, you may experience lower rate limits.
 
 These endpoints are available without an API key:
 
+<Tabs groupId="networks">
+<TabItem value="mainnet" label="Mainnet">
+- WebSocket: wss://zkverify-rpc.zkverify.io
+- HTTPS: https://zkverify-rpc.zkverify.io
+</TabItem>
+<TabItem value="testnet" label="Testnet">
 - WebSocket: wss://zkverify-volta-rpc.zkverify.io
 - HTTPS: https://zkverify-volta-rpc.zkverify.io
+</TabItem>
+</Tabs>
