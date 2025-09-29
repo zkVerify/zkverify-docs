@@ -35,9 +35,10 @@ Install axios and dotenv:
 npm i axios dotenv
 ```
 
-Let's create a ``.env`` file to store our ``API_KEY``, which will be used later to send proofs for verification using Relayer. Use the following code snippet to fill up your ``.env`` file. To use the relayer you need to get an ``API Key``. You can try to contact any of the team members or open a ticket on our [Discord](https://discord.gg/zkverify). 
+Let's create a ``.env`` file to store our ``API_KEY``, which will be used later to send proofs for verification using Relayer. Use the following code snippet to fill up your ``.env`` file. To use the relayer you need an ``API Key``. 
+Create your own API key by signing up [here for mainnet](relayer.horizenlabs.io) or [here for testnet](relayer-testnet.horizenlabs.io). 
 ```bash
-API_KEY = "get your API Key from Horizen Labs team"
+API_KEY = "generate your API key"
 ```
 
 Create a new file named ``index.js`` as the entrypoint for our application. Open ``index.js`` in your IDE and start with import neccesary packages :
@@ -58,7 +59,10 @@ For mainnet:
 ```js
 const API_URL = 'https://relayer-api-mainnet.horizenlabs.io/api/v1';
 ```
-You can also check the Swagger docs for the Relayer API [here](https://relayer-api-testnet.horizenlabs.io/docs).
+
+Swagger docs are also available:
+- Mainnet: https://relayer-api-mainnet.horizenlabs.io/docs
+- Testnet: https://relayer-api-testnet.horizenlabs.io/docs
 
 We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets :
 
@@ -576,3 +580,10 @@ All the status mentioned below, would not be generated if chainId is not provide
 - Aggregated - Proof successfully aggregated and published
 - AggregationPublished - Proof aggregation successfully published to zkVerify contract on destination chain
 - Failed - Proof processing failed
+
+## Resources
+1. Submit feedback/ or an issue: [Relayer API: Feedback](https://forms.gle/Gn4dVoFsCPL6zuy17)
+
+2. Submit a new feature request: [Relayer API: New Feature Requests](https://forms.gle/xcrEChxv8b3EQZVs7)
+
+3. Reach out to us on [Discord](https://discord.gg/zkverify) or [relayer-support@horizenlabs.io](mailto:relayer-support@horizenlabs.io) if you like to discuss potential partnerships
