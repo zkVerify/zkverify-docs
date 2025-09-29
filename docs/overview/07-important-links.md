@@ -22,9 +22,20 @@ import TabItem from '@theme/TabItem';
 
 For best reliability and higher rate limits, use Ankr with an API key:
 
+
+<Tabs groupId="ankr">
+<TabItem value="mainnet" label="Mainnet">
+- Create a free account and get an API key: [Ankr zkVerify chain page](https://www.ankr.com/web3-api/chains-list/zkverify/[API_KEY])
+- WebSocket: `wss://rpc.ankr.com/zkverify_mainnet/ws/[API_KEY]`
+- HTTPS: `https://rpc.ankr.com/zkverify_mainnet/[API_KEY]`
+</TabItem>
+<TabItem value="testnet" label="Testnet">
 - Create a free account and get an API key: [Ankr zkVerify chain page](https://www.ankr.com/web3-api/chains-list/zkverify/)
 - WebSocket: `wss://rpc.ankr.com/zkverify_volta_testnet/ws/[API_KEY]`
 - HTTPS: `https://rpc.ankr.com/zkverify_volta_testnet/[API_KEY]`
+</TabItem>
+</Tabs>
+
 
 Without an API key, you may experience lower rate limits.
 
