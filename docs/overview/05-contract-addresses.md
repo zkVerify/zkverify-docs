@@ -1,14 +1,19 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 ---
 title: Supported Networks
 ---
 
-## Aggregation Contract
-### zkVerify
+## Supported Networks
+
+<Tabs groupId="networks">
+<TabItem value="mainnet" label="Mainnet">
 | Network                                                     | Contract Address                                                                                                                                                                                                             | Chain ID                                                     
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |  ----------------------------------------------------------- 
 | Base | [`Contract`](https://basescan.org/address/0x5596aE76a636483361C9e777C03091BAEDcEa1C6) [`Proxy`](https://basescan.org/address/0xCb47A3C3B9Eb2E549a3F2EA4729De28CafbB2b69)                         | 8453 |
-
-### zkVerify Volta
+</TabItem>
+<TabItem value="testnet" label="Testnet">
 | Network                                                     | Contract Address                                                                                                                                                                                                             | Chain ID                                                     
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |  ----------------------------------------------------------- 
 | Sepolia (Ethereum testnet) | [`Contract`](https://sepolia.etherscan.io/address/0x5a3c35CCC5c05fDeFe5Ecafc15F4B1aC8eF71481) [`Proxy`](https://sepolia.etherscan.io/address/0xEA0A0f1EfB1088F4ff0Def03741Cb2C64F89361E)                         | 11155111 |
@@ -16,3 +21,5 @@ title: Supported Networks
 | Base      | [`Contract`](https://basescan.org/address/0x5596aE76a636483361C9e777C03091BAEDcEa1C6) [`Proxy`](https://basescan.org/address/0xCb47A3C3B9Eb2E549a3F2EA4729De28CafbB2b69)                         | 84532 |
 | Optimism (Sepolia testnet) | [`Contract`](https://sepolia-optimism.etherscan.io/address/0xFbA954966Fa27adec13Ba42F96E9F8ec8308a860) [`Proxy`](https://sepolia-optimism.etherscan.io/address/0xBBa17b0Eb3DdF0631c0Cce00E4245E4A2EE49982)       | 11155420 |
 | EDU Chain (Testnet)        | [`Contract`](https://edu-chain-testnet.blockscout.com/address/0x8fDFE115948b54e77134Ff3841a626FAd4E6A661) [`Proxy`](https://edu-chain-testnet.blockscout.com/address/0xd007494945580eEb25522c8e0b2fa798B3F0FDE2) | 656476 |
+</TabItem>
+</Tabs>
