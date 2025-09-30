@@ -14,7 +14,7 @@ By completing the tasks below, you can earn Incentivized Program Points and move
 
 #### 1. Submit Valid Proofs at Scale Using the Relayer API - Mainnet
 
-- Relayer usage is tracked via your Mainnet API key. To use the Relayer API, you will need an API key. Create your API key here: https://relayer-api-mainnet.horizenlabs.io/
+- Relayer usage is tracked via your Mainnet API key. To use the Relayer API, you will need an API key. Create your API key here: https://relayer.horizenlabs.io
 - Power users can reach out to us on Discord to adjust their rate limits or fill out this [form](https://forms.gle/8GLNhADGoxkvCdTu7); participants should specify their use cases and/ or apps they’re working on that uses the Relayer integration and we will determine the rate limit increase accordingly.
 
 <i>To earn zkVerify Incentivized Testnet Points, this requires creating a new circuit, registering your verification key, and submitting unique proofs. The proof types we support are: Groth16, UltraHonk, UltraPlonk, Risc0, Plonky2, SP1, Fflonk.</i><br/>
