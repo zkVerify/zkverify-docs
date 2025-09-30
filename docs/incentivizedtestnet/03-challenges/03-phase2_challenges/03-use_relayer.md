@@ -27,10 +27,10 @@ Points will be calculated based on your valid submission volume over time for qu
 
 | # of Unique Proofs Submitted | Points |
 | ---------------------------- | ------ |
-| 100                          | 50     |
-| 250                          | 100    |
-| 500                          | 200    |
-| 1000+                        | 500    |
+| 1-100                          | 5     |
+| 101-500                       | 10    |
+| 501-1000                        | 25   |
+| 1000+                        | 60   |
 
 #### 2. Provide Feedback on the Relayer
 
