@@ -61,7 +61,9 @@ ZKXEFgKUrjavy6PEBPrqwNY6svCkz72ttwP77JApnjXKWNVb6
 ```
 
 :::warning
-Be very careful to construct this string exactly. The new line is crucial. The easiest way is to use a plain text editor or an online tool; do not use a word processor that might add formatting.
+Be very careful to construct this string exactly. The new line is crucial.
+Make sure there aren't whitespaces at the beginning or at the end of the message, nor in between the claim message and the address.
+The easiest way is to use a plain text editor or an online tool; do not use a word processor that might add formatting.
 :::
 
 ### Step 2: Generate Your Ethereum Signature

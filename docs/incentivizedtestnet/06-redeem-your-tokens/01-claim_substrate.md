@@ -112,7 +112,7 @@ If you have created an ed25519-based account, these are the steps you have to fo
 <TabItem value="ecdsa" label="Advanced (ecdsa scheme)" default>
 If you have created an ecdsa-based account, these are the steps you have to follow:
 
-3.  For the `beneficiary: SpRuntimeMultiSigner` field, select `Ecdsa`, and in the field `Ecdsa: [u8;33]` insert your **hex public key** (e.g. `0xb`).
+3.  For the `beneficiary: SpRuntimeMultiSigner` field, select `Ecdsa`, and in the field `Ecdsa: [u8;33]` insert your **hex compressed public key** (e.g. `0x3..`).
     You can obtain the public key leveraging the `subkey` tool:
     ```bash
     subkey inspect "<Your seed Phrase>" --scheme ecdsa
