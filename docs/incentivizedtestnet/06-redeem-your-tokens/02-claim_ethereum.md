@@ -17,7 +17,7 @@ The claiming process is **feeless** and is done by submitting an unsigned transa
 ![alt_text](./img/check-claim-active.png)
 
 2.  **Access to Your Ethereum Wallet:** You have access to the eligible Ethereum wallet (e.g., via MetaMask).
-3.  **Access to Your A Substrate Account:** You must have a Substrate account to receive the tokens. If you don't have one, follow [this guide](../../overview/02-getting-started/01-connect-a-wallet.md).
+3.  **Access to Your Substrate Account:** You must have a Substrate account to receive the tokens. If you don't have one, follow [this guide](../../overview/02-getting-started/01-connect-a-wallet.md).
    
 4.  **Eligibility:** You have confirmed that your Ethereum address is on the list of beneficiaries for the current giveaway. You can easily check if you are eligible in this way:
     1.  Navigate to the **PolkadotJS Apps** interface for our chain.
