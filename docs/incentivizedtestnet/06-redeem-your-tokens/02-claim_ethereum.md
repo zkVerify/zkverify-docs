@@ -36,8 +36,7 @@ The claiming process is **feeless** and is done by submitting an unsigned transa
     1.  Navigate to the **PolkadotJS Apps** interface for our chain.
     2.  Navigate to **Developer > Chain state** tab.
     3.  Select the `tokenClaim` module and the `claimId: Option<(u64, Bytes)>` method.
-    4.  Click on the `+` button on the right. A number and a string will be returned. The message to be signed for this claim is the string, and you might want to copy it.
-
+    4.  Click on the `+` button on the right. A number and a message will be returned between square brackets `[]`. Copy only the message.
 ![alt_text](./img/get-claim-message.png)
 
 ### Step 1: Construct the Special Message to Sign
@@ -45,25 +44,21 @@ The claiming process is **feeless** and is done by submitting an unsigned transa
 For security, you must sign a special message that includes both the claiming message and the chosen Substrate destination address.
 
 The format is:
-`[claiming_message]\n[destination_address]`
-
-*   `\n` means that you have to simply copy-paste the destination address in a new line after the claiming message.
+`[claiming_message]@[destination_address]`
 
 **Example:**
 *   Claiming Message: `claim_round_1`
-*   Destination Public Key: `ZKXEFgKUrjavy6PEBPrqwNY6svCkz72ttwP77JApnjXKWNVb6`
+*   Destination Address: `ZKXEFgKUrjavy6PEBPrqwNY6svCkz72ttwP77JApnjXKWNVb6`
 
 The final message you need to sign is:
 
 ```bash
-claim_round_1
-ZKXEFgKUrjavy6PEBPrqwNY6svCkz72ttwP77JApnjXKWNVb6
+claim_round_1@ZKXEFgKUrjavy6PEBPrqwNY6svCkz72ttwP77JApnjXKWNVb6
 ```
 
 :::warning
-Be very careful to construct this string exactly. The new line is crucial.
-Make sure there aren't whitespaces at the beginning or at the end of the message, nor in between the claim message and the address.
-The easiest way is to use a plain text editor or an online tool; do not use a word processor that might add formatting.
+Be very careful to construct this string exactly.
+Make sure there aren't unwanted characters (e.g. whitespaces, newlines, etc.) at the beginning or at the end of the message, nor in between the claim message and the address.
 :::
 
 ### Step 2: Generate Your Ethereum Signature
@@ -83,6 +78,12 @@ Most of the EVM-based Blockchains leveraging a `_scan` explorer (e.g. [Basescan]
 3.  In the `Message` box, paste the **full constructed message** from Step 1.
 
 ![alt_text](./img/sign_message_etherscan.png)
+
+:::warning
+Be very careful to paste the message to sign exactly as you constructed it in Step 1.
+Make sure there aren't unwanted characters (e.g. whitespaces, newlines, etc.) at the beginning or at the end of the message, nor in between the claim message and the address.
+The easiest way is to write it directly in the Etherscan `Message` box.
+:::
 
 4.  Click `Sign Message`. Your wallet will prompt you a confirmation to sign the message.
 5.  After signing, copy the value of the `Signature Hash` field. This is the Ethereum signature you're going to use for claiming on zkVerify, and it will start with `0x...`.
