@@ -669,7 +669,7 @@ with open(json_path, 'w') as f:
 print(f"Input data saved to {json_path}")
 ```
 
-Grant the script execution permissions by running `chmod +x export_model.py` in a Bash shell and then run it using the command `python3 export_model.py`. After the script is finished, you should have two files, namely, `network.onnx` and `input.json`. We are now ready to start using `ezkl`.
+Grant the script execution permissions by running `chmod +x export_model.py` from a Bash shell and then run it by issuing the command `python3 export_model.py`. After the script is finished, you should have two files, namely, `network.onnx` and `input.json`. We are now ready to start using `ezkl`.
 
 6. Generate Settings: To inspect the model and create a configuration file, run:
 
@@ -739,8 +739,8 @@ tail -c +9 vka.bytes | xxd -p | tr -d '\n' | sed 's/.*/`{"vkBytes": "0x&"}`/' > 
 # Convert proof to hexadecimal format
 jq -r '.proof[] | select(type == "number")' proof.json | awk 'BEGIN {printf "\"0x"} {printf "%02x", $1} END {printf "\"\n"}' > zkv_proof.hex
 
-# Convert public inputs (instances) to hexadecimal format
-echo "[$(jq -r '.instances | flatten | map("\"0x\(.)\"") | join(", ")' proof.json)]" > zkv_pubs.hex
+# Convert instances (public inputs) to hexadecimal format
+echo "[$(jq -r '.pretty_public_inputs.outputs | flatten | map("\"\(.)\"") | join(", ")' proof.json)]" > zkv_pubs.hex
 ```
 </TabItem>
 
