@@ -59,7 +59,7 @@ and you should get something similar to:
 
 ```bash
 CONTAINER ID   IMAGE                         COMMAND                CREATED              STATUS              NAMES
-dab0c67cf5aa   horizenlabs/zkverify:x.y.z-t.u.v-relay   "/app/entrypoint.sh"   About a minute ago   Up About a minute   boot-node
+dab0c67cf5aa   zkverify/relay-node:x.y.z   "/app/entrypoint.sh"   About a minute ago   Up About a minute   boot-node
 ```
 
 This shows your node has started correctly.
@@ -75,7 +75,7 @@ Lastly, you should notify other node operators about the existence of your bootn
 
 - The IP address (or the DNS).
 - The open ports.
-- The public part of your node key (peer id).  This is printed at the startup of your node with the log `Local node identity is: ...` or is retrievable with command `docker run -v`*`path_to_your_file`*`/node_key.dat:/data/node_key.dat --rm --entrypoint zkv-relay horizenlabs/zkverify:x.y.z-t.u.v-relay key inspect-node-key --file /data/node_key.dat`.
+- The public part of your node key (peer id).  This is printed at the startup of your node with the log `Local node identity is: ...` or is retrievable with command `docker run -v`*`path_to_your_file`*`/node_key.dat:/data/node_key.dat --rm --entrypoint zkv-relay zkverify/relay-node:x.y.z key inspect-node-key --file /data/node_key.dat`.
 
 In this way others will be able to leverage your boot node to join the network by inserting these configurations into the `.env` file of their node.
 
