@@ -623,6 +623,7 @@ pip install torch torchvision
 ```
 
 4. Define your model, export it to `network.onnx`, and create an `input.json` file:
+
 For illustration, let's create a Python script defining a simple model that learns the linear function $y = 2x + 1$. We will call it `export_model.py`. If you already have your own model, you may skip this step.
 
 ```python
@@ -667,7 +668,9 @@ print(f"Input data saved to {json_path}")
 
 Grant the script execution permissions by running `chmod +x export_model.py` from a Bash shell and then run it by issuing the command `python3 export_model.py`. After the script finishes, you should have two files, namely, `network.onnx` and `input.json`. We are now ready to start using `ezkl`.
 
-5. Generate Settings: To inspect the model and create a configuration file, run:
+5. Generate Settings:
+
+To inspect the model and create a configuration file, run:
 
 ```bash
 ezkl gen-settings -M network.onnx
@@ -675,7 +678,9 @@ ezkl gen-settings -M network.onnx
 
 This should generate `settings.json`.
 
-6. Calibrate Settings: This step is crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This helps prevent proofs from failing due to arithmetic errors. Run:
+6. Calibrate Settings:
+
+This step is crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This helps prevent proofs from failing due to arithmetic errors. Run:
 
 ```bash
 ezkl calibrate-settings -D input.json -M network.onnx --settings-path settings.json
@@ -683,7 +688,9 @@ ezkl calibrate-settings -D input.json -M network.onnx --settings-path settings.j
 
 This modifies `settings.json` with optimal parameters.
 
-7. Compile the Model: This step transforms your neural network into an arithmetic circuit, the fundamental object for which we can create proofs. Run:
+7. Compile the Model:
+
+This step transforms your neural network into an arithmetic circuit, the fundamental object for which we can create proofs. Run:
 
 ```bash
 ezkl compile-circuit -M network.onnx --settings-path settings.json
@@ -691,7 +698,7 @@ ezkl compile-circuit -M network.onnx --settings-path settings.json
 
 This should generate the `model.compiled` file which contains an optimized format of the model for zero-knowledge proofs.
 
-8. Run the Trusted Setup to generate the cryptographic keys.
+8. Run the Trusted Setup to generate the cryptographic keys:
 
 Run the command:
 
