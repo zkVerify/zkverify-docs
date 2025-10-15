@@ -57,7 +57,7 @@ You should get an output similar to this:
 
 ```bash
 CONTAINER ID   IMAGE                            COMMAND                CREATED              STATUS              NAMES
-ca4bdf2c6f05   zkverify/relay-node:1.0.0   "/app/entrypoint.sh"   About a minute ago   Up About a minute   validator-node
+ca4bdf2c6f05   zkverify/relay-node:latest   "/app/entrypoint.sh"   About a minute ago   Up About a minute   validator-node
 ```
 
 ## Register your node with the network
@@ -72,7 +72,7 @@ Since you are going to submit extrinsics which change the blockchain state, you 
 
 Run the following command to generate the Babe, Para Validator, Para Assignment and Authority Discovery keys:
 ```bash
-docker run --rm -ti --entrypoint zkv-relay zkverify/relay-node:x.y.z key inspect --scheme sr25519
+docker run --rm -ti --entrypoint zkv-relay zkverify/relay-node:latest key inspect --scheme sr25519
 ```
 
 and provide your validator secret phrase when prompted for (`URI:`), then hit enter. You should get the following response:
@@ -91,7 +91,7 @@ The `Public key(hex)` field is the one we are looking for.
 Now let's execute the same command but this time with ed25519 scheme.
 
 ```bash
-docker run --rm -ti --entrypoint zkv-relay zkverify/relay-node:x.y.z key inspect --scheme ed25519
+docker run --rm -ti --entrypoint zkv-relay zkverify/relay-node:latest key inspect --scheme ed25519
 ```
 
 and provide same secret phrase when prompted for (`URI:`), then hit enter. You should get the following response:
