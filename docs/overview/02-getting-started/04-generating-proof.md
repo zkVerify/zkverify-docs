@@ -708,7 +708,9 @@ ezkl setup -M model.compiled --pk-path pk.key --vk-path vk.key
 
 You should now have a proving key (for the prover) in `pk.key` and a verification key (for the verifier) in `vk.key`.
 
-9. Generate the witness: This step creates a witness file from your input data and compiled model. Simply run:
+9. Generate the witness:
+
+This step creates a witness file from your input data and compiled model. Simply run:
 
 ```bash
 ezkl gen-witness
@@ -716,7 +718,9 @@ ezkl gen-witness
 
 This should generate the `witness.json` file.
 
-10. Prove: To generate a zero-knowledge proof using the witness and other artifacts, run:
+10. Prove:
+
+To generate a zero-knowledge proof using the witness and other artifacts, run:
 
 ```bash
 ezkl prove -M model.compiled --pk-path pk.key --proof-path proof.json
@@ -724,7 +728,9 @@ ezkl prove -M model.compiled --pk-path pk.key --proof-path proof.json
 
 and you should now have a JSON file called `proof.json`. This file contains both the proof and the instances (public inputs).
 
-11. Generate the VKA: The Reusable EZKL verifier relies on an additional artifact called the Verification Key Artifact (or, VKA for short). To generate it, simply run:
+11. Generate the VKA:
+
+The Reusable EZKL verifier relies on an additional artifact called the Verification Key Artifact (or, VKA for short). To generate it, simply run:
 
 ```bash
 ezkl create-evm-vka
