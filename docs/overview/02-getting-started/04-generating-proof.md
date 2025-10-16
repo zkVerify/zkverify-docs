@@ -130,13 +130,13 @@ After running these commands, you will have three files, namely: `proof`, `publi
 To convert the three files into hex format, run the following Bash commands:
 ```bash
 # Convert proof to hexadecimal format
-{ printf "0x"; xxd -p -c 256 "./target/proof" | tr -d '\n'; echo; } > "./target/zkv_proof.hex"
+printf "\"0x%s\"\n" "$(xxd -p -c 0 "./target/proof")" > ./target/zkv_proof.hex
 
 # Convert vk to hexadecimal format
-{ printf "0x"; xxd -p -c 256 "./target/vk" | tr -d '\n'; echo; } > "./target/zkv_vk.hex"
+printf "\"0x%s\"\n" "$(xxd -p -c 0 "./target/vk")" > ./target/zkv_vk.hex
 
 # Convert public inputs to hexadecimal format
-{ printf "0x"; xxd -p -c 256 "./target/public_inputs" | tr -d '\n'; echo; } > "./target/zkv_pubs.hex"
+xxd -p -c 32 ./target/public_inputs | sed 's/.*/"0x&"/' | paste -sd, - | sed 's/.*/[&]/' > ./target/zkv_pubs.hex
 
 ```
 </TabItem>
@@ -592,6 +592,165 @@ file.write_all(json_string.as_bytes()).unwrap();
 ```
 </TabItem>
 </Tabs>
+</TabItem>
+
+<TabItem value="ezkl" label="EZKL">
+We will use the quickstart guide by zkonduit in order to generate an EZKL proof, and we will then verify it on zkVerify. We will not be going into detail about EZKL's implementation, our focus would be on verifying those proofs efficiently on zkVerify.
+
+## Steps Involved
+- Installing EZKL and dependencies
+- Defining a model and exporting it to ONNX format
+- Generating EZKL proofs
+- Converting the proof, vk, and instances (public inputs) to required hex format using Bash
+- Verifying our proofs on zkVerify and getting proof receipts
+- Verifying the proof receipts on Ethereum
+
+To start this tutorial, first we need to install the EZKL zkML library. For the purposes of this tutorial, we will be primarily using the Bash CLI. However, for defining our toy model, we will rely on Python3 and PyTorch. Other frameworks should also be compatible, as long as you are able to export your model into `.onnx` format. For alternatives, please consult the [EZKL documentation](https://docs.ezkl.xyz/getting-started/setup/) by zkonduit. Use of a virtual environment is recommended. Run the following commands to install the requirements:
+
+1. Install ezkl by running the following command:
+```bash
+curl https://raw.githubusercontent.com/zkonduit/ezkl/main/install_ezkl_cli.sh | bash
+```
+
+2. Install ONNX:
+```bash
+pip install onnx
+```
+
+3. Install PyTorch:
+```bash
+pip install torch torchvision
+```
+
+4. Define your model, export it to `network.onnx`, and create an `input.json` file:
+
+For illustration, let's create a Python script defining a simple model that learns the linear function $y = 2x + 1$. We will call it `export_model.py`. If you already have your own model, you may skip this step.
+
+```python
+import torch
+import torch.nn as nn
+import json
+import os
+
+# 1. DEFINE THE PYTORCH MODEL
+class SimpleModel(nn.Module):
+    def __init__(self):
+        super(SimpleModel, self).__init__()
+        self.linear = nn.Linear(1, 1)
+        # Manually set weights to learn y = 2x + 1
+        self.linear.weight.data.fill_(2.0)
+        self.linear.bias.data.fill_(1.0)
+
+    def forward(self, x):
+        return self.linear(x)
+
+# 2. EXPORT TO ONNX
+model = SimpleModel()
+model.eval()
+
+# Define a dummy input for the ONNX export
+dummy_input = torch.randn(1, 1)
+onnx_path = "network.onnx"
+torch.onnx.export(model, dummy_input, onnx_path, export_params=True, input_names=['input'], output_names=['output'])
+
+print(f"Model exported to {onnx_path}")
+
+# 3. CREATE THE INPUT DATA FILE
+# Let's test with an input of x = 2. We expect the output to be 2*2 + 1 = 5
+input_data = dict(input_data = [[2.0]])
+json_path = "input.json"
+
+with open(json_path, 'w') as f:
+    json.dump(input_data, f)
+
+print(f"Input data saved to {json_path}")
+```
+
+Grant the script execution permissions by running `chmod +x export_model.py` from a Bash shell and then run it by issuing the command `python3 export_model.py`. After the script finishes, you should have two files, namely, `network.onnx` and `input.json`. We are now ready to start using `ezkl`.
+
+5. Generate Settings:
+
+To inspect the model and create a configuration file, run:
+
+```bash
+ezkl gen-settings -M network.onnx
+```
+
+This should generate `settings.json`.
+
+6. Calibrate Settings:
+
+This step is crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This helps prevent proofs from failing due to arithmetic errors. Run:
+
+```bash
+ezkl calibrate-settings -D input.json -M network.onnx --settings-path settings.json
+```
+
+This modifies `settings.json` with optimal parameters.
+
+7. Compile the Model:
+
+This step transforms your neural network into an arithmetic circuit, the fundamental object for which we can create proofs. Run:
+
+```bash
+ezkl compile-circuit -M network.onnx --settings-path settings.json
+```
+
+This should generate the `model.compiled` file which contains an optimized format of the model for zero-knowledge proofs.
+
+8. Run the Trusted Setup to generate the cryptographic keys:
+
+Run the command:
+
+```bash
+ezkl setup -M model.compiled --pk-path pk.key --vk-path vk.key
+```
+
+You should now have a proving key (for the prover) in `pk.key` and a verification key (for the verifier) in `vk.key`.
+
+9. Generate the witness:
+
+This step creates a witness file from your input data and compiled model. Simply run:
+
+```bash
+ezkl gen-witness
+```
+
+This should generate the `witness.json` file.
+
+10. Prove:
+
+To generate a zero-knowledge proof using the witness and other artifacts, run:
+
+```bash
+ezkl prove -M model.compiled --pk-path pk.key --proof-path proof.json
+```
+
+and you should now have a JSON file called `proof.json`. This file contains both the proof and the instances (public inputs).
+
+11. Generate the VKA:
+
+The Reusable EZKL verifier relies on an additional artifact called the Verification Key Artifact (or, VKA for short). To generate it, simply run:
+
+```bash
+ezkl create-evm-vka
+```
+
+and you should now have an additional file called `vka.bytes`.
+
+You are almost set. The artifacts `proof.json` and `vka.bytes` contain all the information necessary for verifying the proof with zkVerify. The final step consists of extracting this data, and converting them to a format compatible for direct use with zkVerify.
+
+To accomplish this, issue the following Bash commands:
+```bash
+# Convert vka to hexadecimal format
+tail -c +9 vka.bytes | xxd -p | tr -d '\n' | sed 's/.*/`{"vkBytes": "0x&"}`/' > zkv_vk.hex
+
+# Convert proof to hexadecimal format
+jq -r '.proof[] | select(type == "number")' proof.json | awk 'BEGIN {printf "\"0x"} {printf "%02x", $1} END {printf "\"\n"}' > zkv_proof.hex
+
+# Convert instances (public inputs) to hexadecimal format
+echo "[$(jq -r '.pretty_public_inputs.outputs | flatten | map("\"\(.)\"") | join(", ")' proof.json)]" > zkv_pubs.hex
+```
 </TabItem>
 
 </Tabs>
