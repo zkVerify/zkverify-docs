@@ -60,7 +60,7 @@ and you should get something similar to:
 
 ```bash
 CONTAINER ID   IMAGE                         COMMAND                CREATED              STATUS              NAMES
-ca4bdf2c6f05   horizenlabs/zkverify:x.y.z-t.u.v-relay   "/app/entrypoint.sh"   About a minute ago   Up About a minute   rpc-node
+ca4bdf2c6f05   zkverify/relay-node:latest   "/app/entrypoint.sh"   About a minute ago   Up About a minute   rpc-node
 ```
 
 This shows your node has started correctly.

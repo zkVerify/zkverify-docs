@@ -2,7 +2,7 @@
 title: Getting Started - Docker
 ---
 
-Pre-built docker images of the zkVerify node are available on [DockerHub](https://hub.docker.com/r/horizenlabs/zkverify/tags). These images are built for the `amd64` architecture. If you want to run a node on a different architecture (e.g. Apple Silicon chips), then please refer to the [Run Using Binaries](../03-run_using_binaries/01-getting_started_binaries.md) section.
+Pre-built docker images of the zkVerify node are available on [DockerHub](https://hub.docker.com/r/zkverify/relay-node/tags). These images are built for the `amd64` architecture. If you want to run a node on a different architecture (e.g. Apple Silicon chips), then please refer to the [Run Using Binaries](../03-run_using_binaries/01-getting_started_binaries.md) section.
 
 ## Prerequisites
 
@@ -85,7 +85,7 @@ A couple of additional checks when running `scripts/init.sh` are required:
 
 Following is a brief overview of the basic items required to actually run the node:
 
-- The Docker image `horizenlabs/zkverify`:
+- The Docker image `zkverify/relay-node`:
   - This is the **zkVerify** software packaged up in a Docker image.  It allows you to run the node consistently on every platform (Linux, Windows, macOS, ...).
   - The recommended tag is `latest`, otherwise you can choose another one from DockerHub.
   - Unless already available on your machine, it will be automatically downloaded from DockerHub by Docker Compose file (see below).
