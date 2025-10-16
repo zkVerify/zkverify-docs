@@ -130,13 +130,13 @@ After running these commands, you will have three files, namely: `proof`, `publi
 To convert the three files into hex format, run the following Bash commands:
 ```bash
 # Convert proof to hexadecimal format
-printf "\"0x%s\"\n" "$(xxd -p -c 0 "./target/proof")" > zkv_proof.hex
+printf "\"0x%s\"\n" "$(xxd -p -c 0 "./target/proof")" > ./target/zkv_proof.hex
 
 # Convert vk to hexadecimal format
-printf "\"0x%s\"\n" "$(xxd -p -c 0 "./target/vk")" > zkv_vk.hex
+printf "\"0x%s\"\n" "$(xxd -p -c 0 "./target/vk")" > ./target/zkv_vk.hex
 
 # Convert public inputs to hexadecimal format
-xxd -p -c 32 ./target/public_inputs | sed 's/.*/"0x&"/' | paste -sd, - | sed 's/.*/[&]/' > zkv_pubs.hex
+xxd -p -c 32 ./target/public_inputs | sed 's/.*/"0x&"/' | paste -sd, - | sed 's/.*/[&]/' > ./target/zkv_pubs.hex
 
 ```
 </TabItem>
