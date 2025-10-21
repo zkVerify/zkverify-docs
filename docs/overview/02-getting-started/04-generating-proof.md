@@ -119,16 +119,20 @@ Once we have generated our witness, we can generate proof and vk using the `bb` 
 
 <Tabs groupId="ultrahonk-prover-options">
 <TabItem value="ZK" label="ZK">
+
 ```bash
 # To generate proof
 bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak --zk
 ```
+
 </TabItem>
 <TabItem value="Plain" label="Plain">
+
 ```bash
 # To generate proof
 bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak
 ```
+
 </TabItem>
 </Tabs>
 
