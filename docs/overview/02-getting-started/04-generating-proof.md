@@ -121,7 +121,7 @@ Once we have generated our witness, we can generate proof and vk using the `bb` 
 <TabItem value="ZK" label="ZK">
 
 ```bash
-# To generate proof
+# To generate zero-knowledge proof
 bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak --zk
 ```
 
@@ -129,12 +129,14 @@ bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -
 <TabItem value="Plain" label="Plain">
 
 ```bash
-# To generate proof
+# To generate a plain proof
 bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak
 ```
 
 </TabItem>
 </Tabs>
+
+Generating the vk is the same regardless of which flavor you picked:
 
 ```bash
 # To generate vk
