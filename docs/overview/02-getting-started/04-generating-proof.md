@@ -115,7 +115,7 @@ Let's execute our hello_world circuit and get our witness value, which will be u
 nargo execute
 ```
 
-Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. UltraHonk offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is truly zero knowledge and the verifier learns nothing about the secret input (witness). The latter is slightly faster but the verifier can learn something about the witness from the proof. Use the following command to generate the required files, depending on which suits your specific needs:
+Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. UltraHonk offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is truly zero knowledge and thus, the verifier learns nothing about the secret input (witness). The latter is slightly faster but the verifier can learn something about the witness from the proof. Use the following command to generate the required files, depending on which suits your specific needs:
 
 <Tabs groupId="ultrahonk-prover-options">
 <TabItem value="ZK" label="ZK">
