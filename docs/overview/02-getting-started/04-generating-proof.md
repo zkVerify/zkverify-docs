@@ -104,7 +104,7 @@ nargo new hello_world
 
 After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
 
-To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below :
+To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. You can either generate it manually, or by simply issuing the command `nargo check`. Populate the `Prover.toml` file with the inputs given below :
 ```toml
 x = "1"
 y = "2"
@@ -115,28 +115,74 @@ Let's execute our hello_world circuit and get our witness value, which will be u
 nargo execute
 ```
 
-Once we have generated our witness, we can generate proof and vk using the bb toolkit. Use the following command to generate the required files:
+Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. UltraHonk offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is truly zero knowledge and the verifier learns nothing about the secret input (witness). The latter is slightly faster but the verifier can learn something about the witness from the proof. Use the following command to generate the required files, depending on which suits your specific needs:
+<Tabs groupId="ultrahonk-prover-options">
+<TabItem value="ZK" label="ZK">
+
+# To generate proof
+```bash
+bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak --zk
+```
+</TabItem>
+<TabItem value="Plain" label="Plain">
 ```bash
 # To generate proof
-bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak --zk
+bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak
+```
+</TabItem>
+</Tabs>
 
+```bash
 # To generate vk
 bb write_vk -s ultra_honk -b ./target/hello_world.json -o ./target --oracle_hash keccak
-
 ```
 
 After running these commands, you will have three files, namely: `proof`, `public_inputs`, and `vk` inside the `target` folder which will be used for verification.
 
-To convert the three files into hex format, run the following Bash commands:
+To convert the three files into hex format, run the following Bash script:
 ```bash
+#!/usr/bin/env bash
+
+PROOF_TYPE="ZK"                          # Set to "Plain" if you are using the non-zk variant of UltraHonk
+PROOF_FILE_PATH="./target/proof"         # Adjust path depending on where the Noir-generated proof file is
+VK_FILE_PATH="./target/vk"               # Adjust path depending on where the Noir-generated vk file is
+PUBS_FILE_PATH="./target/public_inputs"  # Adjust path depending on where the Noir-generated public_inputs file is
+
+# You may ignore these:
+ZKV_PROOF_HEX_FILE_PATH="./target/zkv_proof.hex"
+ZKV_VK_HEX_FILE_PATH="./target/zkv_vk.hex"
+ZKV_PUBS_HEX_FILE_PATH="./target/zkv_pubs.hex"
+
 # Convert proof to hexadecimal format
-printf "\"0x%s\"\n" "$(xxd -p -c 0 "./target/proof")" > ./target/zkv_proof.hex
+{
+  if [ -f "$PROOF_FILE_PATH" ]; then
+    PROOF_BYTES=$(xxd -p -c 256 "$PROOF_FILE_PATH" | tr -d '\n')
+    printf '`{\n    "proof_type": "%s",\n    "proof_bytes": "0x%s"\n}`\n' "$PROOF_TYPE" "$PROOF_BYTES" > "$ZKV_PROOF_HEX_FILE_PATH"
+    echo "✅ 'proof' hex file generated at ${ZKV_PROOF_HEX_FILE_PATH}."
+  else
+    echo "❌ Error: Proof file '$PROOF_FILE_PATH' not found. Skipping." >&2
+  fi
+}
 
 # Convert vk to hexadecimal format
-printf "\"0x%s\"\n" "$(xxd -p -c 0 "./target/vk")" > ./target/zkv_vk.hex
+{
+  if [ -f "$VK_FILE_PATH" ]; then
+    printf "\"0x%s\"\n" "$(xxd -p -c 0 "$VK_FILE_PATH")" > "$ZKV_VK_HEX_FILE_PATH"
+    echo "✅ 'vk' hex file generated at ${ZKV_VK_HEX_FILE_PATH}."
+  else
+    echo "❌ Error: Verification key file '$VK_FILE_PATH' not found. Skipping." >&2
+  fi
+}
 
 # Convert public inputs to hexadecimal format
-xxd -p -c 32 ./target/public_inputs | sed 's/.*/"0x&"/' | paste -sd, - | sed 's/.*/[&]/' > ./target/zkv_pubs.hex
+{
+  if [ -f "$PUBS_FILE_PATH" ]; then
+    xxd -p -c 32 "$PUBS_FILE_PATH" | sed 's/.*/"0x&"/' | paste -sd, - | sed 's/.*/[&]/' > "$ZKV_PUBS_HEX_FILE_PATH"
+    echo "✅ 'pubs' hex file generated at ${ZKV_PUBS_HEX_FILE_PATH}."
+  else
+    echo "❌ Error: Public inputs file '$PUBS_FILE_PATH' not found. Skipping." >&2
+  fi
+}
 
 ```
 </TabItem>
@@ -605,7 +651,7 @@ We will use the quickstart guide by zkonduit in order to generate an EZKL proof,
 - Verifying our proofs on zkVerify and getting proof receipts
 - Verifying the proof receipts on Ethereum
 
-To start this tutorial, first we need to install the EZKL zkML library. For the purposes of this tutorial, we will be primarily using the Bash CLI. However, for defining our toy model, we will rely on Python3 and PyTorch. Other frameworks should also be compatible, as long as you are able to export your model into `.onnx` format. For alternatives, please consult the [EZKL documentation](https://docs.ezkl.xyz/getting-started/setup/) by zkonduit. Use of a virtual environment is recommended. Run the following commands to install the requirements:
+To start this tutorial, first we need to install the EZKL zkML library. For the purposes of this tutorial, we will be primarily using the Bash CLI. However, for defining our toy model, we will rely on Python3 and PyTorch. Other frameworks should also be compatible, as long as you are able to export your model into `.onnx` format. For alternatives, please consult the [EZKL documentation](https://docs.ezkl.xyz/getting-started/setup/) by zkonduit and the [ONNX documentation](https://onnx.ai/onnx/intro/). Use of a virtual environment is recommended. Run the following commands to install the requirements:
 
 1. Install ezkl by running the following command:
 ```bash
@@ -624,7 +670,7 @@ pip install torch torchvision
 
 4. Define your model, export it to `network.onnx`, and create an `input.json` file:
 
-For illustration, let's create a Python script defining a simple model that learns the linear function $y = 2x + 1$. We will call it `export_model.py`. If you already have your own model, you may skip this step.
+For illustration, let's create a Python script defining a simple model that learns the linear function $y = 2x + 1$. We will call it `export_model.py`. If you already have an exported model, you may skip this step completely.
 
 ```python
 import torch
