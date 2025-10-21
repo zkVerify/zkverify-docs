@@ -136,7 +136,7 @@ bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -
 </TabItem>
 </Tabs>
 
-Generating the vk is the same regardless of which flavor you picked:
+Generating the `vk` is the same regardless of which flavor you picked:
 
 ```bash
 # To generate vk
