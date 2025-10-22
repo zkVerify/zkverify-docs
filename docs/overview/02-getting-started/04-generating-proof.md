@@ -115,7 +115,7 @@ Let's execute our hello_world circuit and get our witness value, which will be u
 nargo execute
 ```
 
-Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. UltraHonk offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is zero knowledge and thus, the verifier learns *nothing* about the secret input (witness). The latter is slightly faster but the verifier can learn something about the witness from the proof. Use the following command to generate the required files, depending on which suits your specific needs:
+Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. Noir's implementation of the UltraHonk prover offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is zero knowledge and thus, the verifier learns *nothing* about the secret input (witness). The latter is slightly faster, but the verifier can learn something about the witness from the proof. Use the following command to generate the required files, depending on which suits your specific needs:
 
 <Tabs groupId="ultrahonk-prover-options">
 <TabItem value="ZK" label="ZK">
@@ -143,9 +143,10 @@ Generating the `vk` is the same regardless of which flavor you picked:
 bb write_vk -s ultra_honk -b ./target/hello_world.json -o ./target --oracle_hash keccak
 ```
 
-After running these commands, you will have three files, namely: `proof`, `public_inputs`, and `vk` inside the `target` folder which will be used for verification.
+After running these commands, you will have three files, namely: `proof`, `public_inputs`, and `vk` inside the `target` folder which will be used for verification. As a final step, we will convert them to a format compatible with direct use with zkVerify. zkVerify supports both flavors for UltraHonk proofs, but you will need to explicitly convey which flavor was used to generate your proof during this final step. You can do this by setting the `PROOF_TYPE` variable in the script that follows to either `ZK` or `Plain`.
 
 To convert the three files into hex format, run the following Bash script:
+
 ```bash
 #!/usr/bin/env bash
 
