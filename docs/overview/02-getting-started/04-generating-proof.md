@@ -164,7 +164,7 @@ ZKV_PUBS_HEX_FILE_PATH="./target/zkv_pubs.hex"
 {
   if [ -f "$PROOF_FILE_PATH" ]; then
     PROOF_BYTES=$(xxd -p -c 256 "$PROOF_FILE_PATH" | tr -d '\n')
-    printf '`{\n    "proof_type": "%s",\n    "proof_bytes": "0x%s"\n}`\n' "$PROOF_TYPE" "$PROOF_BYTES" > "$ZKV_PROOF_HEX_FILE_PATH"
+    printf '`{\n    "%s:" "0x%s"\n}`\n' "$PROOF_TYPE" "$PROOF_BYTES" > "$ZKV_PROOF_HEX_FILE_PATH"
     echo "✅ 'proof' hex file generated at ${ZKV_PROOF_HEX_FILE_PATH}."
   else
     echo "❌ Error: Proof file '$PROOF_FILE_PATH' not found. Skipping." >&2
