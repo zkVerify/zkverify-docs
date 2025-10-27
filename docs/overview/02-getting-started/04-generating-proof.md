@@ -596,7 +596,7 @@ file.write_all(json_string.as_bytes()).unwrap();
 
 </Tabs>
 
-After generating proofs, there are multiple ways in which you can verify it on [zkVerify](https://zkverify.io). The recommended way to verify proofs on zkVerify is by using the [zkVerifyJS package](./06-zkverify-js.md). You can verify proofs using anyone of the following :-
+After generating proofs, there are multiple ways in which you can verify it on [zkVerify](https://zkverify.io). The recommended way to verify proofs on zkVerify is by using the [Relayer Service](./05-relayer.md). You can verify proofs using anyone of the following :-
 
 1. Using [Relayer Service](./05-relayer.md)
 2. Using [zkVerifyJS package](./06-zkverify-js.md)

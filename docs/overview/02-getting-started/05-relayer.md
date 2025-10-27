@@ -574,6 +574,7 @@ In this example, we demonstrated how to wait for "Finalized" status for our proo
 - Submitted - Proof submitted to blockchain/mempool
 - IncludedInBlock - Proof transaction included in a block
 - Finalized - Proof transaction finalized on-chain
+- Failed - Proof processing failed
 
 :::note
 All the status mentioned below, would not be generated if chainId is not provided in the submit proof request
@@ -582,7 +583,6 @@ All the status mentioned below, would not be generated if chainId is not provide
 - AggregationPending - Proof ready for aggregation
 - Aggregated - Proof successfully aggregated and published
 - AggregationPublished - Proof aggregation successfully published to zkVerify contract on destination chain
-- Failed - Proof processing failed
 
 ## Resources
 1. Submit feedback/ or an issue: [Relayer API: Feedback](https://forms.gle/Gn4dVoFsCPL6zuy17)
