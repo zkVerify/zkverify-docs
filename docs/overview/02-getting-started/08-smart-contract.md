@@ -172,7 +172,7 @@ Now we can move to the verification part, where can call the zkVerify’s contra
 - Number of Leaves
 - Leaf Index
 
-We can get all the above data except the public inputs from the aggregation.json file, we have generated earlier. User can provide the public inputs to the verify function which we can use to create the leaf digest. We need to pass the public inputs hash we got while generating proof(You can find this in proof.json file). To create the final leaf we need the hash of proving system, vkey, version hash and the combined hash of public inputs.
+We can get all the above data except the public inputs from the aggregation.json file, we have generated earlier. User can provide the public inputs to the verify function which we can use to create the leaf digest. We need to pass the public inputs hash we got while generating proof(You can find this in proof.json file). To create the final leaf we need the hash of proving system, vkey, version hash and the combined hash of public inputs. **Note:  this step can be skipped if using the relayer for the aggregation data.**
 
 <Tabs groupId="leaf-digest">
 <TabItem value="circom" label="Circom">
