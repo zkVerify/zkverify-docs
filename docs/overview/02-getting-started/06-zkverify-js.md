@@ -78,6 +78,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 ```
 </TabItem>
+<TabItem value="ezkl" label="Ezkl">
+```js
+import { zkVerifySession, ZkVerifyEvents } from "zkverifyjs";
+import dotenv from 'dotenv';
+dotenv.config();
+```
+</TabItem>
 </Tabs>
 
 We would also need to import the required files we have generated already in previous tutorials, which are proof, verification key and public inputs. Use the following code snippets :
@@ -118,6 +125,14 @@ const base64Vk = bufvk.toString("base64");
 ```js
 import fs from "fs";
 const proof = JSON.parse(fs.readFileSync("../my_project/proof.json")); // Following the SP1 tutorial
+```
+</TabItem>
+<TabItem value="ezkl" label="Ezkl">
+```js
+import fs from "fs";
+const proof = fs.readFileSync('../target/zkv_proof.hex', 'utf-8');
+const publicInputs = fs.readFileSync('../target/zkv_pubs.hex', 'utf-8');
+const vk = fs.readFileSync('../target/zkv_vk.hex', 'utf-8');
 ```
 </TabItem>
 </Tabs>
@@ -329,6 +344,44 @@ const {events} = await session.verify()
     }, domainId: 0})
 ```
 </TabItem>
+<TabItem value="ezkl" label="Ezkl">
+```js
+let statement, aggregationId;
+
+session.subscribe([
+  {
+    event: ZkVerifyEvents.NewAggregationReceipt,
+    callback: async (eventData) => {
+      console.log("New aggregation receipt:", eventData);
+      if(aggregationId == parseInt(eventData.data.aggregationId.replace(/,/g, ''))){
+        let statementpath = await session.getAggregateStatementPath(
+          eventData.blockHash,
+          parseInt(eventData.data.domainId),
+          parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+          statement
+        );
+        console.log("Statement path:", statementpath);
+        const statementproof = {
+          ...statementpath,
+          domainId: parseInt(eventData.data.domainId),
+          aggregationId: parseInt(eventData.data.aggregationId.replace(/,/g, '')),
+        };
+        fs.writeFileSync("aggregation.json", JSON.stringify(statementproof));
+    }
+    },
+    options: { domainId: 0 },
+  },
+]);
+
+const {events} = await session.verify()
+    .ezkl()
+    .execute({proofData: {
+        vk: vk.split("\n")[0],
+        proof: proof.split("\n")[0],
+        publicSignals: publicInputs.split("\n").slice(0,-1)
+    }, domainId: 0});
+```
+</TabItem>
 </Tabs>
 
 We can listen to events to get the current status of our submitted proof, and collect important data required for attestation verification. We have custom events for block inclusion, transaction finalization, etc. You can listen to them using our events.on() function like : 
@@ -375,6 +428,9 @@ You can check details about the verified proofs using the ``txHash`` on our [zkV
 </TabItem>
 <TabItem value="sp1" label="SP1">
 ![alt_text](./img/sp1-zkverifyjs.png)
+</TabItem>
+<TabItem value="ezkl" label="Ezkl">
+![alt_text](./img/ezkl-zkverifyjs.png)
 </TabItem>
 </Tabs>
 
