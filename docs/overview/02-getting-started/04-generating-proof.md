@@ -89,7 +89,7 @@ curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/head
 ```
 
 :::warning
-Recommended bb version 0.84.0
+Our verifier is currently compatible with Noir proofs generated through `bb` and `bb.js` versions `v0.84.0` and later, up to but not including version `v0.86.*`.
 :::
 
 4. Install Barretenberg's Backend by running bbup command:
