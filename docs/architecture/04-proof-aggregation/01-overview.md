@@ -17,6 +17,6 @@ $$
 
 Where $2.64$ is the base deposit and the rest depends on used storage size.
 
-The other important concept in this engine is the **Permissionless publication**: anyone can publish an aggregation in any domain and the publisher will be rewarded by the accounts whose proof is part of the aggregation.
+The other important concept in this engine is the **Permissionless publication**: the domain can be configured that anyone can publish an aggregation and the publisher will be rewarded by the accounts whose proof is part of the aggregation.
 
 Finally, is important to know the **published aggregations have a limited lifetime**: a published aggregation remains in published state just for the block where it was published: who computes the ownership proof needs to do it by indicating exactly the block where the [`NewAggregationReceipt`](../02-mainchain/04-mainchain_api.md#newaggregationreceipt) event was emitted.

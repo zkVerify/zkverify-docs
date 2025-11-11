@@ -131,6 +131,10 @@ aggregation is present in this storage for **just one block**: the one where it
 has been aggregated. In order to create the aggregation proof you should inspect the storage
 value at the block where it has been published.
 
+#### [SubmittersAllowlist](#submittersallowlist)
+
+Contains all the accounts allowed submitting proofs for each domain configured with `OnlyAllowlisted` in `proof_rules`.
+
 ## [Extrinsics](#extrinsics)
 
 Mainchain nodes support some of the most common extrinsics provided by Substrate (see the [official documentation](https://polkadot.js.org/docs/substrate/extrinsics)).
@@ -186,6 +190,7 @@ Arguments:
 - `aggregation_size`: Maximum number of statements per aggregation
 - `queue_size`: Optional maximum number of pending aggregations (defaults to runtime configuration)
 - `aggregate_rules`: Security rules for controlling who can aggregate
+- `proof_rules`: Security rules for controlling who can submit proofs
 - `delivery`: Parameters for delivery (destination and price) At the moment destination can only be either None or Hyperbridge
 - `delivery_owner`: The delivery owner, as discussed in the previous section (defaults to origin).
 
@@ -194,10 +199,10 @@ Arguments:
 Hold a domain. Put the domain in `Hold` or `Removable` [state](#domainstatechanged). Only the domain owner can call it.
 Once you call this function the domain state could be:
 
-- `Hold`: If there are some aggregations in this domain that are not aggregated yet.
-- `Removable`: If the domain is ready to be removed because there are no more aggregations to be aggregated.
+- `Hold`: Both if there are some aggregations in this domain that are not aggregated yet, or there are some accounts in the allow-list for this domain.
+- `Removable`: If the domain is ready to be removed because there are no more aggregations to be aggregated, and its allow-list accounts is empty.
 
-Once the domain go in `Hold` or `Removabe` state cannot receive new proofs at all and cannot become in the `Ready`
+Once the domain go in `Hold` or `Removable` state cannot receive new proofs at all and cannot become in the `Ready`
 state again.
 
 **Only when the domain is in `Removable` state** you can call [`unregisterDomain`](#unregisterdomain) extrinsic
@@ -205,6 +210,10 @@ to remove it definitely.
 
 The [`DomainStateChanged`](#domainstatechanged) event is emitted when the domain changes its state. This call fails
 if the domain is not in `Ready` state or if the caller is not the domain's owner.
+
+If your domain is configured to use the allow-list for accepting proofs (`OnlyAllowlisted` in `proof_rules`), the domain owner should use
+[`removeProofSubmitters`](#removeproofsubmitters) to remove all address before becoming `Removable`. To inspect the allowed accounts for a domain use the
+[`SubmittersAllowlist` storage](#submittersallowlist).
 
 Arguments
 
@@ -228,6 +237,28 @@ Arguments
 
 - `domain_id`: Domain identifier
 - `price`: New delivery price
+
+#### [allowlistProofSubmitters](#allowlistproofsubmitters)
+
+Add accounts to the allow-list defined for this domain. Origin must be domain owner,
+or manager. The domain should be configured as `OnlyAllowlisted` as `proof_rules`.
+For each new address in the set a small amount will be put on hold for the domain owner in order to cover the storage price.
+
+Arguments
+
+- `domain_id`: Domain identifier
+- `submitters`: A list of allowed accounts for proof submission
+
+#### [removeProofSubmitters](#removeproofsubmitters)
+
+Add accounts from the allow-list defined for this domain. Origin must be domain owner,
+or manager. The domain should be configured as `OnlyAllowlisted` as `proof_rules`. Every removed address will free the relative
+hold amount.
+
+Arguments
+
+- `domain_id`: Domain identifier
+- `submitters`: A list of accounts to remove
 
 ### Verifier Pallets
 
