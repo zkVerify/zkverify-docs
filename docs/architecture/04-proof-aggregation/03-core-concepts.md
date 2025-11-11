@@ -4,6 +4,7 @@ title: Concepts
 ### Domains
 
 Domains are logical containers for aggregating statements. Each domain has:
+
 - An owner who can manage and unregister the domain
 - Configurable aggregation size (i.e. how many proof verification results it is possible to aggregate at a time) and queue size (how many aggregation results can be kept in storage before publishing them)
 - Security rules for controlling who can aggregate statements
@@ -12,6 +13,7 @@ Domains are logical containers for aggregating statements. Each domain has:
 ### Domain States
 
 Domains can exist in the following states:
+
 - `Ready`: Active and can receive new statements
 - `Hold`: Cannot receive new statements but can publish existing aggregations
 - `Removable`: Ready to be unregistered (no pending aggregations)
@@ -20,10 +22,18 @@ Domains can exist in the following states:
 ### Aggregation Security Rules
 
 Controls who can trigger aggregations:
+
 - `Untrusted`: Anyone can call aggregate
 - `OnlyOwner`: Only domain owner and pallet manager can call aggregate
 - `OnlyOwnerUncompleted`: Anyone can aggregate completed collections, but only owner/manager can aggregate incomplete ones
 
+### Submitting Security Rules
+
+Define the rules about who can submit proofs for this domain:
+
+- `Untrusted`: Anyone can submit proofs
+- `OnlyOwner`: Only domain owner can submit proofs
+- `OnlyAllowlisted`: Just a set of registered accounts can submit proofs
 
 ## Actors
 
@@ -40,7 +50,8 @@ The account calling the register_domain extrinsic is set to be the owner of the 
 ### Aggregator
 
 The one responsible for calling the aggregate() extrinsic.
-Aggregation is a permissionless task, and it is rewarded. In particular:
+Aggregation in general could be a permissionless task, and it is rewarded. In particular:
+
 - Whoever calls aggregate will be refunded with the cost for executing the extrinsic
 - It will be also rewarded with an additional tip, configurable at runtime level (In the future each domain will be able to specify its own tip)
 
