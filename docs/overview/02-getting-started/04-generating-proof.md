@@ -728,7 +728,7 @@ Grant the script execution permissions by running `chmod +x export_model.py` fro
 To inspect the model and create a configuration file, run:
 
 ```bash
-ezkl gen-settings -M network.onnx
+ezkl gen-settings -M network.onnx -O settings.json
 ```
 
 This should generate `settings.json`.
