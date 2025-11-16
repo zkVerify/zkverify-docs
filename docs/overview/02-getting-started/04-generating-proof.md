@@ -755,7 +755,7 @@ This should generate the `model.compiled` file which contains an optimized forma
 
 8. Download the relevant SRS file:
 
-You will need to download an SRS file according to what is specified in your circuit settings file. To do this, issue the command:
+You will need to download a Structured Reference String (SRS) file according to what commitment scheme you are using (by default, that's KZG) and the number of `logrows`. This information is specified in your circuit settings file. To commence the download, issue the command:
 
 ```bash
 ezkl get-srs -S settings.json
