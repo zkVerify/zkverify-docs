@@ -724,8 +724,7 @@ print(f"Input data saved to {json_path}")
 Grant the script execution permissions by running `chmod +x export_model.py` from a Bash shell and then run it by issuing the command `python3 export_model.py`. After the script finishes, you should have two files, namely, `network.onnx` and `input.json`. We are now ready to start using `ezkl`.
 
 5. Generate Settings:
-
-To inspect the model and create a configuration file, run:
+The first command that you need to issue to `ezkl` is for generating the initial circuit parameters for your model. To inspect the model and create such a configuration file, run:
 
 ```bash
 ezkl gen-settings -M network.onnx -O settings.json
@@ -733,9 +732,9 @@ ezkl gen-settings -M network.onnx -O settings.json
 
 This should generate `settings.json`.
 
-6. Calibrate Settings:
+6. Calibrate Settings (Optional):
 
-This step is crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This helps prevent proofs from failing due to arithmetic errors. Run:
+This step is *optional*, but crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This step essentially fine-tunes your `settings.json` parameters to better match your actual model and data, which in turn helps prevent proofs from failing due to arithmetic errors. You will need to provide a `calibration.json` data file to the `calibrate-settings` command. The data in this file must match the (tensor) shape and structure of `input.json`, differing only in the specific values used (which should be representative, not dummy). `ezkl` can use this data to automatically tune and optimize the circuit settings (e.g., scales, constraints, and logrows). For the purpose of this tutorial, we will keep things simple and use `input.json` as our calibration data file. To commence calibration, run:
 
 ```bash
 ezkl calibrate-settings -D input.json -M network.onnx --settings-path settings.json
@@ -760,6 +759,8 @@ You will need to download a Structured Reference String (SRS) file according to 
 ```bash
 ezkl get-srs -S settings.json
 ```
+
+By default, any downloaded SRS are saved in `~/.ezkl/srs`.
 
 9. Run the Trusted Setup to generate the cryptographic keys:
 
