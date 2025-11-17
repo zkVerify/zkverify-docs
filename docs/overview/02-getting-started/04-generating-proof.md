@@ -760,7 +760,7 @@ You will need to download a Structured Reference String (SRS) file according to 
 ezkl get-srs -S settings.json
 ```
 
-By default, any downloaded SRS are saved in `~/.ezkl/srs`.
+By default, any downloaded SRS is saved in `~/.ezkl/srs`.
 
 9. Run the Trusted Setup to generate the cryptographic keys:
 
