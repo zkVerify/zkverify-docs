@@ -677,7 +677,9 @@ pip install torch torchvision
 
 4. Define your model, export it to `network.onnx`, and create an `input.json` file:
 
-For illustration, let's create a Python script defining a simple model that learns the linear function $y = 2x + 1$. We will call it `export_model.py`. If you already have an exported model, you may skip this step completely.
+*Important:* If you already have an exported model (`network.onnx`) and inputs file (`input.json`), you may skip this step completely.
+
+For illustration, let's create a Python script defining a simple model that learns the linear function $y = 2x + 1$. We will call it `export_model.py`.
 
 ```python
 import torch
@@ -722,18 +724,17 @@ print(f"Input data saved to {json_path}")
 Grant the script execution permissions by running `chmod +x export_model.py` from a Bash shell and then run it by issuing the command `python3 export_model.py`. After the script finishes, you should have two files, namely, `network.onnx` and `input.json`. We are now ready to start using `ezkl`.
 
 5. Generate Settings:
-
-To inspect the model and create a configuration file, run:
+The first command that you need to issue to `ezkl` is for generating the initial circuit parameters for your model. To inspect the model and create such a configuration file, run:
 
 ```bash
-ezkl gen-settings -M network.onnx
+ezkl gen-settings -M network.onnx -O settings.json
 ```
 
 This should generate `settings.json`.
 
-6. Calibrate Settings:
+6. Calibrate Settings (Optional):
 
-This step is crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This helps prevent proofs from failing due to arithmetic errors. Run:
+This step is *optional*, but crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This step essentially fine-tunes your `settings.json` parameters to better match your actual model and data, which in turn helps prevent proofs from failing due to arithmetic errors. You will need to provide a `calibration.json` data file to the `calibrate-settings` command. The data in this file must match the (tensor) shape and structure of `input.json`, differing only in the specific values used (which should be representative, not dummy). `ezkl` can use this data to automatically tune and optimize the circuit settings (e.g., scales, constraints, and logrows). For the purpose of this tutorial, we will keep things simple and use `input.json` as our calibration data file. To commence calibration, run:
 
 ```bash
 ezkl calibrate-settings -D input.json -M network.onnx --settings-path settings.json
@@ -746,12 +747,22 @@ This modifies `settings.json` with optimal parameters.
 This step transforms your neural network into an arithmetic circuit, the fundamental object for which we can create proofs. Run:
 
 ```bash
-ezkl compile-circuit -M network.onnx --settings-path settings.json
+ezkl compile-circuit -M network.onnx --settings-path settings.json --compiled-circuit model.compiled
 ```
 
 This should generate the `model.compiled` file which contains an optimized format of the model for zero-knowledge proofs.
 
-8. Run the Trusted Setup to generate the cryptographic keys:
+8. Download the relevant SRS file:
+
+You will need to download a Structured Reference String (SRS) file according to what commitment scheme you are using (by default, that's KZG) and the number of `logrows`. This information is specified in your circuit settings file. To commence the download, issue the command:
+
+```bash
+ezkl get-srs -S settings.json
+```
+
+By default, any downloaded SRS is saved in `~/.ezkl/srs`.
+
+9. Run the Trusted Setup to generate the cryptographic keys:
 
 Run the command:
 
@@ -761,32 +772,32 @@ ezkl setup -M model.compiled --pk-path pk.key --vk-path vk.key
 
 You should now have a proving key (for the prover) in `pk.key` and a verification key (for the verifier) in `vk.key`.
 
-9. Generate the witness:
+10. Generate the witness:
 
 This step creates a witness file from your input data and compiled model. Simply run:
 
 ```bash
-ezkl gen-witness
+ezkl gen-witness -M model.compiled -D input.json -V vk.key -O witness.json
 ```
 
 This should generate the `witness.json` file.
 
-10. Prove:
+11. Prove:
 
 To generate a zero-knowledge proof using the witness and other artifacts, run:
 
 ```bash
-ezkl prove -M model.compiled --pk-path pk.key --proof-path proof.json
+ezkl prove -M model.compiled --pk-path pk.key --proof-path proof.json -W witness.json
 ```
 
 and you should now have a JSON file called `proof.json`. This file contains both the proof and the instances (public inputs).
 
-11. Generate the VKA:
+12. Generate the VKA:
 
 The Reusable EZKL verifier relies on an additional artifact called the Verification Key Artifact (or, VKA for short). To generate it, simply run:
 
 ```bash
-ezkl create-evm-vka
+ezkl create-evm-vka -S settings.json --vk-path vk.key --vka-path vka.bytes
 ```
 
 and you should now have an additional file called `vka.bytes`.
