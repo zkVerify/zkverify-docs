@@ -178,7 +178,7 @@ The response you get should have a payload similar to this:
 ```
 In this particular structure, each of the validator’s information like address, total tVFY staked and total nominations can be found. As per the example shared above, the third active validator (sorting them from highest to lowest stake) has staked `139,999,999,999,999,999,971,572,664` (unit of measure is `tVFY*10^18`) so you are required to stake at least that amount (or amount to it via nominations) for participating actively.
 
-For more information on staking activities in zkVerify, check the corresponding [guide](../04-nominators.md).
+For more information on staking activities in zkVerify, check the corresponding [guide](../04-nominators/01-nominators.md).
 
 Now your take would be to stake more than the lowest in the top 10 validators list. Next visit to ``Developer`` > ``Extrinsics`` section and choose the ``staking`` module. Now, choose the ``bond`` extrinsic and fill in the value field with the amount of tVFY you would like to stake. Finally, choose the account type in payee option and sign your transaction. 
 

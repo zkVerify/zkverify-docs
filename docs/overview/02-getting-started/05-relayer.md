@@ -355,7 +355,7 @@ console.log(requestResponse.data)
 </Tabs>
 </TabItem>
 <TabItem value="with-aggregation" label="With Aggregation">
-We need to define the chainId where we want to verify our aggregated proof. You can find the chain ID for all the supported networks [here](../05-contract-addresses.md)
+We need to define the chainId where we want to verify our aggregated proof. You can find the chain ID for all the supported networks [here](../../architecture/08-contract-addresses.md)
 <Tabs groupId="submit-proof">
 <TabItem value="circom" label="Circom">
 ```js
