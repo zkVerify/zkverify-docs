@@ -7,7 +7,7 @@ title: Proof Verification Smart Contract
 ## Overview
 
 The zkVerify Smart Contract is deployed on different chains, where it receives an aggregation from the zkVerify authorized relayer.
-[Here](../10-faq.md) is a list of the chains in which zkVerify contracts are deployed.
+[Here](../useful-links/01-useful-links.md) is a list of the chains in which zkVerify contracts are deployed.
 
 ## Storage Variables
 

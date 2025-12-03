@@ -75,21 +75,21 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
+          sidebarId: 'archSidebar',
+          position: 'left',
+          label: '🚀 Introduction',
+        },
+        {
+          type: 'docSidebar',
           sidebarId: 'docsSidebar',
           position: 'left',
           label: '🛠️ Build',
         },
         {
           type: 'docSidebar',
-          sidebarId: 'archSidebar',
-          position: 'left',
-          label: '📖 Learn',
-        },
-        {
-          type: 'docSidebar',
           sidebarId: 'nodeSidebar',
           position: 'left',
-          label: '⚙️ Operators',
+          label: '⚙️ Staking / Node Operators',
         },
         {
           type: 'docSidebar',
@@ -98,11 +98,10 @@ const config: Config = {
           label: '🎖️ Incentivized Testnet',
         },
         {
-          type: 'doc',
-          docId: 'faq',
-          to: 'docs/faq.md',
+          type: 'docSidebar',
+          sidebarId: 'usefulSidebar',
           position: 'left',
-          label: '🤔 FAQ',
+          label: '🌍 Useful Links / Guides',
         },
         {
           href: 'https://github.com/zkVerify/zkVerify-docs',

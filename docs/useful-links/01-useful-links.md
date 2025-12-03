@@ -1,8 +1,6 @@
 ---
-title: FAQ
+title: Move VFY from zkVerify to Base
 ---
-
-# FAQs
 
 ## How do I move VFY from zkVerify to Base?
 
@@ -14,7 +12,7 @@ Follow these steps end-to-end. You will first teleport VFY from the zkVerify rel
 - Ensure your wallet (e.g., SubWallet/Talisman + EVM account) is ready to interact with Polkadot-JS and VFlow.
 - If the network isn’t listed, manually add the mainnet RPC endpoint from the connection guide linked above.
 
-![Select EVM address in Polkadot-JS](./architecture/08-VFlow/03-VFY-Bridging/img/select_EVM_address.png)
+![Select EVM address in Polkadot-JS](../architecture/08-VFlow/03-VFY-Bridging/img/select_EVM_address.png)
 
 Prerequisite: two addresses connected in Polkadot-JS UI
 
