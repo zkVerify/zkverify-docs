@@ -46,7 +46,7 @@ For the addresses of the contracts we have deployed on all the destination chain
 <TabItem value="mainnet" label="Mainnet">
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
-| 1         | Base              | Bot         |
+| 2         | Base              | Bot         |
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 | Domain ID | Chain             | Mechanism   |
