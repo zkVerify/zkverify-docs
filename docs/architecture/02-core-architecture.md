@@ -11,7 +11,7 @@ Our chain is an L1 proof of stake blockchain built on the Substrate framework. T
 
 ## Proof Submission Interface
 
-This is the entry point for our blockchain, where users will be submitting transactions and making RPC calls. Similar to any other blockchain we have our SDK implementation called [zkVerifyJS](https://docs.zkverify.io/tutorials/submit-proofs/typescript-example) that you can use to interact with the chain. This library makes it very easy for developers to interact with the blockchain with simple code snippets to register a verification key, submit a zk proof, listen to events, get aggregation details, etc.
+This is the entry point for our blockchain, where users will be submitting transactions and making RPC calls. Similar to any other blockchain we have our SDK implementation called [zkVerifyJS](https://docs.zkverify.io/overview/getting-started/zkverify-js) that you can use to interact with the chain. This library makes it very easy for developers to interact with the blockchain with simple code snippets to register a verification key, submit a zk proof, listen to events, get aggregation details, etc.
 
 ## Proof Receipt Mechanism
 
