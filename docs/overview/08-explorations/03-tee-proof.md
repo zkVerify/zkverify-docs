@@ -42,7 +42,7 @@ dcap-bonsai-cli = { git="https://github.com/automata-network/automata-dcap-zkvm-
 You can apply for a Bonsai API Key [here](https://docs.google.com/forms/d/e/1FAIpQLSf9mu18V65862GS4PLYd7tFTEKrl90J5GTyzw_d14ASxrruFQ/viewform) and for Kurier, users can obtain an API key by creating an account at [kurier.xyz](https://kurier.xyz) and generating a key from the user dashboard.
 :::
 
-After adding all the required modules to the project, we will create a `.env` file in which we will store our Bonsai API details and [Horizen's Kurier](../02-getting-started/05-kurier.md) API key. Paste the following snippet and add your API details:
+After adding all the required modules to the project, we will create a `.env` file in which we will store our Bonsai API details and [Kurier](../02-getting-started/05-kurier.md) API key. Paste the following snippet and add your API details:
 
 ```bash
 BONSAI_API_URL="<BONSAI_API_URL>"
