@@ -292,3 +292,48 @@ Setting `interior = X1 { Parachain: 3 }` means essentially specifying `./paracha
 Instead setting `interior = X2 { Parachain: 3, AccountKey20: 0x111 }` means essentially specifying `./parachain_3/account_111`
 
 Putting it all together, in this case, we are initiating the teleport from the Relay Chain (so `parents` is 0, since we are already on the Relay Chain) to the Parachain with id `1`, which is *one hop* away from the parent (so `interior` is `X1` with `Parachain` set to `1`).
+
+### Possible Errors and Recovery
+
+In this section we list some known possible user errors, and related recovery opportunities.
+
+#### Teleporting funds to AccountId32 addresses on VFlow
+
+VFlow only supports 20byte addresses, identified by the `AccountKey20` type. It is therefore a mistake, and should *never* be done, to teleport funds to an `AccountId32` address on VFlow. Unfortunately the PolkadotJS UI is generic and does not prevent users from submitting erroneous extrinsics.
+
+Luckily, in case this mistake occurs, it is still possible to recover the funds, having the private key for the destination `AccountId32`. In this paragraph we show how to send the funds teleported to VFlow to another address on VFlow, using an XCM remote execution requested from zkVerify.
+
+To do so, we need to perform a two step operation: first, we create the extrinsic on VFlow to send funds to a given address through the EVM, and second we execute this extrinsic remotely from zkVerify. 
+
+##### Step 1. Create the extrinsic on VFlow
+
+**On the VFlow explorer**, go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
+`
+0x2c0001503403000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+`
+Then from `Decode` move to `Submission`. You need to change the following parameters:
+
+- `Call: H160`: with the address of the receiver on VFlow
+- `value: u256`: with the amount of VFY tokens you want to send to another VFlow address (specified with 18 digits). **NOTICE**: this cannot be the full balance of the address, because some funds are needed to complete the execution of the XCM extrinsic. For example, if you follow the steps in this document, we reserve 0.1VFY for the execution. This is an overestimation, and the unused part will be reimbursed to the account specified in the next step.
+
+Once you set the parameters correctly, **do not** submit the transaction, but rather click on the UI button to copy the encoded call data.
+
+![vflow_eth_send](./img/vflow_eth_send.png)
+
+##### Step 2. Execute remotely from zkVerify
+
+**On the zkVerify explorer**, go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
+
+`
+0x8c000500010004051400040100001300008a5d78456301130100001300008a5d784563010006010000140d0100000103000000000000000000000000000000000000000000
+`
+
+Then from `Decode` move to `Submission`. You need to change the following parameters:
+
+- `message -> Transact -> call: XcmDoubleEncoded`: with the encoded call data that you copied in the previous step
+- `message -> DepositAsset -> AccountKey20 -> key: [u8; 20]`: with the address of the receiver of the reimbursement mentioned in the previous step, on VFlow
+
+![zkv_xcm_send](./img/zkv_xcm_send.png)
+
+Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the operation.
+
