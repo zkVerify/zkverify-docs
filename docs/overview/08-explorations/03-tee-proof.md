@@ -6,16 +6,18 @@ title: TEE verification with Risc Zero
 All the codebase used in the tutorial can be explored [here](https://github.com/zkVerify/explorations/tree/main/tee-r0-verifier)
 :::
 
-
 This guide will walk you through the process of verifying TEE proofs on zkVerify by wrapping them with [Risc Zero](https://risczero.com/). As per the current standards, most of the TEE proofs are first wrapped into a zkVM to generate a STARK proof, and then again wrapped into a groth16 proof to verify it onchain. But with zkVerify we don't need to wrap it to groth16 as zkVerify supports native Risc Zero STARK verification.
 
 To start with we will create a new cargo project using the follwing command:
+
 ```bash
 cargo new zkverify-tee-r0
 ```
-After creating the project, open it with IDE of your choice. We will be importing all the required modules for our project. We will be using [Automata's DCAP CLI](https://github.com/automata-network/automata-dcap-zkvm-cli) project for all the required TEE verification functions. We will also use ``risc0-zkvm`` to create a client and generate a proof with the Bonsai proving service.
 
-Next, open the ``cargo.toml`` file and replace it with the following:
+After creating the project, open it with IDE of your choice. We will be importing all the required modules for our project. We will be using [Automata's DCAP CLI](https://github.com/automata-network/automata-dcap-zkvm-cli) project for all the required TEE verification functions. We will also use `risc0-zkvm` to create a client and generate a proof with the Bonsai proving service.
+
+Next, open the `cargo.toml` file and replace it with the following:
+
 ```toml
 [package]
 name = "zkverify-tee-r0"
@@ -37,19 +39,20 @@ dcap-bonsai-cli = { git="https://github.com/automata-network/automata-dcap-zkvm-
 ```
 
 :::info
-You can apply for a Bonsai API Key [here](https://docs.google.com/forms/d/e/1FAIpQLSf9mu18V65862GS4PLYd7tFTEKrl90J5GTyzw_d14ASxrruFQ/viewform) and for the relayer API key you can reach us out in discord by creating a ticket.
+You can apply for a Bonsai API Key [here](https://docs.google.com/forms/d/e/1FAIpQLSf9mu18V65862GS4PLYd7tFTEKrl90J5GTyzw_d14ASxrruFQ/viewform) and for the Kurier API key you can reach us out in discord by creating a ticket.
 :::
 
-After adding all the required modules to the project, we will create a ``.env`` file in which we will store our Bonsai API details and [Horizen's Relayer Service](../02-getting-started/05-relayer.md) API key. Paste the following snippet and add your API details:
+After adding all the required modules to the project, we will create a `.env` file in which we will store our Bonsai API details and [Horizen's Kurier](../02-getting-started/05-kurier.md) API key. Paste the following snippet and add your API details:
 
 ```bash
 BONSAI_API_URL="<BONSAI_API_URL>"
 BONSAI_API_KEY="<BONSAI_API_KEY>"
 RISC0_PROVER="bonsai"
-API_KEY="<RELAYER_API_KEY>"
+API_KEY="<KURIER_API_KEY>"
 ```
 
-Then create a new file named ``utils.rs`` inside the ``src`` folder. In this file we will define the ``verify_proof`` function which will call the relayer service for proof verification. First we will import all the required modules. You can paste the following code snippet:
+Then create a new file named `utils.rs` inside the `src` folder. In this file we will define the `verify_proof` function which will call Kurier for proof verification. First we will import all the required modules. You can paste the following code snippet:
+
 ```rust
 use std::{env, fs, thread, time::Duration};
 use anyhow::{Ok, Result};
@@ -59,10 +62,10 @@ use risc0_zkvm::Receipt;
 use serde::Deserialize;
 ```
 
-Now we will define a constant ``API_URL`` which will hold our relayer API URL. And the the ``verify_proof`` function, which will be an async function and will take the ``ZK receipt`` and ``image_id`` as the inputs.
-We will read the ``API_KEY`` from the ``env`` and then convert the Risc Zero proof receipt into the required hex format which zkVerify supports.
+Now we will define a constant `API_URL` which will hold our Kurier API URL. And the the `verify_proof` function, which will be an async function and will take the `ZK receipt` and `image_id` as the inputs.
+We will read the `API_KEY` from the `env` and then convert the Risc Zero proof receipt into the required hex format which zkVerify supports.
 
-Then we will create the ``submit_params`` object with all the proof details required for verification. Next, we make a ``POST`` request to ``submit-proof`` endpoint which will return the ``job-id`` and ``optimistic-verification`` status. If the ``optimistic-verification`` status is ``success`` then we will start polling the ``job-id`` till it's status is ``Finalized``, which means that the ZK proof has been finalized on zkVerify chain.
+Then we will create the `submit_params` object with all the proof details required for verification. Next, we make a `POST` request to `submit-proof` endpoint which will return the `job-id` and `optimistic-verification` status. If the `optimistic-verification` status is `success` then we will start polling the `job-id` till it's status is `Finalized`, which means that the ZK proof has been finalized on zkVerify chain.
 
 ```rust
 pub async fn verify_proof(receipt: Receipt, image_id: String) -> Result<()>{
@@ -134,7 +137,8 @@ pub async fn verify_proof(receipt: Receipt, image_id: String) -> Result<()>{
 
 Now let's dive to create the main logic for our application. We don't need to write a zkVM program, because we will be using [Automata's DCAP CLI](https://github.com/automata-network/automata-dcap-zkvm-cli) project which already contains all the zkVM programs needed for the wrapping of the TEE attestation.
 
-Open the ``main.rs`` file, and import alll the following modules:
+Open the `main.rs` file, and import alll the following modules:
+
 ```rust
 use std::{fs::read_to_string, path::PathBuf};
 use anyhow::Result;
@@ -155,6 +159,7 @@ use risc0_zkvm::{compute_image_id, default_prover, ExecutorEnv, ProverOpts};
 ```
 
 Next we will create some utility functions to verify our TEE attestation. These functions will be to read the hex quote from a file, serialize the collaterals, and to generate the input for our zkVM program. You can paste the following code snippet:
+
 ```rust
 fn get_quote() -> Result<Vec<u8>> {
 
@@ -234,11 +239,12 @@ fn generate_input(quote: &[u8], collaterals: &[u8]) -> Vec<u8> {
 }
 ```
 
-Finally, we will create our ``main`` function which will use all the utils functions to generate a Risc Zero proof for our TEE attestaion and verify it on zkVerify using the relayer service. This function will be a async function as there will be multiple async API calls involved in this process. 
+Finally, we will create our `main` function which will use all the utils functions to generate a Risc Zero proof for our TEE attestaion and verify it on zkVerify using Kurier. This function will be a async function as there will be multiple async API calls involved in this process.
 
-We will start by reading the quote from a file, then checking all the collaterals, serializing these collaterals and generating the zkVM input using the utility function we defined previously.  After generating the input, we will create a ``DefaultProver`` which will connect to the Bonsai server to generate our ZK proof. 
+We will start by reading the quote from a file, then checking all the collaterals, serializing these collaterals and generating the zkVM input using the utility function we defined previously. After generating the input, we will create a `DefaultProver` which will connect to the Bonsai server to generate our ZK proof.
 
-We will also define the required proof type as ``&ProverOpts::succinct()``. After generating the proof, we will use the ``verify_proof`` function we made previously to send our Risc Zero proof for verification to zkVerify. You can just copy this code snippet for your main function:
+We will also define the required proof type as `&ProverOpts::succinct()`. After generating the proof, we will use the `verify_proof` function we made previously to send our Risc Zero proof for verification to zkVerify. You can just copy this code snippet for your main function:
+
 ```rust
 #[tokio::main]
 async fn main() -> Result<()>{
@@ -344,13 +350,15 @@ async fn main() -> Result<()>{
 ```
 
 Now we will compile our project with release tag. Use the following command to build your project:
+
 ```bash
 cargo build --release
 ```
 
-To generate a ZK proof, you would need to pass the TEE quote as an input. Create a new folder named ``data`` and the a new file named ``quote.hex`` inside this folder. And then copy paste the data in this [file](https://github.com/automata-network/automata-dcap-zkvm-cli/blob/268b4115ad592d46c02f4ef7d49a6bae066d1592/data/quote.hex) to the ``quote.hex`` file you created.
+To generate a ZK proof, you would need to pass the TEE quote as an input. Create a new folder named `data` and the a new file named `quote.hex` inside this folder. And then copy paste the data in this [file](https://github.com/automata-network/automata-dcap-zkvm-cli/blob/268b4115ad592d46c02f4ef7d49a6bae066d1592/data/quote.hex) to the `quote.hex` file you created.
 
-Next load your ``.env`` file and run the project to generate ZK proofs. Use the following command to start your project:
+Next load your `.env` file and run the project to generate ZK proofs. Use the following command to start your project:
+
 ```bash
 source .env
 ```
@@ -360,6 +368,7 @@ source .env
 ```
 
 After running the program, you will get an output similar to:
+
 ```bash
 Quote version: 4
 TEE Type: 129

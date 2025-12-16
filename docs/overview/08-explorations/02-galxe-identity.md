@@ -10,7 +10,8 @@ Galxe Identity Protocol is a permissionless self-sovereign identity infrastructu
 
 Galxe Identity Protocol SDK is capable to utilize zkVerify's proof verification technology to drastically reduce the costly onchain proof verifications. This tutorial will guide you through the process of using zkVerifyJS to verify credentials on zkVerify.
 
-To start with, we will create a new directory, initialize npm, and install required packages(galxe-identity-zkVerify, ethers and zkVerifyJS). Use the following commands:- 
+To start with, we will create a new directory, initialize npm, and install required packages(galxe-identity-zkVerify, ethers and zkVerifyJS). Use the following commands:-
+
 ```bash
 # This will create a new directory for our project
 mkdir galxe-identity-zkVerify
@@ -25,16 +26,33 @@ npm init -y && npm pkg set type=module
 npm i @galxe-identity-protocol/sdk ethers zkverifyjs
 ```
 
-Create a ``.env`` file and paste the follwoing code snippet. Make sure to replace ``<SEED-PHRASE>`` with your wallet's seed phrase.
+Create a `.env` file and paste the follwoing code snippet. Make sure to replace `<SEED-PHRASE>` with your wallet's seed phrase.
+
 ```bash
 ZKVERIFY_SIGNER_PK = <SEED-PHRASE>
 ```
 
-Next, we will import all the required dependencies. Also we will initialize the ``MAINNET_RPC`` and a ``dummyIssuerEvmAddr``.
+Next, we will import all the required dependencies. Also we will initialize the `MAINNET_RPC` and a `dummyIssuerEvmAddr`.
+
 ```js
-import { prepare, credential, evm, credType, errors, user, issuer, utils, babyzkTypes } from "@galxe-identity-protocol/sdk";
+import {
+  prepare,
+  credential,
+  evm,
+  credType,
+  errors,
+  user,
+  issuer,
+  utils,
+  babyzkTypes,
+} from "@galxe-identity-protocol/sdk";
 import { ethers } from "ethers";
-import { CurveType, Library, ZkVerifyEvents, zkVerifySession } from "zkverifyjs";
+import {
+  CurveType,
+  Library,
+  ZkVerifyEvents,
+  zkVerifySession,
+} from "zkverifyjs";
 
 const unwrap = errors.unwrap;
 
@@ -49,6 +67,7 @@ const dummyIssuerEvmAddr = "0x15f4a32c40152a0f48E61B7aed455702D1Ea725e";
 ```
 
 Now, we will create a function for issuing credentials. We will be needing the User's EVM address amd User's Identity commitment. First we will create the type of credential, for this tutorial let's create a Scalar type. Then we will create the credential and sign it by the issuer.
+
 ```js
 async function issuingProcess(userEvmAddr, userIdc) {
   // 1. First of all, we must create the type of the credential.
@@ -96,14 +115,18 @@ async function issuingProcess(userEvmAddr, userIdc) {
   const issuerChainID = BigInt(1); // mainnet
   // A mock private key for the signer, which is used to sign the credential.
   // This key has been registered and activated on mainnet by the dummy issuer.
-  const dummyKey = utils.decodeFromHex("0xfd60ceb442aca7f74d2e56c1f0e93507798e8a6e02c4cd1a5585a36167fa7b03");
+  const dummyKey = utils.decodeFromHex(
+    "0xfd60ceb442aca7f74d2e56c1f0e93507798e8a6e02c4cd1a5585a36167fa7b03"
+  );
   const issuerPk = dummyKey;
   // create a new issuer object using the private key, issuerID, and issuerChainID.
   const myIssuer = new issuer.BabyzkIssuer(issuerPk, issuerID, issuerChainID);
   // sign the credential to user's identity commitment, with a unique signature id and expiration date.
   myIssuer.sign(newCred, {
     sigID: BigInt(100),
-    expiredAt: BigInt(Math.ceil(new Date().getTime() / 1000) + 7 * 24 * 60 * 60), // assuming the credential will be expired after 7 days
+    expiredAt: BigInt(
+      Math.ceil(new Date().getTime() / 1000) + 7 * 24 * 60 * 60
+    ), // assuming the credential will be expired after 7 days
     identityCommitment: userIdc,
   });
 
@@ -113,6 +136,7 @@ async function issuingProcess(userEvmAddr, userIdc) {
 ```
 
 We will also create a function for the proof generation process. We will be taking the user and credential data as inputs to this function. Then, we will create an external nullifier for our proof. We will download the proof generation gadgets, and then list down the checks we want to implement like we want to verify that the credential is still valid after 3 days, prove that the credential's 'val' value is between 500 and 5000 etc.
+
 ```js
 async function proofGenProcess(myCred, u) {
   // Now issuer can issue a credential to the user.
@@ -121,16 +145,23 @@ async function proofGenProcess(myCred, u) {
   // Assuming that the user has received the credential,
   // user can generate a zk proof to prove that he has sent more than 500 transactions, but no more than 5000.
   // Let's first decide the external nullifier for the proof.
-  const externalNullifier = utils.computeExternalNullifier("Galxe Identity Protocol tutorial's verification");
+  const externalNullifier = utils.computeExternalNullifier(
+    "Galxe Identity Protocol tutorial's verification"
+  );
   // Now we need to fetch the proof generation gadgets. It is explicitly fetched outside the proof generation function
   // because usually, the proof generation gadgets are stored in a remote server, and may be large (3-10MB).
   // It's highly recommended to cache the proof generation gadgets locally.
   console.log("downloading proof generation gadgets...");
-  const proofGenGagets = await user.User.fetchProofGenGadgetsByTypeID(myCred.header.type, provider);
+  const proofGenGagets = await user.User.fetchProofGenGadgetsByTypeID(
+    myCred.header.type,
+    provider
+  );
   console.log("proof generation gadgets are downloaded successfully.");
   // Finally, let's generate the proof.
   // Assume that we want to verify that the credential is still valid after 3 days.
-  const expiredAtLowerBound = BigInt(Math.ceil(new Date().getTime() / 1000) + 3 * 24 * 60 * 60);
+  const expiredAtLowerBound = BigInt(
+    Math.ceil(new Date().getTime() / 1000) + 3 * 24 * 60 * 60
+  );
   // Do not reveal the credential's actual id, which is the evm address in this example
   const equalCheckId = BigInt(0);
   // Instead, claim to be Mr.Deadbeef. It's verifier's responsibility to verify that the pseudonym is who
@@ -166,12 +197,16 @@ async function proofGenProcess(myCred, u) {
 }
 ```
 
-Next we will create a specific function to verify proofs with zkVerify. We will take the proof and the vk as the inputs for our function. First, we will start a session with zkVerify's Volta Testnet with our seed phrase, then we will call the verify function and pass the proof artifacts to get verified on zkVerify. After the proof is sent for verification, we will wait to listen for ``IncludedInBlock`` and ``Finalized`` events.
+Next we will create a specific function to verify proofs with zkVerify. We will take the proof and the vk as the inputs for our function. First, we will start a session with zkVerify's Volta Testnet with our seed phrase, then we will call the verify function and pass the proof artifacts to get verified on zkVerify. After the proof is sent for verification, we will wait to listen for `IncludedInBlock` and `Finalized` events.
+
 ```js
 async function executeVerificationWithZkVerify(proof, vk) {
   try {
     // Start a new zkVerifySession on our testnet
-    const session = await zkVerifySession.start().Volta().withAccount(process.env.SEED_PHRASE);
+    const session = await zkVerifySession
+      .start()
+      .Volta()
+      .withAccount(process.env.SEED_PHRASE);
 
     // Execute the verification transaction
     const { events, transactionResult } = await session
@@ -186,17 +221,17 @@ async function executeVerificationWithZkVerify(proof, vk) {
       });
 
     // Listen for the 'includedInBlock' event
-    events.on(ZkVerifyEvents.IncludedInBlock, eventData => {
+    events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
       console.log("Transaction included in block:", eventData);
     });
 
     // Listen for the 'finalized' event
-    events.on(ZkVerifyEvents.Finalized, eventData => {
+    events.on(ZkVerifyEvents.Finalized, (eventData) => {
       console.log("Transaction finalized:", eventData);
     });
 
     // Handle errors during the transaction process
-    events.on("error", error => {
+    events.on("error", (error) => {
       console.error("An error occurred during the transaction:", error);
       throw error;
     });
@@ -212,7 +247,8 @@ async function executeVerificationWithZkVerify(proof, vk) {
 }
 ```
 
-Let's create a function to get our proof verification key from the registry. Also we will call the ``executeVerificationWithZkVerify`` function with the proof and vk inside this function.
+Let's create a function to get our proof verification key from the registry. Also we will call the `executeVerificationWithZkVerify` function with the proof and vk inside this function.
+
 ```js
 async function verifyWithZkVerify(proof) {
   const expectedTypeID = credType.primitiveTypes.scalar.type_id;
@@ -224,9 +260,14 @@ async function verifyWithZkVerify(proof) {
   const tpRegistry = evm.v1.createTypeRegistry({
     signerOrProvider: provider,
   });
-  const verifier = await tpRegistry.getVerifier(expectedTypeID, credential.VerificationStackEnum.BabyZK);
+  const verifier = await tpRegistry.getVerifier(
+    expectedTypeID,
+    credential.VerificationStackEnum.BabyZK
+  );
   const vKey = await verifier.getVerificationKeysRaw();
-  console.log("on zkVerify-chain proof verification start, executing verification transaction");
+  console.log(
+    "on zkVerify-chain proof verification start, executing verification transaction"
+  );
   const verifyResult = await executeVerificationWithZkVerify(proof, vKey);
   console.log("on zkVerify-chain proof verification result: ", verifyResult);
 
@@ -234,7 +275,7 @@ async function verifyWithZkVerify(proof) {
 }
 ```
 
-After creating all the important components of the program let's create our ``main`` function in which we will call all these functions step by step. We will also initialize our user in this function. 
+After creating all the important components of the program let's create our `main` function in which we will call all these functions step by step. We will also initialize our user in this function.
 
 ```js
 async function main() {
@@ -277,7 +318,8 @@ async function main() {
 main();
 ```
 
-Now you can run this script by running ``node index.js`` and you will get an output in the following structure :- 
+Now you can run this script by running `node index.js` and you will get an output in the following structure :-
+
 ```bash
 Credential is issued successfully.
 {
@@ -364,4 +406,4 @@ End of verification with zkVerify
 
 The code used in this tutorial is available [here](https://github.com/Galxe/identity-protocol/blob/main/apps/tutorial/src/useZkVerify.ts)
 
-Congratulations! You’ve successfully issued a credential, generated a zero-knowledge proof, and verified it with zkVerify. Next steps would be to explore more advanced topics like [Relayer Service](../02-getting-started/05-relayer.md) and [Domain Aggregation](../../architecture/04-proof-aggregation/01-overview.md)
+Congratulations! You’ve successfully issued a credential, generated a zero-knowledge proof, and verified it with zkVerify. Next steps would be to explore more advanced topics like [Kurier](../02-getting-started/05-kurier.md) and [Domain Aggregation](../../architecture/04-proof-aggregation/01-overview.md)

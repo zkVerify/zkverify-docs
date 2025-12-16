@@ -65,7 +65,8 @@ Specify your inputs and generate proof on this page. Then save the proof in proo
 We will use the quickstart Noir Lang guide to generate an UltraHonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved
-- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup 
+
+- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup
 - Generating Noir UltraHonk proofs
 - Converting the proof, vk, and public inputs to required hex format using Bash
 - Verifying our proofs on zkVerify and getting proof receipts
@@ -74,16 +75,19 @@ We will use the quickstart Noir Lang guide to generate an UltraHonk proof and wi
 To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements:
 
 1. Install noirup by running the following command:
+
 ```bash
 curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
 ```
 
 2. Running noirup will install the latest version of Noir Toolkit
+
 ```bash
 noirup
 ```
 
 3. Install bbup by running the following command:
+
 ```bash
 curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
 ```
@@ -93,11 +97,13 @@ Our verifier is currently compatible with Noir proofs generated through `bb` and
 :::
 
 4. Install Barretenberg's Backend by running bbup command:
+
 ```bash
 bbup -v <version>
 ```
 
 5. Create hello_world noir project using the following command:
+
 ```bash
 nargo new hello_world
 ```
@@ -105,17 +111,19 @@ nargo new hello_world
 After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
 
 To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. You can either generate it manually, or by simply issuing the command `nargo check`. Populate the `Prover.toml` file with the inputs given below :
+
 ```toml
 x = "1"
 y = "2"
 ```
 
 Let's execute our hello_world circuit and get our witness value, which will be used to generate proofs and vk. Use the following command to execute:
+
 ```bash
 nargo execute
 ```
 
-Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. Noir's implementation of the UltraHonk prover offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is zero knowledge and thus, the verifier learns *nothing* about the secret input (witness). The latter is slightly faster, but the verifier can learn something about the witness from the proof. Use the following command to generate the required files, depending on which suits your specific needs:
+Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. Noir's implementation of the UltraHonk prover offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is zero knowledge and thus, the verifier learns _nothing_ about the secret input (witness). The latter is slightly faster, but the verifier can learn something about the witness from the proof. Use the following command to generate the required files, depending on which suits your specific needs:
 
 <Tabs groupId="ultrahonk-prover-options">
 <TabItem value="ZK" label="ZK">
@@ -192,13 +200,15 @@ ZKV_PUBS_HEX_FILE_PATH="./target/zkv_pubs.hex"
 }
 
 ```
+
 </TabItem>
 
 <TabItem value="ultraplonk" label="Ultraplonk">
 We will use the quickstart Noir Lang guide to generate an UltraPlonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved
-- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup 
+
+- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup
 - Generating Noir UltraPlonk proofs
 - Converting the proof and vk to required hex format using Noir-CLI
 - Verifying our proofs on zkVerify and getting proof receipts
@@ -246,6 +256,7 @@ nargo new hello_world
 After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
 
 To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below:
+
 ```toml
 x = "1"
 y = "2"
@@ -258,6 +269,7 @@ nargo execute
 ```
 
 Once we have generated our witness, we can generate proof and vk using the bb toolkit. Use the following command to generate the required files:
+
 ```bash
 # To generate proof
 bb prove -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target/proof
@@ -321,6 +333,7 @@ In order to build the application, go through the following steps:
     ```
 
   - Open the file `hasher/host/src/main.rs`. After all the imports add the following:
+
     ```rust
     use serde::Serialize;
     use std::{fs::File, io::Write};
@@ -480,17 +493,18 @@ fn main() {
 <Tabs groupId="sp1-zkv-sdk">
 <TabItem value="with-sdk" label="With sp1_zkv_sdk">
 
-
 After having obtained a compressed proof, it's necessary to post-process the proof (alongside the verification key, and public inputs) to obtain a `serialized_proof`, a `vk_hash`, and `public_values` as required by the SP1 verification pallet.
 The [`sp1_zkv_sdk`](https://github.com/zkVerify/sp1-verifier/tree/main/sp1-zkv-sdk) crate contains utility functions to perform the relevant conversions.
 
 Add these following dependencies below the `[dependencies]` tab in your Cargo.toml file of the script folder:
+
 ```toml
 bincode = { version = "2", features = ["serde"] }
 sp1-zkv-sdk = { git="https://github.com/zkVerify/sp1-verifier" }
 ```
 
 And then add the following imports to your `script/Cargo.toml`:
+
 ```rust
 use sp1_zkv_sdk::*; // for the `convert_to_zkv` and `hash_bytes` methods.
 use std::{fs::File, io::Write};
@@ -514,6 +528,7 @@ fn to_hex_with_prefix(bytes: &[u8]) -> String {
 ```
 
 Now, add these lines after the proof is generated by the SP1 prover sdk:
+
 ```rust
 // Convert proof and vk into a zkVerify-compatible proof.
 let SP1ZkvProofWithPublicValues {
@@ -542,6 +557,7 @@ let json_string = serde_json::to_string_pretty(&output)
 let mut file = File::create("proof.json").unwrap();
 file.write_all(json_string.as_bytes()).unwrap();
 ```
+
 </TabItem>
 <TabItem value="without-sdk" label="Without sp1_zkv_sdk">
 If you'd rather not depend on `sp1_zkv_sdk` in your application, the following sections show code snippets to perform the required conversions.
@@ -550,7 +566,8 @@ First you would need to add these following dependencies below the `[dependencie
 bincode = { version = "2", features = ["serde"] }
 ```
 
-Next we need to import all the important modules and create a structure to store our proof. Add these following lines after all the imports in ``script/Cargo.toml`` file:
+Next we need to import all the important modules and create a structure to store our proof. Add these following lines after all the imports in `script/Cargo.toml` file:
+
 ```rust
 use sp1_sdk::HashableKey;   // for the `hash_babybear` method.
 use std::{fs::File, io::Write};
@@ -630,6 +647,7 @@ let public_values = proof.public_values.to_vec();
 ### Storing the output
 
 Once we have generated all the proof artifacts, we will store it in a json file which will be used later while verification. Paste the following code snippet to store your artifacts into the required structure:
+
 ```rust
 let output = Output{
     proof: to_hex_with_prefix(&serialized_proof),
@@ -643,6 +661,7 @@ let json_string = serde_json::to_string_pretty(&output)
 let mut file = File::create("proof.json").unwrap();
 file.write_all(json_string.as_bytes()).unwrap();
 ```
+
 </TabItem>
 </Tabs>
 </TabItem>
@@ -651,6 +670,7 @@ file.write_all(json_string.as_bytes()).unwrap();
 We will use the quickstart guide by zkonduit in order to generate an EZKL proof, and we will then verify it on zkVerify. We will not be going into detail about EZKL's implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved
+
 - Installing EZKL and dependencies
 - Defining a model and exporting it to ONNX format
 - Generating EZKL proofs
@@ -661,23 +681,26 @@ We will use the quickstart guide by zkonduit in order to generate an EZKL proof,
 To start this tutorial, first we need to install the EZKL zkML library. For the purposes of this tutorial, we will be primarily using the Bash CLI. However, for defining our toy model, we will rely on Python3 and PyTorch. Other frameworks should also be compatible, as long as you are able to export your model into `.onnx` format. For alternatives, please consult the [EZKL documentation](https://docs.ezkl.xyz/getting-started/setup/) by zkonduit and the [ONNX documentation](https://onnx.ai/onnx/intro/). Use of a virtual environment is recommended. Run the following commands to install the requirements:
 
 1. Install ezkl by running the following command:
+
 ```bash
 curl https://raw.githubusercontent.com/zkonduit/ezkl/main/install_ezkl_cli.sh | bash
 ```
 
 2. Install ONNX:
+
 ```bash
 pip install onnx
 ```
 
 3. Install PyTorch:
+
 ```bash
 pip install torch torchvision
 ```
 
 4. Define your model, export it to `network.onnx`, and create an `input.json` file:
 
-*Important:* If you already have an exported model (`network.onnx`) and inputs file (`input.json`), you may skip this step completely.
+_Important:_ If you already have an exported model (`network.onnx`) and inputs file (`input.json`), you may skip this step completely.
 
 For illustration, let's create a Python script defining a simple model that learns the linear function $y = 2x + 1$. We will call it `export_model.py`.
 
@@ -724,7 +747,7 @@ print(f"Input data saved to {json_path}")
 Grant the script execution permissions by running `chmod +x export_model.py` from a Bash shell and then run it by issuing the command `python3 export_model.py`. After the script finishes, you should have two files, namely, `network.onnx` and `input.json`. We are now ready to start using `ezkl`.
 
 5. Generate Settings:
-The first command that you need to issue to `ezkl` is for generating the initial circuit parameters for your model. To inspect the model and create such a configuration file, run:
+   The first command that you need to issue to `ezkl` is for generating the initial circuit parameters for your model. To inspect the model and create such a configuration file, run:
 
 ```bash
 ezkl gen-settings -M network.onnx -O settings.json
@@ -734,7 +757,7 @@ This should generate `settings.json`.
 
 6. Calibrate Settings (Optional):
 
-This step is *optional*, but crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This step essentially fine-tunes your `settings.json` parameters to better match your actual model and data, which in turn helps prevent proofs from failing due to arithmetic errors. You will need to provide a `calibration.json` data file to the `calibrate-settings` command. The data in this file must match the (tensor) shape and structure of `input.json`, differing only in the specific values used (which should be representative, not dummy). `ezkl` can use this data to automatically tune and optimize the circuit settings (e.g., scales, constraints, and logrows). For the purpose of this tutorial, we will keep things simple and use `input.json` as our calibration data file. To commence calibration, run:
+This step is _optional_, but crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This step essentially fine-tunes your `settings.json` parameters to better match your actual model and data, which in turn helps prevent proofs from failing due to arithmetic errors. You will need to provide a `calibration.json` data file to the `calibrate-settings` command. The data in this file must match the (tensor) shape and structure of `input.json`, differing only in the specific values used (which should be representative, not dummy). `ezkl` can use this data to automatically tune and optimize the circuit settings (e.g., scales, constraints, and logrows). For the purpose of this tutorial, we will keep things simple and use `input.json` as our calibration data file. To commence calibration, run:
 
 ```bash
 ezkl calibrate-settings -D input.json -M network.onnx --settings-path settings.json
@@ -805,6 +828,7 @@ and you should now have an additional file called `vka.bytes`.
 You are almost set. The artifacts `proof.json` and `vka.bytes` contain all the information necessary for verifying the proof with zkVerify. The final step consists of extracting this data, and converting them to a format compatible for direct use with zkVerify.
 
 To accomplish this, issue the following Bash commands:
+
 ```bash
 # Convert vka to hexadecimal format
 tail -c +9 vka.bytes | xxd -p | tr -d '\n' | sed 's/.*/`{"vkBytes": "0x&"}`/' > zkv_vk.hex
@@ -815,13 +839,14 @@ jq -r '.proof[] | select(type == "number")' proof.json | awk 'BEGIN {printf "\"0
 # Convert instances (public inputs) to hexadecimal format
 echo "[$(jq -r '.pretty_public_inputs.outputs | flatten | map("\"\(.)\"") | join(", ")' proof.json)]" > zkv_pubs.hex
 ```
+
 </TabItem>
 
 </Tabs>
 
-After generating proofs, there are multiple ways in which you can verify it on [zkVerify](https://zkverify.io). The recommended way to verify proofs on zkVerify is by using the [Relayer Service](./05-relayer.md). You can verify proofs using anyone of the following :-
+After generating proofs, there are multiple ways in which you can verify it on [zkVerify](https://zkverify.io). The recommended way to verify proofs on zkVerify is by using the [Kurier](./05-kurier.md). You can verify proofs using anyone of the following :-
 
-1. Using [Relayer Service](./05-relayer.md)
+1. Using [Kurier](./05-kurier.md)
 2. Using [zkVerifyJS package](./06-zkverify-js.md)
 3. Using [Polkadot.js frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
 4. Using the [subxt](https://github.com/paritytech/subxt) rust crate
