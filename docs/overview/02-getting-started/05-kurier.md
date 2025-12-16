@@ -140,7 +140,7 @@ main();
 
 :::
 
-Once you have all the requirements imported, we will start by registering our verification key. We can do this by calling a `GET` endpoint named `register-vk` on the Kurier API. We will also need to create a params object with all the necessary information about the verification key, which will be sent in the API call. Once we register the verification key, we will store the `vkHash` in a json file which can be used in subsequent API verification calls.
+Once you have all the requirements imported, we will start by registering our verification key. We can do this by calling a `POST` endpoint named `register-vk` on the Kurier API. We will also need to create a params object with all the necessary information about the verification key, which will be sent in the API call. Once we register the verification key, we will store the `vkHash` in a json file which can be used in subsequent API verification calls.
 
 <Tabs groupId="register-vk">
 <TabItem value="circom" label="Circom">
