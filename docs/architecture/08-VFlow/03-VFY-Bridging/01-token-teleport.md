@@ -303,7 +303,7 @@ VFlow only supports 20byte addresses, identified by the `AccountKey20` type. It 
 
 Luckily, in case this mistake occurs, it is still possible to recover the funds, having the private key for the destination `AccountId32`. In this paragraph we show how to send the funds teleported to VFlow to another address on VFlow, using an XCM remote execution requested from zkVerify.
 
-To do so, we need to perform a two step operation: first, we create the extrinsic on VFlow to send funds to a given address through the EVM, and second we execute this extrinsic remotely from zkVerify. 
+To do so, we need to perform a two step operation: [first](#step-1-create-the-extrinsic-on-vflow), we create the extrinsic on VFlow to send funds to a given address through the EVM, and [second](#step-2-execute-remotely-from-zkverify) we execute this extrinsic remotely from zkVerify.
 
 ##### Step 1. Create the extrinsic on VFlow
 
@@ -337,3 +337,5 @@ Then from `Decode` move to `Submission`. You need to change the following parame
 
 Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the operation.
 
+Notice that the execution of the operation on the VFlow side is asynchronous with respect to zkVerify; you need to monitor the VFlow explorer to see your operation completing successfully.
+In the unlikely event that the the execution fails at any step, you can try to re-submit the extrinsic from zkVerify. In such a case, consider double checking the amount set at [step 1](#step-1-create-the-extrinsic-on-vflow) to leave enough extra funds to cover the cost of execution.
