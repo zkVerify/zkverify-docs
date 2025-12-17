@@ -25,11 +25,11 @@ The zkVerify Incentivized Testnet is structured around a series of Phases, each 
 
 
 ### What are the different Phases of the zkVerify Incentivized Testnet? 
-The testnet will be conducted in multiple phases. Phase 1 will commence on September 4, 2024, with an initial set of challenges, and new challenges will be introduced as the testnet progresses. 
+The testnet will be conducted in multiple phases. Phase 1 commenced on September 4, 2024, with an initial set of challenges, and new challenges are being introduced as the testnet progresses. 
 
 
 ### How will Rewards and Incentives work in the zkVerify Incentivized Testnet? 
-Successful challenge completion will be rewarded with points. More complex tasks will earn a higher point amount. A dedicated dApp will allow participants to connect their wallets and track their points and contributions.
+Successful challenge completion will be rewarded with points. More complex tasks will earn a higher point amount. A dedicated dApp allows participants to connect their wallets and track their points and contributions.
 
 
 ### What is the Submission Process for the zkVerify Incentivized Testnet? 

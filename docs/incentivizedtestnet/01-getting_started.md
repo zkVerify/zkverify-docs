@@ -2,40 +2,42 @@
 title: Getting started
 ---
 
-Welcome, intrepid explorer, to the frontier of blockchain innovation! The zkVerify Incentivized Testnet offers you a great opportunity to shape the future of privacy and scalability with ZK tech.
+The original zkVerify Incentivized Testnet concluded successfully in October 2025, with the completion of the final claim event.
+All reward distributions linked to the Volta Testnet and the ProofPoints program are now closed.
 
-### Why zkVerify?
-zkVerify provides rapid and inexpensive proof verification for any type of zero-knowledge proof. This enables dApp developers to implement the latest zk proving systems to generate their proofs, and zkVerify to verify them. Proofs are verified in seconds, enabling developers to create and deploy games, voting,identity, and interoperability systems that are either usable and economically viable.
+We are now entering a new phase of the Incentivized Testnet — running directly on mainnet.
+While we have kept the name for continuity, this phase no longer operates on a testnet environment.
+Instead, participants interact directly with the zkVerify mainchain and can accrue points by contributing to the network in production.
 
-### What is zkVerify?
-zkVerify is a dedicated modular proof verification layer that empowers blockchain applications with the power of zero-knowledge proofs. By offloading the complex proof verification process to a dedicated chain, we're paving the way for a new era of scalable, secure, and privacy-preserving digital world.
+### What This New Phase Is About
+The mainnet Incentivized Testnet focuses on supporting the growth of zkVerify by rewarding users who:
+- contribute proofs to the network through integrated partners
+- help strengthen decentralization by participating in ecosystem activities
+- support applications and protocols building on zkVerify
+- engage with governance and community-driven processes
 
-### Your mission: build the future
-The Incentivized Testnet is your chance to be a trailblazer through a series of challenges. Whether you're a seasoned developer or a passionate zero-knowledge enthusiast, the zkVerify Incentivized Testnet welcomes you with open arms. 
+Rewards are issued based on on-chain activity and partner-verified contributions, depending on the task category.
 
-Your contributions will be recognized and rewarded: you can earn points for your contributions and activities, with the most complex and impactful tasks earning the highest rewards.
+### If You Participated in the Previous Testnet
+All rewards related to the Volta Testnet and ProofPoints have already been distributed.
+- The final claim window opened in October 2025 and closed few months after.
+- No further actions are required for past participants.
+- Historical data remains available for transparency but is no longer updated.
 
-Even better, the true reward lies in the lasting impact you'll have on the industry. Your work will not only earn you points but also cement your place as a pioneer in zero-knowledge and decentralized technologies.
+### How to Participate Now
+Participation in this new phase happens directly on mainnet.
 
-### Why participate?
-By participating, you can:
+You can get started by:
+1. Exploring the tasks avaialable at [points.zkverify.io](https://points.zkverify.io)
+2. Following the announcements on our website or Discord or X for new tasks and campaigns.
 
-- Create dApps with zk features, excellent performance, and low cost 
-- Contribute to the robustness and advancement of the zkVerify ecosystem
-- Earn points and potentially receive future rewards
-- Gain hands-on experience with cutting-edge blockchain and ZK technology
-- Collaborate with a passionate community of developers and enthusiasts 
+### Why We Still Call It “Incentivized Testnet”
+Although the environment is now mainnet, the program continues the mission of the original Incentivized Testnet:
+- onboarding new developers
+- testing and hardening the proof ecosystem
+- rewarding early contributors 
+- growing adoption of zkVerify’s verification engine
 
-Ready to embark on this exciting journey? Let's get started!
-
-### For existing zkApps and zkRollups
-Are you an existing zkApp or zkRollup looking to offset your ZK proof verification costs? We want to hear from you too!
-
-Express your interest through this [form](https://forms.gle/rTLYKdskVRXxGRGz9).
-Briefly describe your current project and how you plan to integrate with zkVerify.
-
-We'll contact you for the next phase of our incentivized testnet.
-
-Points and incentives are also allocated for established projects joining our ecosystem.
+The name reflects the continuity of the initiative while acknowledging that zkVerify is now fully live.
 Remember, this is your chance to be at the forefront of zero-knowledge technology. We can't wait to see what you'll build with zkVerify! 
 
