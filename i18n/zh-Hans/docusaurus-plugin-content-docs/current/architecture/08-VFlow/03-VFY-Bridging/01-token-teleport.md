@@ -1,178 +1,130 @@
 ---
-title: 在 zkVerify 平行链间 Teleport 代币
+title: 在 zkVerify 平行链间传送 VFY 代币
 ---
 
-本指南提供在 zkVerify 平行链间 Teleport 代币的步骤。开始前请[正确配置钱包并可与 Polkadot-JS 交互](docs/overview/02-getting-started/01-connect-a-wallet.md)。
+本指南分步讲解如何在 zkVerify 平行链间传送 VFY。开始前请先[设置好钱包并能与 Polkadot-JS 交互](docs/overview/02-getting-started/01-connect-a-wallet.md)。
 
 ## XCM Teleport
 
-**teleport** 是一种 XCM 指令，用于在 zkVerify 中继链与系统平行链之间转移资产。
-
-资产（VFY）Teleport 分两阶段执行：中继链销毁、平行链铸造。
+**Teleport** 是一种 XCM 指令，用于在 zkVerify 中继链与 System Parachain 间转移资产。VFY 传送分两步执行：中继链烧毁、目标平行链铸造。
 
 ![alt_text](./img/xcm-asset-teleportation.png)
 
-[Image Source](https://wiki.polkadot.network/learn/learn-xcm-usecases/)
+[图片来源](https://wiki.polkadot.network/learn/learn-xcm-usecases/)
 
-本指南示范 VFY 在 zkVerify（Substrate）与 VFlow（EVM）间 Teleport 的双向流程。
+本文用 teleport 在 zkVerify（Substrate）与 VFlow（EVM 兼容）间双向传送 VFY。更多 XCM 资料见[此处](https://polkadot.com/blog/xcm-the-cross-consensus-message-format/)。
 
-更多 XCM 说明见[此处](https://polkadot.com/blog/xcm-the-cross-consensus-message-format/)。
+### zkVerify → VFlow（PolkadotJS-UI）
 
-### From zkVerify to VFlow via PolkadotJS-UI
-
-From PolkadotJS navigate to `Developer-> Extrinsics` and select the `xcmPallet` pallet and the `teleportAssets` extrinsic:
+在 PolkadotJS 进入 `Developer -> Extrinsics`，选择 `xcmPallet` 与 `teleportAssets`：
 
 ![alt_text](./img/extrinsic_relay.png)
 
-You can see that we need to supply 4 parameters: `dest`, `beneficiary`, `assets` and `feeAssetItem`.
-You can either use the `Quick Teleport Guide` or follow starting from the `Destination` section.
+需填 4 个参数：`dest`、`beneficiary`、`assets`、`feeAssetItem`。可用“快捷传送指南”或从 `Destination` 起按步骤。
 
-#### Quick Teleport Guide
+#### 快捷传送指南
 
-Go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
+进入 `Developer -> Extrinsics -> Decode`，粘贴：
 
 `0x8c0105000100040500010300000000000000000000000000000000000000000005040000000000000000`
 
-Then from `Decode` move to `Submission`
+从 `Decode` 切到 `Submission`，修改：
 
-You need to change the following parameters:
+- `beneficiary -> V5 -> X1 -> AccountKey20 -> key: [u8, 20]`：VFlow 接收方 EVM 地址
+- `assets -> V5 -> 0 -> id -> fun -> Fungible: Compact<u128>`：传送数量（18 位精度）
 
-- `beneficiary -> V5 -> X1 -> AccountKey20 -> key: [u8, 20]`: with the EVM address of the receiver on VFlow
-- `assets -> V5 -> 0 -> id -> fun -> Fungible: Compact<u128>`: with the amount of VFY tokens you want to teleport to VFlow (specified with 18 digits)
-
-Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the teleport.
+提交并签名完成传送。
 
 #### Destination
 
 ![alt_text](./img/dest_relay.png)
 
-This parameter specifies the target chain where the assets are being teleported. Let's select:
+目标链设置：
 
-- For `dest: XcmVersionedLocation` select `V5` from the drop-down menu. New fields will pop-up. Let's set:
-    - For `parents` input `0`
-    - For `interior` select `X1` from the drop-down menu. Then new fields will appear. Let's set:
-        - For `0` select `Parachain` from the drop-down menu
-        - We need finally to insert the ID of the VFlow `Parachain`, which is `1`.
+- `dest: XcmVersionedLocation` 选 `V5`；`parents`=0；`interior` 选 `X1`；`0` 选 `Parachain`，填 VFlow Parachain ID `1`。
 
 #### Beneficiary
 
 ![alt_text](./img/beneficiary_relay.png)
 
-This specifies the account that will receive the assets on the destination chain. Let's set:
+接收账户设置：
 
-- For `beneficiary: XcmVersionedLocation` select `V5` from the drop-down menu. New fields will pop-up. Let's set:
-    - For `parents` input `0`
-    - For `interior` input `X1` from the drop-down menu. Then new fields will appear. Let's set:
-        - For `0` select `AccountKey20` from the drop-down menu
-        - For `key` input the address of the Ethereum account you want to receive the assets on VFlow. 
+- `beneficiary: XcmVersionedLocation` 选 `V5`；`parents`=0；`interior` 选 `X1`；`0` 选 `AccountKey20`；`key` 填在 VFlow 收款的以太坊地址。
 
 #### Assets
 
 ![alt_text](./img/assets_relay.png)
 
-This defines the actual asset(s) and the amount(s) you are sending. Let's set:
+资产与金额：
 
-- For `assets: XcmVersionedAssets` select `V5` from the drop-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
-    - For `parents` input `0`
-    - For `interior` select  `Here` from the drop-down menu. Then new fields will appear. Let's set:
-        - For `fun` select `Fungible` from the drop-down menu
-        - For `Fungible` input the amount of assets you want to send.
-        - Note: on-chain, amounts use 18 decimals. So if you want 1 VFY, you need to input 1 * 10^18 = `1000000000000000000`.
-          - Example:
-            - 1 VFY → `1000000000000000000`
-            - 0.5 VFY → `500000000000000000`
+- `assets: XcmVersionedAssets` 选 `V5`，点 `Add Item`；`parents`=0；`interior` 选 `Here`；`fun` 选 `Fungible`，填金额。
+- 数量按 18 位精度：1 VFY = `1000000000000000000`；0.5 VFY = `500000000000000000`。
 
 #### Fee Asset Item
 
-This is simply the index of the asset in the `assets` array that will be used to pay for the XCM teleport fee. We only have a single asset (VFY) and we are using that one, so we set it to `0`.
+指定费用资产索引，只有 VFY，填 `0`。
 
-#### Submitting the Extrinsic
+#### 提交 Extrinsic
 
-Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the teleport.
+点击 `Submit Transaction`，再 `Sign and Submit` 完成。
 
-### From VFlow to zkVerify via PolkadotJS-UI
+### VFlow → zkVerify（PolkadotJS-UI）
 
-**Note:** if you want to bridge tokens back that you previously sent to an address living in Metamask, you must first export your private key from Metamask. You will then need to import this key into a wallet with full EVM and Substrate support, such as SubWallet (or Talisman).
-
-To setup a SubWallet or Talisman wallet please refer to the [documentation to setup a wallet ready to interact with Polkadot-JS](docs/overview/02-getting-started/01-connect-a-wallet.md). 
+**注意：** 若桥回 Metamask 地址的代币，需先导出私钥，再导入支持 EVM+Substrate 的钱包（SubWallet/Talisman）。设置参考[钱包文档](docs/overview/02-getting-started/01-connect-a-wallet.md)。
 
 ---
 
-The process here is exactly a mirror of what we did on zkVerify side.
-
-The first thing you must do, is to connect to the VFlow parachain. Supposed you're already connected to zkVerify, click on the zkVerify logo top left of the screen, scroll down and find `VFlow`, then click on it, scroll up again and click `Switch` to connect. 
-
-In the case multiple EVM accounts are detected, you can select the beneficiary by clicking on the current selected account `0x...` (under `free balance`), and choose from the drop-down menu. 
+流程与上文镜像。先切换到 VFlow parachain：如当前在 zkVerify，点左上徽标，下滑选 `VFlow`，再点 `Switch`。如有多个 EVM 账户，可在 `free balance` 下拉选择受益人。
 
 ![alt_text](./img/select_EVM_address.png)
 
-Now that you're connected, from PolkadotJS navigate to `Developer-> Extrinsics` and select the `zkvXcm` pallet and the `teleportAssets` extrinsic.
+在 `Developer -> Extrinsics` 选择 `zkvXcm` 与 `teleportAssets`：
 
 ![alt_text](./img/extrinsic_para.png)
 
-Like before we need to supply 4 parameters: `dest`, `beneficiary`, `assets` and `feeAssetItem`.
-You can either use the `Quick Teleport Guide` or follow starting from the `Destination` section.
+同样 4 个参数，可用快捷指南或按下文步骤。
 
+#### 快捷传送指南
 
-#### Quick Teleport Guide
-
-Go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
+`Developer -> Extrinsics -> Decode` 粘贴：
 
 `0x1f010501000500010100486b90dbf0cb9bfe92b6ba7d4942019a17ada772ab5fa9258ac3df821daca54d050401000013000064a7b3b6e00d00000000`
 
-You need to change the following parameters:
+修改：
+- `beneficiary -> V5 -> X1 -> AccountId32 -> id: [u8, 32]`：zkVerify 收款地址
+- `assets -> V5 -> 0 -> id -> fun -> Fungible: Compact<u128>`：传送数量（18 位精度）
 
-- `beneficiary -> V5 -> X1 -> AccountId32 -> id: [u8, 32]`: with the address of the receiver on zkVerify
-- `assets -> V5 -> 0 -> id -> fun -> Fungible: Compact<u128>`: with the amount of VFY tokens you want to teleport to zkVerify (specified with 18 digits)
-
-Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the teleport. 
+提交并签名完成传送。
 
 #### Destination
 
-Let's start with the `dest` parameter:
-
 ![alt_text](./img/dest_para.png)
 
-- For `dest: XcmVersionedLocation` select `V5` from the drop-down menu. New fields will pop-up. Let's set:
-    - For `parents` input `1`
-    - For `interior` select `Here` from the drop-down menu. Then new fields will appear. Let's set:
+- `dest: XcmVersionedLocation` 选 `V5`；`parents`=1；`interior` 选 `Here`。
 
 #### Beneficiary
 
-Let's set the `beneficiary` parameter as follows:
-
 ![alt_text](./img/beneficiary_para.png)
 
-- For `beneficiary: XcmVersionedLocation` select `V5` from the drop-down menu. New fields will pop-up. Let's set:
-    - For `parents` input `0`
-    - For `interior` select `X1` from the drop-down menu. Then new fields will appear. Let's set:
-        - For `0` select `AccountId32` from the drop-down menu
-        - For `id` input the address of the zkVerify account you want to receive the assets on zkVerify.
+- `beneficiary: XcmVersionedLocation` 选 `V5`；`parents`=0；`interior` 选 `X1`；`0` 选 `AccountId32`；`id` 填 zkVerify 地址。
 
 #### Assets
 
-Let's set the `assets` parameter as follows:
-
 ![alt_text](./img/assets_para.png)
 
-- For `assets: XcmVersionedAssets` select `V5` from the drop-down menu. Click on the `Add Item` button. New fields will pop-up. Let's set:
-    - For `parents` input `1`
-    - For `interior` select `Here` from the drop-down menu. Then new fields will appear. Let's set:
-        - For `fun` select `Fungible` from the drop-down menu
-        - For `fun` input the amount of assets you want to send. e.g. to send 1 VFY , remembering that the token has 18 decimals, it's: `1000000000000000000`.
+- `assets: XcmVersionedAssets` 选 `V5`，`Add Item`；`parents`=1；`interior` 选 `Here`；`fun` 选 `Fungible`，填金额（18 位小数，例如 1 VFY = `1000000000000000000`）。
 
 #### Fee Asset Item
 
-This is simply the index of the asset in the `assets` array that will be used to pay for the XCM teleport fee. We only have a single asset (VFY) and we are using that one, so we set it to `0`.
+费用资产索引，填 `0`。
 
-#### Submitting the extrinsic
+#### 提交 extrinsic
 
-Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude our teleport.
+点击 `Submit Transaction`，再 `Sign and Submit` 完成。
 
-### From VFlow to zkVerify via EVM Tooling
+### VFlow → zkVerify（EVM 工具）
 
-We've included a precompile contract in VFlow that allows you to teleport VFY tokens to zkVerify directly from your standard EVM tools (like Metamask).
-Contract is deployed at address `2060`. Here is an example script leveraging `web3` library:
+VFlow 提供预编译合约，可用常规 EVM 工具直接传送 VFY 到 zkVerify，部署地址 `2060`。示例（web3）：
 
 ```javascript
 const { Web3 } = require('web3');
@@ -244,98 +196,91 @@ async function testTeleport() {
 }
 
 testTeleport();
-
 ```
 
-A couple of important notes:
-- In this case, the `amount` to be sent, doesn't require to specify 18 decimals.
-- The `destinationAccount` is an hex public key of zkVerify. While from PolkadotJS-UI you can use the AccountID and PolkadotJS automatically performs the conversion to the correct format, in this case you need to do it manually.
-From PolkadotJS navigate to `Developer-> Utilities` and select the `Convert Address` tab:
+注意事项：
+- 这里 `amount` 不需要手动加 18 位小数。
+- `destinationAccount` 是 zkVerify 的公钥 hex。在 PolkadotJS-UI 可直接用 AccountID 自动转换，这里需手动：在 PolkadotJS `Developer-> Utilities` 选 `Convert Address` 标签：
 
 ![alt_text](./img/convert_address.png)
 
-Just copy paste the account id in the `address to convert` field to automatically get the public key to use as `destinationAccount`.
+把 account id 粘贴到 `address to convert` 字段即可得到 `destinationAccount` 公钥。
 
-### Teleport via zkv-xcm-library
-We've developed a Typescript library, called [zkv-xcm-library](https://github.com/zkVerify/zkv-xcm-library?tab=readme-ov-file#zkverify-xcm-library), in order to simplify the creation of such XCM teleport extrinsics and for ease of integration with your app/frontend.
-Check the readme for installation and usage instructions.
+### 通过 zkv-xcm-library 传送
 
-### A Note on XCM Teleport Fees
+我们开发了 TS 库 [zkv-xcm-library](https://github.com/zkVerify/zkv-xcm-library?tab=readme-ov-file#zkverify-xcm-library)，简化 XCM teleport extrinsic 构造，便于应用/前端集成。安装与用法见 README。
 
-Since an XCM message is executed both on the Relay Chain and Parachain side, both sender and receiver need to pay for execution fees. However:
-- The fees charged to the sender **are deducted directly from its main balance**. This happens immediately when the transaction is included in a block, **before the teleport's burn logic is even executed**. So, if after fee deduction your remaining balance is not enough to cover the burn logic, the transaction will fail.
-- The fees charged to the receiver **are deducted from the amount being teleported**. This happens when the XCM message is executed on the Parachain side.
+### 关于 XCM Teleport 手续费
 
-### Deep-Dive: XCM Parameters Explanation
+XCM 消息在中继链和平行链执行，发送方和接收方都需要支付费用：
+- 发送方费用**直接从主余额扣除**，交易进块即扣，**在 burn 逻辑之前**。扣费后余额不足会导致失败。
+- 接收方费用**从传送金额中扣除**，在平行链侧执行 XCM 时扣。
 
-Let's provide a brief explanation here of the complex XCM message construction and parameters we've seen before:
-- `dest` provides details about the destination of the message (we need to select the XCM version currently being used. V5 is the most-up-to-date at the time of writing).
-    - `parents` tells the XCM executor that the following `interior` is relative to the chain itself. 
+### 深入：XCM 参数说明
 
-    - `interior` describes the rest of the path, the specific, step-by-step directions to the final destination. It defines a sequence of "hops" or _Junctions_. Each junction is a specific location or entity within a consensus system.
-        - The interior is structured as a container, usually X1, X2, X3, etc. where X stands for the number of Junctions (hops) in the path.
-            - Here: Equivalent to X0, no junctions.
-            - X1: A path with one junction.
-            - X2: A path with two junctions.
-            - ...and so on, up to X8.
+简要解释 XCM 消息的构造与参数：
+- `dest`：消息目标（需选择当前使用的 XCM 版本，写作时 V5 最新）。
+  - `parents`：表明后续 `interior` 相对于链本身。
+  - `interior`：到目标的路径，包含一系列 “跳”（Junction）。容器通常为 X1、X2、X3…，X 表示路径中 Junction 数量。
+    - X0：无跳。
+    - X1：一跳。
+    - X2：两跳。
+    - …一直到 X8。
 
-You could think of it like a File System where: 
-- The root directory is the Relay Chain
-- There are as many sub-directories as Parachains.
-- In each directory there is a list of consensus entities (accounts, pallets, etc.) living in that Relay Chain/Parachain.
+类比文件系统：
+- 根目录 = 中继链
+- 子目录 = 各 Parachain
+- 目录内有账户、pallet 等共识实体
 
 ![alt_text](./img/fs_metaphor.png)
 
-So setting `parents = 0` means it's the current location (in bash it would be `.`) while `parents = 1` means it's the parent location (in bash it would be `..`).
+`parents = 0` 表示当前链（类似 `.`），`parents = 1` 表示父链（类似 `..`）。
 
-Setting `interior = X1 { Parachain: 3 }` means essentially specifying `./parachain_3`;
-Instead setting `interior = X2 { Parachain: 3, AccountKey20: 0x111 }` means essentially specifying `./parachain_3/account_111`
+设置 `interior = X1 { Parachain: 3 }` 类似指定 `./parachain_3`；设置 `interior = X2 { Parachain: 3, AccountKey20: 0x111 }` 类似指定 `./parachain_3/account_111`。
 
-Putting it all together, in this case, we are initiating the teleport from the Relay Chain (so `parents` is 0, since we are already on the Relay Chain) to the Parachain with id `1`, which is *one hop* away from the parent (so `interior` is `X1` with `Parachain` set to `1`).
+综上，本例从中继链发起（`parents=0`），到 ID 为 `1` 的 Parachain，属于一步之遥（`interior` 设为 `X1`，`Parachain`=1）。
 
-### Possible Errors and Recovery
+### 常见错误与补救
 
-In this section we list some known possible user errors, and related recovery opportunities.
+本节列出一些已知用户错误及补救方式。
 
-#### Teleporting funds to AccountId32 addresses on VFlow
+#### 将资金传到 VFlow 的 AccountId32
 
-VFlow only supports 20byte addresses, identified by the `AccountKey20` type. It is therefore a mistake, and should *never* be done, to teleport funds to an `AccountId32` address on VFlow. Unfortunately the PolkadotJS UI is generic and does not prevent users from submitting erroneous extrinsics.
+VFlow 仅支持 20 字节地址（`AccountKey20`），不应向 `AccountId32` 传送。PolkadotJS UI 泛用，无法阻止错误 extrinsic。
 
-Luckily, in case this mistake occurs, it is still possible to recover the funds, having the private key for the destination `AccountId32`. In this paragraph we show how to send the funds teleported to VFlow to another address on VFlow, using an XCM remote execution requested from zkVerify.
+若发生此错误且你持有目标 `AccountId32` 的私钥，仍可恢复资金：通过 zkVerify 发起远程执行，把传送到 VFlow 的资金再转到正确地址。
 
-To do so, we need to perform a two step operation: [first](#step-1-create-the-extrinsic-on-vflow), we create the extrinsic on VFlow to send funds to a given address through the EVM, and [second](#step-2-execute-remotely-from-zkverify) we execute this extrinsic remotely from zkVerify.
+需两步：[第一步](#step-1-create-the-extrinsic-on-vflow) 在 VFlow 创建通过 EVM 转账的 extrinsic；[第二步](#step-2-execute-remotely-from-zkverify) 在 zkVerify 远程执行该 extrinsic。
 
 ##### Step 1. Create the extrinsic on VFlow
 
-**On the VFlow explorer**, go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
+**在 VFlow explorer**，进入 `Developer -> Extrinsics -> Decode`，粘贴：
 `
 0x2c0001503403000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 `
-Then from `Decode` move to `Submission`. You need to change the following parameters:
+然后切到 `Submission`。需要修改：
 
-- `Call: H160`: with the address of the receiver on VFlow
-- `value: u256`: with the amount of VFY tokens you want to send to another VFlow address (specified with 18 digits). **NOTICE**: this cannot be the full balance of the address, because some funds are needed to complete the execution of the XCM extrinsic. For example, if you follow the steps in this document, we reserve 0.1VFY for the execution. This is an overestimation, and the unused part will be reimbursed to the account specified in the next step.
+- `Call: H160`：填 VFlow 上的接收地址
+- `value: u256`：填要发送的 VFY 数量（18 位精度）。**注意**不能填满余额，需要预留执行 XCM extrinsic 的资金。例如本文步骤中预留 0.1 VFY（高估值，未用部分会退到下一步指定账户）。
 
-Once you set the parameters correctly, **do not** submit the transaction, but rather click on the UI button to copy the encoded call data.
+设置好后**不要**提交交易，点击 UI 按钮复制编码的 call data。
 
 ![vflow_eth_send](./img/vflow_eth_send.png)
 
 ##### Step 2. Execute remotely from zkVerify
 
-**On the zkVerify explorer**, go to `Developer -> Extrinsics -> Decode` and copy/paste the following hex:
-
+**在 zkVerify explorer**，进入 `Developer -> Extrinsics -> Decode`，粘贴：
 `
 0x8c000500010004051400040100001300008a5d78456301130100001300008a5d784563010006010000140d0100000103000000000000000000000000000000000000000000
 `
 
-Then from `Decode` move to `Submission`. You need to change the following parameters:
+然后切到 `Submission`。需要修改：
 
-- `message -> Transact -> call: XcmDoubleEncoded`: with the encoded call data that you copied in the previous step
-- `message -> DepositAsset -> AccountKey20 -> key: [u8; 20]`: with the address of the receiver of the reimbursement mentioned in the previous step, on VFlow
+- `message -> Transact -> call: XcmDoubleEncoded`：填上一步复制的编码 call data
+- `message -> DepositAsset -> AccountKey20 -> key: [u8; 20]`：填退款接收地址（VFlow）
 
 ![zkv_xcm_send](./img/zkv_xcm_send.png)
 
-Click on `Submit Transaction` and then `Sign and Submit` on the new window that will appear to conclude the operation.
+点击 `Submit Transaction`，再 `Sign and Submit` 完成操作。
 
-Notice that the execution of the operation on the VFlow side is asynchronous with respect to zkVerify; you need to monitor the VFlow explorer to see your operation completing successfully.
-In the unlikely event that the the execution fails at any step, you can try to re-submit the extrinsic from zkVerify. In such a case, consider double checking the amount set at [step 1](#step-1-create-the-extrinsic-on-vflow) to leave enough extra funds to cover the cost of execution.
+VFlow 侧的执行相对 zkVerify 是异步的，需要在 VFlow explorer 观察执行是否成功；若任一步失败，可尝试从 zkVerify 重新提交 extrinsic，并在[步骤 1](#step-1-create-the-extrinsic-on-vflow) 预留足够费用以覆盖执行成本。
