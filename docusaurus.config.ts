@@ -2,6 +2,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import remarkMath from 'remark-math';
+import { visit } from 'unist-util-visit';
 import rehypeKatex from 'rehype-katex';
 import 'dotenv/config';
 
@@ -22,7 +23,15 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'zh-Hans'],
+    localeConfigs: {
+      en: {
+        label: 'English',
+      },
+      'zh-Hans': {
+        label: '简体中文',
+      },
+    },
   },
 
   customFields: {
@@ -35,7 +44,18 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          remarkPlugins: [remarkMath],
+          // Default missing code fences to bash so Prism can highlight
+          remarkPlugins: [
+            remarkMath,
+            () =>
+              (tree: unknown) => {
+                visit(tree as any, 'code', (node: any) => {
+                  if (!node.lang || node.lang.trim() === '') {
+                    node.lang = 'bash';
+                  }
+                });
+              },
+          ],
           rehypePlugins: [rehypeKatex],
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -108,6 +128,10 @@ const config: Config = {
           label: 'GitHub',
           position: 'right',
         },
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
       ],
     },
     footer: {
@@ -117,7 +141,20 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['solidity', 'javascript', 'bash', 'rust'],
+      // include all languages used in code fences for proper highlighting
+      additionalLanguages: [
+        'solidity',
+        'javascript',
+        'typescript',
+        'json',
+        'toml',
+        'bash',
+        'rust',
+        'tsx',
+        'jsx',
+        'yaml',
+      ],
+      defaultLanguage: 'javascript',
     },
     algolia: {
       appId: process.env.ALGOLIA_APP_ID,

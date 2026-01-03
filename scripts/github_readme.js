@@ -1,5 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+
+// Allow skipping remote fetch when offline or during local checks
+if (process.env.SKIP_README === '1') {
+  console.log('SKIP_README enabled, skipping remote README fetch.');
+  process.exit(0);
+}
+
 const axios = require('axios');
 
 const remoteReadmes = [

@@ -1,5 +1,6 @@
 ---
 title: zkVerify Mainchain API
+slug: /architecture/mainchain/mainchain_api
 ---
 
 # zkVerify Mainchain API

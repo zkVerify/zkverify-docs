@@ -12,23 +12,23 @@ Follow the steps below:
 
 - In the workspace `Cargo.toml` file (the one located at repository root) modify the `[workspace.dependencies]` section appending the following line just after all the other `pallet-*-verifier` entries:
 
-  ```
+  ```toml
   pallet-foo-verifier = { path = "verifiers/foo", default-features = false }
   ```
 
 - In the runtime config file `runtime/Cargo.toml` modify the `[dependencies]` section appending the following line just after all the other `pallet-*-verifier` entries:
 
-  ```
+  ```toml
   pallet-foo-verifier = { workspace = true }
   ```
 
   Then modify the `[features]` section, `runtime-benchmarks` and `std` entries, appending the following lines at the corresponding ends:
 
-  ```
+  ```toml
   "pallet-foo-verifier/runtime-benchmarks",
   ```
 
-  ```
+  ```toml
   "pallet-foo-verifier/std",
   ```
 

@@ -1,0 +1,17 @@
+{
+  "navbar.intro": {
+    "message": "🚀 简介"
+  },
+  "navbar.build": {
+    "message": "🛠️ 构建"
+  },
+  "navbar.node": {
+    "message": "⚙️ 质押 / 节点运营"
+  },
+  "navbar.testnet": {
+    "message": "🎖️ 激励测试网"
+  },
+  "navbar.links": {
+    "message": "🌍 实用链接 / 指南"
+  }
+}
