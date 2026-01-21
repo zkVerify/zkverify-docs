@@ -27,3 +27,6 @@ yarn-error.log*
 yarn.lock
 .pnp.cjs
 .pnp.loader.mjs
+.opencode_private/
+docs/resources/
+.opencode/

@@ -72,6 +72,9 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+  markdown: {
+    mermaid: true,
+  },
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
@@ -82,6 +85,7 @@ const config: Config = {
     },
   ],
 
+  themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
     // Replace with your project's social card
     image: 'img/meta-image.png',
