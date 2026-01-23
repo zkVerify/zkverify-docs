@@ -47,6 +47,7 @@ For the addresses of the contracts we have deployed on all the destination chain
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
 | 2         | Base              | Bot         |
+| 3         | Horizen           | Bot         |
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 | Domain ID | Chain             | Mechanism   |
