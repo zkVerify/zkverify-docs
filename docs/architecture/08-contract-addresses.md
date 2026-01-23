@@ -10,6 +10,7 @@ import TabItem from '@theme/TabItem';
 | Network                                                     | Contract Address                                                                                                                                                                                                             | Chain ID                                                     
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |  ----------------------------------------------------------- 
 | Base | [`Contract`](https://basescan.org/address/0x5596aE76a636483361C9e777C03091BAEDcEa1C6) [`Proxy`](https://basescan.org/address/0xCb47A3C3B9Eb2E549a3F2EA4729De28CafbB2b69)                         | 8453 |
+| Horizen | [`Proxy`](https://horizen.calderaexplorer.xyz/address/0xCb47A3C3B9Eb2E549a3F2EA4729De28CafbB2b69)                         | 26514 |
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 | Network                                                     | Contract Address                                                                                                                                                                                                             | Chain ID                                                     
