@@ -86,7 +86,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import path from "path";
 
-const API_URL = "https://api-testnet.kurier.xyz";
+const API_URL = "https://api-testnet.kurier.xyz/api/v1";
 
 export default async function handler(
   req: NextApiRequest,
