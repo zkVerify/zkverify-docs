@@ -191,7 +191,7 @@ Arguments:
 - `queue_size`: Optional maximum number of pending aggregations (defaults to runtime configuration)
 - `aggregate_rules`: Security rules for controlling who can aggregate
 - `proof_rules`: Security rules for controlling who can submit proofs
-- `delivery`: Parameters for delivery (destination and price) At the moment destination can only be either None or Hyperbridge
+- `delivery`: Parameters for delivery (destination and price)
 - `delivery_owner`: The delivery owner, as discussed in the previous section (defaults to origin).
 
 #### [holdDomain](#holddomain)

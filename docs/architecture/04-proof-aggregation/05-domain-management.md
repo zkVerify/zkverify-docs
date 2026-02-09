@@ -36,8 +36,6 @@ For each of these domains, we are providing the following guarantees:
 
 - Whenever an aggregation is ready to be published, or according to other internal policies (e.g. a timeout), our Aggregator Service will take care of calling the aggregate extrinsic
 - For domains with Mechanism “Bot”, we are running an off-chain relayer that listens to all the new Aggregation Receipt events, and takes care of publishing the receipt on the specified destination chain
-- For domains with Hyperbridge support, we are running our own relayers to the Hyperbridge chain and we are taking care of the costs (for now).
-
 [Please find the list below](#listdomains)
 
 For the addresses of the contracts we have deployed on all the destination chains, please refer to the appropriate [section](../08-contract-addresses.md) of the docs.
@@ -54,11 +52,9 @@ For the addresses of the contracts we have deployed on all the destination chain
 | --------- | ----------------- | ----------- |
 | 175       | Horizen Testnet   | Bot         |
 | 0         | Ethereum Sepolia  | Bot         |
-| 1         | Ethereum Sepolia  | Hyperbridge |
 | 2         | Base Sepolia      | Bot         |
 | 3         | Optimism Sepolia  | Bot         |
 | 4         | Arbitrum Sepolia  | Bot         |
-| 5         | Arbitrum Sepolia  | Hyperbridge |
 | 56        | EDU Chain Testnet | Bot         |
 </TabItem>
 </Tabs>
