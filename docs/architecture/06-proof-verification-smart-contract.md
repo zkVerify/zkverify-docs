@@ -50,17 +50,6 @@ function submitAggregationBatchByDomainId(
 
 It’s a bit cheaper than calling submitAggregation externally multiple times, as you’ll pay the initial gas fee only one time.   Additionally, it avoids edge cases related to Ethereum nonce management.
 
-### onAccept Method (submit aggregation for Hyperbridge only)
-
-This method receives hyperbridge message containing an aggregation and is defined by Hyperbridge interface
-
-```solidity
-function onAccept(IncomingPostRequest memory incoming) external override onlyHost
-```
-
-- Parse and unpacks message payload to get domainId, aggregationId, and proofsAggregation
-- Invokes the `registerAggregation` internal method.
-
 ### Verify Proof Aggregation Method
 
 This method is used by proof submitters’ contracts to verify that their proof has been attested by a published aggregation.
