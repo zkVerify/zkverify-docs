@@ -3,30 +3,30 @@ title: "2. ZK Proof Lifecycle (What Happens From Different Roles’ Perspectives
 sidebar_position: 1
 ---
 
-The value of this chapter is not memorizing terms, but knowing “which segment is broken” when you troubleshoot. Proof generation, verification, aggregation, and on-chain consumption often get mixed together, and you end up fixing the wrong part. Once the lifecycle is straightened out, boundaries become clear.
+这章的价值不在于记术语，而是让你在排错时知道“问题在哪一段”。proof 生成、验证、聚合和链上消费经常被混成一团，一旦出错你会改错地方。把生命周期拉直之后，工程边界就清楚了。
 
-Think of it like a package sorting line: each station does one step, and the output of one station is the input of the next. You don’t need to control the whole line, but you must know which segment you own and where the handoff is.
+把它想成快递分拣线会更直观：每一站只负责自己那一步，前一站的产物是后一站的输入。你不需要同时控制整条线，但你必须知道自己负责哪一段、交接点在哪里。
 
-System facts: proof generation happens off-chain, while verification usually happens on-chain. The generation process includes “compile to intermediate representation → produce proof offline.” Verification is on-chain and typically much faster than proving. That’s why Quickstart showed verification but not compile or witness.
+从系统事实看，proof 生成发生在链下，验证通常发生在链上。生成过程包含“编译到中间表示 → 离线产出 proof”，验证阶段是链上验证并给出结果，而且验证通常比 proving 快得多。这也是你在 Quickstart 里只看到验证，而没有看到编译和 witness 的原因。
 
 ```mermaid
 flowchart LR
-  A["Compile to IR"] --> B["Prove (off-chain)"]
-  B --> C["Verify (on-chain)"]
-  C --> D{Aggregate?}
-  D -->|optional| E["Receipt (Merkle root)"]
+  A[Compile to IR]-->B["Prove (off-chain)"]
+  B-->C["Verify (on-chain)"]
+  C-->D{Aggregate?}
+  D-->|optional|E["Receipt (Merkle root)"]
 ```
 
-Whether the next step enters aggregation is an engineering choice. Aggregation is optional and primarily used to amortize cost; if your consumer is off-chain, you can stop at verification results and skip receipt publication.
+这条线的下一步是否进入聚合，是一个工程选择。聚合是可选的，主要用来摊薄成本；如果你的消费端不在链上，你可以停在验证结果上，不必进入 receipt 发布路径。
 
-The report treats prover, verifier, and witness as core components of a ZKP system. You’ll keep seeing these names in toolchains, APIs, and logs. They map to “proof generation,” “proof verification,” and “input material used to build the proof.”
+报告把 prover、verifier、witness 视为 ZKP 系统的核心组件。你会在工具链、接口或日志里不断遇到这三个名字，它们分别出现在“生成证明”“验证证明”和“证明所依赖的输入材料”这一条线上。
 
-| Component | Where it appears | Where you see it in practice |
+| 组件 | 在哪一段出现 | 你会在什么操作里遇到 |
 | --- | --- | --- |
-| Prover | Proof generation | When running the proving toolchain |
-| Verifier | Proof verification | On-chain verification or zkVerify verification |
-| Witness | Proof generation | When preparing input materials |
+| Prover | 生成 proof | 运行 proving 工具链时 |
+| Verifier | 验证 proof | 链上验证或 zkVerify 验证时 |
+| Witness | 生成 proof | 准备输入材料时 |
 
-> 📌 Note: Aggregation is optional. Its purpose is not “more correct,” but cheaper.
+> 📌 Note: 聚合是可选的。它存在的目的不是“更正确”，而是更便宜。
 
-The next two sections break down roles and the five-step pipeline so you can align “who owns what” and “what the previous output was.”
+接下来两节会把角色分工和五步流水线拆开讲，这样你能把“谁负责什么”“前一步产物是什么”一条条对齐。

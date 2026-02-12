@@ -2,29 +2,29 @@
 title: "3D.1 I Have a Contract (Consume zkVerify Results On-chain)"
 sidebar_position: 2
 ---
-This section is for readers who already have a contract. You are not asking whether a proof was generated, but **how the contract decides the verification result is trustworthy**. The answer is direct: the contract does not verify proofs; it verifies the receipt (Merkle root) and your Merkle path. This path means you must use verify + aggregate.
+这一节写给“已经有合约”的人。你关心的不是 proof 有没有生成，而是**合约到底如何判断验证结果可信**。答案很直接：合约不验证 proof，合约验证 receipt（Merkle root）和你的 Merkle path。这条路径决定了你必须走 verify + aggregate。
 
-Think of zkVerify as an “acceptance center,” and the contract only recognizes the “acceptance receipt.” After a proof is verified on zkVerify, it is aggregated into a receipt. Once the receipt is published to the target-chain contract, you use a Merkle path to prove “my proof is included in this receipt batch.”
+可以把 zkVerify 当成“验收中心”，而合约只认“验收单”。proof 在 zkVerify 上通过验证后，会被聚合成 receipt。receipt 发布到目标链合约后，你再用 Merkle path 证明“我的 proof 被包含在这批验收单里”。
 
-The diagram below shows the end-to-end structure, focusing on how data moves from zkVerify to the contract:
+下面这张图给你一个端到端结构，重点是数据如何从 zkVerify 到合约：
 
 ```mermaid
 flowchart LR
-  P["Proof Verified"] --> Q["Aggregation queue"]
+  P[Proof Verified] --> Q[Aggregation queue]
   Q --> R["Receipt (Merkle root)"]
-  R --> S["Relayer submits to contract"]
-  S --> V["Contract verifies Merkle path"]
+  R --> S[Relayer submits to contract]
+  S --> V[Contract verifies Merkle path]
 ```
 
-## 1) How the receipt reaches the contract
+## 1) receipt 如何到达合约
 
-zkVerify generates a receipt when aggregation completes, and a relayer publishes it to the zkVerify contract on the target chain. Inside the contract, an internal mapping records aggregation results:
+zkVerify 在聚合完成时生成 receipt，并由 relayer 发布到目标链的 zkVerify 合约。合约内部用一个映射记录聚合结果：
 
 ```solidity
 mapping(uint256 => mapping(uint256 => bytes32)) public proofsAggregations;
 ```
 
-The publishing entry points are `submitAggregation` or `submitAggregationBatchByDomainId`. The former submits a single aggregation; the latter submits in batches to save gas:
+发布入口是 `submitAggregation` 或 `submitAggregationBatchByDomainId`。前者提交单条聚合，后者批量提交，节省 gas：
 
 ```solidity
 function submitAggregation(
@@ -40,24 +40,24 @@ function submitAggregationBatchByDomainId(
 ) external onlyRole(OPERATOR);
 ```
 
-If you are a contract consumer, you do not call these functions manually, but you must understand “how the receipt is written into the contract.” Otherwise, you cannot explain why the contract lacks the root you expect.
+如果你是合约使用方，你不用手动调用这些函数，但你必须理解“receipt 以什么格式写入合约”。否则你无法解释为什么合约里没有你想要的 root。
 
-## 2) How do I get the Merkle path
+## 2) 我如何拿到 Merkle path
 
-After a proof is aggregated, you need its position in the tree. You can get it through events and RPC:
+proof 被聚合后，你需要拿到它在这棵树里的位置。你可以通过事件与 RPC 拿到：
 
-- Listen for the `NewAggregationReceipt` event and record `domainId`, `aggregationId`, and the **event’s block hash**.
-- Use the `aggregate_statementPath` RPC with the block hash, domainId, aggregationId, and statement to retrieve the Merkle path.
+- 监听 `NewAggregationReceipt` 事件，记录 `domainId`、`aggregationId` 和**事件所在 block hash**。
+- 使用 `aggregate_statementPath` RPC 根据 block hash、domainId、aggregationId 和 statement 取回 Merkle path。
 
-The most overlooked part is the block hash. Published storage only exists in the block where the receipt is created; if you miss it, you cannot retrieve the path.
+这一步最容易被忽略的是 block hash。Published storage 只在 receipt 生成的那个 block 存在，如果你错过它，就拿不到路径。
 
 ```text
 path = aggregate_statementPath(blockHash, domainId, aggregationId, statement)
 ```
 
-## 3) How the contract verifies inclusion
+## 3) 合约如何验证包含关系
 
-The contract verification entry is `verifyProofAggregation`. It checks that the aggregation exists and verifies your leaf with the Merkle path:
+合约验证的入口是 `verifyProofAggregation`。它会检查 aggregation 是否存在，并用 Merkle path 验证你的 leaf：
 
 ```solidity
 function verifyProofAggregation(
@@ -70,7 +70,7 @@ function verifyProofAggregation(
 ) external view returns (bool);
 ```
 
-Its core logic is Merkle verification against the root:
+它的核心逻辑是对 root 做 Merkle 验证：
 
 ```solidity
 return Merkle.verifyProofKeccak(
@@ -82,18 +82,18 @@ return Merkle.verifyProofKeccak(
 );
 ```
 
-The key inputs you provide include aggregationId, domainId, leaf, Merkle path, leafIndex, and numberOfLeaves. Most of these come from aggregation results or aggregationDetails. Only the hash of public inputs must come from the proof generation side.
+你要提供的关键输入包括：aggregationId、domainId、leaf、Merkle path、leafIndex 和 numberOfLeaves。这些字段绝大部分来自聚合结果或 aggregationDetails。只有 public inputs 的 hash 需要你从 proof 生成侧拿到。
 
 ```text
 inputs = { domainId, aggregationId, leaf, merklePath, leafIndex, numberOfLeaves }
 ```
 
-## 4) A minimal “contract consumption” call path
+## 4) 一个最小的“合约消费”调用路径
 
-1) Submit the proof and enter the aggregation queue.
-2) Listen for `NewAggregationReceipt` and record the block hash.
-3) Use `aggregate_statementPath` to obtain the Merkle path.
-4) Assemble the leaf and path, then call `verifyProofAggregation`.
+1) 提交 proof 并进入聚合队列。
+2) 监听 `NewAggregationReceipt`，记录 block hash。
+3) 使用 `aggregate_statementPath` 拿到 Merkle path。
+4) 组装 leaf 与路径，调用 `verifyProofAggregation`。
 
 ```mermaid
 flowchart LR
@@ -102,8 +102,8 @@ flowchart LR
   C --> D[verifyProofAggregation]
 ```
 
-> ⚠️ Warning: If you do not record the block hash of the receipt event, you cannot compute the Merkle path later.
+> ⚠️ Warning: 如果你不记录 receipt 事件所在的 block hash，后续无法计算 Merkle path。
 
-> 💡 Tip: If contract verification fails, first check whether leafIndex/numberOfLeaves align with the receipt; wrong ordering fails immediately.
+> 💡 Tip: 合约验证失败时，先检查 leafIndex/numberOfLeaves 是否与 receipt 对应，顺序错了会直接失败。
 
-The key point to remember: **the contract consumes receipt + Merkle path, not the proof itself**. The next section covers how to consume results without a contract; in early stages you can use that path before returning here for on-chain integration.
+这节要你记住的核心点是：**合约端消费的是 receipt + Merkle path，不是 proof 本身**。下一节会讲“没有合约时”如何消费验证结果，你可以在工程早期先走那条路径，再回到这里做链上落地。

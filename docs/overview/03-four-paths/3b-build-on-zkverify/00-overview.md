@@ -2,49 +2,49 @@
 title: "3B. I Understand ZK and Want to Build on zkVerify"
 sidebar_position: 1
 ---
-If you already understand the basics of ZK, the goal of this path is not to re-explain “what is a proof,” but to make you clear on **what happens inside zkVerify after a proof enters, and which boundaries you are responsible for**. Many engineering failures are not because “the proving algorithm is wrong,” but because teams treat the verification layer as the application layer, or treat the verification layer as the proving layer, which misplaces responsibilities and sends data down the wrong path.
+如果你已经理解 ZK 的基本原理，这一条路径的目标不是再解释“什么是证明”，而是让你搞清楚：**当 proof 进入 zkVerify 后，系统内部到底发生了什么，你要为哪些边界负责**。很多工程失败不是“证明算法不对”，而是把验证层当成应用层，或者把验证层当成证明层，结果职责错位、数据走向错了。
 
-Start by placing zkVerify in the system: it is a chain dedicated to verifying proofs, not a general smart contract platform. Its job is to receive proofs, verify their validity, and turn the verification results into reusable outputs. When you bring zkVerify into a project, you are essentially extracting “whether verification holds” from inside your application so it becomes a fact that multiple systems can trust.
+先把 zkVerify 的角色放到系统里：它是一条专门验证 proof 的链，而不是通用合约平台。它的职责就是接收 proof、验证其有效性、把验证结果变成可复用的输出。你在项目里引入 zkVerify，本质上是在把“验证是否成立”这件事从应用内部拿出来，让它变成一个多系统都能信任的事实。
 
-In this path you focus on four things:
+你会在这个路径里关注四件事：
 
-1) what happens after a proof is submitted;
-2) how verification results are aggregated into reusable outputs;
-3) when and how verification results are published to other systems;
-4) where you, as a developer, provide inputs and where you receive results back.
+1) proof 提交后发生了什么；
+2) 验证结果如何被聚合成可复用的产物；
+3) 验证结果何时、如何发布到其他系统；
+4) 你作为开发者需要在哪里提供输入、在哪里接回结果。
 
-The most overlooked point here is the “landing point of the verification result.” Verification finishing is only the beginning; what really determines whether you can use the result is **aggregation and publication**. zkVerify sends verified proofs into the aggregation flow, generates a receipt (Merkle root), and then a relayer publishes it to a contract on the destination chain. For on-chain consumption, the contract does not see the proof itself, but the receipt and its proof path.
+这里最容易被忽略的是“验证结果的落点”。验证完成只是开始，真正决定你能不能把结果用起来的是**聚合与发布**。zkVerify 会把验证过的 proof 进入聚合流程，生成 receipt（Merkle root），再由 relayer 发布到目标链上的合约。对于链上消费而言，合约侧看到的不是 proof 本身，而是 receipt 及其证明路径。
 
-You can think of zkVerify as an “acceptance center”: you hand it a proof, and it gives you a referenceable “acceptance receipt.” The receipt can be reused by other systems, but it is not the same thing as the proof. If you treat the proof as the receipt, you will get stuck when consuming on-chain.
+你可以把 zkVerify 想成“验收中心”：你把 proof 交给它，它给你一个可被引用的“验收单”。验收单可以被其他系统拿来复用，但它本身不等同于 proof。你如果把 proof 当成验收单，就会在链上消费时卡住。
 
 ```mermaid
 flowchart LR
-  P["Proof Submitted"] --> V["Verification on zkVerify"]
-  V --> A["Aggregation"]
+  P[Proof Submitted] --> V[Verification on zkVerify]
+  V --> A[Aggregation]
   A --> R["Receipt (Merkle root)"]
-  R --> C["Contract on destination chain"]
+  R --> C[Contract on destination chain]
 ```
 
-Another point you must care about is the **cost structure**. zkVerify is on-chain verification, so every verification has a cost, and VFY is the medium that pays that cost. This means you need to consider in engineering: whether the cost per verification is acceptable, whether you need aggregation to amortize the cost, and whether you should publish the results for on-chain consumers.
+另一个你必须关心的点是**成本结构**。zkVerify 是链上验证，所以每次验证都有成本，VFY 是支付这个成本的媒介。这意味着你在工程上要考虑：一次验证的成本是否可接受，是否需要通过聚合来摊薄成本，以及是否要把结果发布给链上消费端。
 
-There is also a choice here: use a relay API like Kurier, or interact with the chain directly. This is not about “advanced vs. basic,” but a tradeoff between engineering control and complexity. Kurier gives you a more Web2-like experience, but it also means handing off some on-chain interaction details to it.
+这里还会涉及一个选择：你是用 Kurier 这样的 relay API，还是直接与链交互。这个选择不是“高级/低级”的区别，而是工程控制权与复杂度的权衡。Kurier 给你更像 Web2 的体验，但也意味着你把一部分链上交互细节交给了它。
 
-To avoid “I understand it but can’t ship it,” you can split the process into three layers of responsibility:
+为了避免“看懂了但不会落地”，你可以把整个过程拆成三层责任：
 
-- **Submission layer**: prepare the proof, vk, and public inputs, ensuring they come from the same compilation artifacts;
-- **Verification layer**: let zkVerify produce reusable results;
-- **Consumption layer**: decide whether results are consumed inside the application or on-chain.
+- **提交层**：准备好 proof、vk 和 public inputs，确保它们来自同一套编译产物；
+- **验证层**：让 zkVerify 产出可复用结果；
+- **消费层**：决定结果在应用内消费还是链上消费。
 
-This path will expand each layer into concrete mechanisms. You will see how the statement hash is formed during proof submission, what role the domain plays in aggregation, how contracts verify a receipt after publication, and at which step you should record the necessary on-chain information.
+这条路径接下来会把每一层展开成具体机制。你会看到 proof 提交时的 statement hash 是如何形成的，domain 在聚合里起什么作用，receipt 发布后如何被合约验证，以及你应该在哪一步记录必要的链上信息。
 
-> 💡 Tip: If you can reliably generate proofs but keep getting stuck on “how to use the result,” the issue is often not proving, but whether the consumption layer has taken the aggregation and publication path.
+> 💡 Tip: 如果你已经能稳定跑通 proof 生成，但总是在“结果怎么用”这一步卡住，问题往往不在 proving，而在“消费层是否走了聚合发布路径”。
 
-> ⚠️ Warning: Do not treat zkVerify as a proving platform. It only handles verification, it will not generate proofs for you, and it will not decide how your business logic consumes the result.
+> ⚠️ Warning: 不要把 zkVerify 当成 proving 平台。它只负责验证，不会替你生成 proof，也不会帮你决定业务逻辑如何消费结果。
 
-To help you quickly locate “which layer you are in,” you can use this simplified checklist:
+为了帮助你快速定位“你现在在哪一层”，可以先用这张简化路线做自检：
 
-1) Can I reliably generate proofs and public inputs?
-2) Do I get stable verification results on zkVerify?
-3) Should my result stay in the application, or be used by on-chain contracts?
+1) 我是否已经能稳定生成 proof 和 public inputs？
+2) 我是否在 zkVerify 上得到稳定的验证结果？
+3) 我的结果要留在应用侧，还是要给链上合约用？
 
-If you can answer these three questions, you can treat the upcoming mechanism pages as a “reference,” rather than “learning from scratch.” The next section starts with the proof submission flow and unpacks the verification layer step by step.
+如果你能回答这三个问题，你就能把后续的机制页当作“查字典”，而不是“从头学习”。下一节会从 proof 提交流程开始，把验证层内部的机制一层层拆开。

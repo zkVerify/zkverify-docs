@@ -203,6 +203,8 @@ ZKV_PUBS_HEX_FILE_PATH="./target/zkv_pubs.hex"
 </TabItem>
 
 <TabItem value="ultraplonk" label="Ultraplonk">
+本节略，原文未提供额外步骤，可参考 UltraHonk 转换与提交流程，使用相应的 Ultraplonk 生成器与输入。
+
 We will use the quickstart Noir Lang guide to generate an UltraPlonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved
@@ -282,6 +284,8 @@ After running these commands, you will have two files, namely: `proof` and `vk` 
 </TabItem>
 
 <TabItem value="risc-zero" label="Risc Zero">
+请结合 Risc Zero 官方教程生成证明，之后在 zkVerifyJS 或 PolkadotJS 提交时按 Risc Zero 选项填写 proof、image_id 与 public inputs，并指定 Domain ID。
+
 This tutorial takes you through the process of building a Risc0 zkVM application.
 
 After building the application, you can run it locally providing different inputs and it will give you back a proof of execution of its code. Then you can submit this proof on zkVerify Mainchain and check it gets correctly verified and included in a block.
@@ -488,7 +492,6 @@ fn main() {
         .expect("failed to generate proof");
 }
 ```
-
 <Tabs groupId="sp1-zkv-sdk">
 <TabItem value="with-sdk" label="With sp1_zkv_sdk">
 
@@ -666,6 +669,8 @@ file.write_all(json_string.as_bytes()).unwrap();
 </TabItem>
 
 <TabItem value="ezkl" label="EZKL">
+参考 ezkl 教程生成证明，使用生成的 proof、vk、public inputs，通过 zkVerifyJS 或 PolkadotJS 按 ezkl 选项提交，并选择对应 Domain ID。
+
 We will use the quickstart guide by zkonduit in order to generate an EZKL proof, and we will then verify it on zkVerify. We will not be going into detail about EZKL's implementation, our focus would be on verifying those proofs efficiently on zkVerify.
 
 ## Steps Involved

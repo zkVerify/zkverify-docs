@@ -45,7 +45,7 @@ flowchart LR
   Consumer[Consumer System or Contract]
 
   Prover -->|proof + vk + public inputs| ZK
-  ZK -->|receipt (Merkle root) + attestation| Consumer
+  ZK -->|"receipt (Merkle root) + attestation"| Consumer
 ```
 
 ## Common pitfall

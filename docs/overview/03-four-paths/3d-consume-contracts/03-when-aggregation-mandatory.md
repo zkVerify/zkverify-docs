@@ -11,7 +11,7 @@ An engineering analogy: aggregation “issues the acceptance receipt,” and the
 ```mermaid
 flowchart LR
   P[Proof Verified] --> A[Aggregation]
-  A --> R[Receipt (Merkle root)]
+  A --> R["Receipt (Merkle root)"]
   R --> C[Contract verifies Merkle path]
 ```
 

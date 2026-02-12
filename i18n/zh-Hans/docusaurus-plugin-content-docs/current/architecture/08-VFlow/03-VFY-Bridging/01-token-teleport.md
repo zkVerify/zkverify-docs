@@ -2,7 +2,7 @@
 title: 在 zkVerify 平行链间传送 VFY 代币
 ---
 
-本指南分步讲解如何在 zkVerify 平行链间传送 VFY。开始前请先[设置好钱包并能与 Polkadot-JS 交互](docs/overview/02-getting-started/01-connect-a-wallet.md)。
+本指南分步讲解如何在 zkVerify 平行链间传送 VFY。开始前请先[设置好钱包并能与 Polkadot-JS 交互](../../../overview/02-getting-started/01-connect-a-wallet.md)。
 
 ## XCM Teleport
 
@@ -70,7 +70,7 @@ title: 在 zkVerify 平行链间传送 VFY 代币
 
 ### VFlow → zkVerify（PolkadotJS-UI）
 
-**注意：** 若桥回 Metamask 地址的代币，需先导出私钥，再导入支持 EVM+Substrate 的钱包（SubWallet/Talisman）。设置参考[钱包文档](docs/overview/02-getting-started/01-connect-a-wallet.md)。
+**注意：** 若桥回 Metamask 地址的代币，需先导出私钥，再导入支持 EVM+Substrate 的钱包（SubWallet/Talisman）。设置参考[钱包文档](../../../overview/02-getting-started/01-connect-a-wallet.md)。
 
 ---
 

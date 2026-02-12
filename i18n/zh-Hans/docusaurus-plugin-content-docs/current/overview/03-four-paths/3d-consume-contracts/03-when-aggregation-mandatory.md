@@ -11,7 +11,7 @@ sidebar_position: 4
 ```mermaid
 flowchart LR
   P[Proof Verified] --> A[Aggregation]
-  A --> R[Receipt (Merkle root)]
+  A --> R["Receipt (Merkle root)"]
   R --> C[Contract verifies Merkle path]
 ```
 
