@@ -23,7 +23,7 @@ const generateSessionId = (): string => {
 };
 
 const Chatbot: React.FC<ChatbotProps> = ({
-  apiEndpoint = 'https://ai-agents.horizenlabs.io/webhook/chat',
+  apiEndpoint = 'https://ai-agents.horizenlabs.io/webhook/chat-hier',
   placeholder = 'Ask me anything...',
   title = 'Chat Assistant',
   token,
