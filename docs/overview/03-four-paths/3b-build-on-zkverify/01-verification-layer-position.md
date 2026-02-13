@@ -1,5 +1,5 @@
 ---
-title: "3B.1 zkVerify’s Position as a Verification Layer"
+title: "zkVerify’s Position as a Verification Layer"
 sidebar_position: 2
 ---
 这节回答一个工程上必须先搞清楚的问题：**zkVerify 到底负责什么、哪些事情你必须自己做**。你如果把它当成 proving 平台，系统会从根上跑偏；你如果把它当成普通链，又会在验证结果的复用上踩坑。定位清楚后，你才能决定“哪些逻辑留在应用侧，哪些交给验证层”。

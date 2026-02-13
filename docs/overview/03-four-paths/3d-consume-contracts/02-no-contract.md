@@ -1,5 +1,5 @@
 ---
-title: "3D.2 I Do Not Have a Contract (System-Level Consumption)"
+title: "I Do Not Have a Contract"
 sidebar_position: 3
 ---
 This section is for scenarios where results are consumed only in Web2/system-side workflows. You do not need a receipt or an on-chain contract, only **reliable verification results and a way to land them in your business system**. It sounds simple, but engineering often hits three pitfalls: lost events, duplicate processing, and insufficient confirmation depth.

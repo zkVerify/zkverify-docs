@@ -1,5 +1,5 @@
 ---
-title: "3B. I Understand ZK and Want to Build on zkVerify"
+title: "I Understand ZK and Want to Build on zkVerify"
 sidebar_position: 1
 ---
 如果你已经理解 ZK 的基本原理，这一条路径的目标不是再解释“什么是证明”，而是让你搞清楚：**当 proof 进入 zkVerify 后，系统内部到底发生了什么，你要为哪些边界负责**。很多工程失败不是“证明算法不对”，而是把验证层当成应用层，或者把验证层当成证明层，结果职责错位、数据走向错了。

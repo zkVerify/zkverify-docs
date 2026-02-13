@@ -1,5 +1,5 @@
 ---
-title: "4.4 High-Frequency Beginner Questions"
+title: "High-Frequency Beginner Questions"
 sidebar_position: 5
 ---
 This page answers the four most frequently asked questions. It is not an encyclopedia, but engineering answers that help you avoid detours. Each question is structured as “scenario → choice → consequence” to keep you out of the weeds.

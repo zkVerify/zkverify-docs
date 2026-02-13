@@ -1,5 +1,5 @@
 ---
-title: "3A.1 Minimal ZK Concepts You Must Know"
+title: "Minimal ZK Concepts You Must Know"
 sidebar_position: 2
 ---
 

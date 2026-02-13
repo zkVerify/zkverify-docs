@@ -1,0 +1,126 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docsSidebar.category.Introduction": {
+    "message": "简介",
+    "description": "The label for category Introduction in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Quickstart": {
+    "message": "快速上手",
+    "description": "The label for category Quickstart in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.ZK Proof Lifecycle": {
+    "message": "ZK 证明生命周期",
+    "description": "The label for category ZK Proof Lifecycle in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Four Paths": {
+    "message": "四条路径",
+    "description": "The label for category Four Paths in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.I Am New to ZK": {
+    "message": "我是 ZK 新手",
+    "description": "The label for category I Am New to ZK in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.I Understand ZK and Want to Build on zkVerify": {
+    "message": "我理解 ZK，想在 zkVerify 上构建",
+    "description": "The label for category I Understand ZK and Want to Build on zkVerify in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.I Just Want Examples": {
+    "message": "我只想看示例",
+    "description": "The label for category I Just Want Examples in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.I Want to Consume Verification Results in Contracts": {
+    "message": "我想在合约中消费验证结果",
+    "description": "The label for category I Want to Consume Verification Results in Contracts in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Common Questions": {
+    "message": "常见问题",
+    "description": "The label for category Common Questions in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Reference": {
+    "message": "参考资料",
+    "description": "The label for category Reference in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Getting Started": {
+    "message": "入门指南",
+    "description": "The label for category Getting Started in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Add a New Verifier": {
+    "message": "新增 Verifier",
+    "description": "The label for category Add a New Verifier in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.\"Palletization\"": {
+    "message": "模块化",
+    "description": "The label for category \"Palletization\" in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Runtime Inclusion": {
+    "message": "Runtime 接入",
+    "description": "The label for category Runtime Inclusion in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Client Side Proof": {
+    "message": "前端证明",
+    "description": "The label for category Client Side Proof in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Use Case Explorations": {
+    "message": "用例探索",
+    "description": "The label for category Use Case Explorations in sidebar docsSidebar"
+  },
+  "sidebar.archSidebar.category.Mainchain": {
+    "message": "Mainchain",
+    "description": "The label for category Mainchain in sidebar archSidebar"
+  },
+  "sidebar.archSidebar.category.Proof Aggregation Engine": {
+    "message": "Proof Aggregation Engine",
+    "description": "The label for category Proof Aggregation Engine in sidebar archSidebar"
+  },
+  "sidebar.archSidebar.category.Verification Pallets": {
+    "message": "Verification Pallets",
+    "description": "The label for category Verification Pallets in sidebar archSidebar"
+  },
+  "sidebar.archSidebar.category.VFlow": {
+    "message": "VFlow",
+    "description": "The label for category VFlow in sidebar archSidebar"
+  },
+  "sidebar.archSidebar.category.VFY Bridging": {
+    "message": "VFY Bridging",
+    "description": "The label for category VFY Bridging in sidebar archSidebar"
+  },
+  "sidebar.nodeSidebar.category.Run Using Docker": {
+    "message": "Run Using Docker",
+    "description": "The label for category Run Using Docker in sidebar nodeSidebar"
+  },
+  "sidebar.nodeSidebar.category.Run Using Binaries": {
+    "message": "Run Using Binaries",
+    "description": "The label for category Run Using Binaries in sidebar nodeSidebar"
+  },
+  "sidebar.nodeSidebar.category.Staking as a Nominator": {
+    "message": "Staking as a Nominator",
+    "description": "The label for category Staking as a Nominator in sidebar nodeSidebar"
+  },
+  "sidebar.incentivizedTestnetSidebar.category.Challenges": {
+    "message": "Challenges",
+    "description": "The label for category Challenges in sidebar incentivizedTestnetSidebar"
+  },
+  "sidebar.incentivizedTestnetSidebar.category.Phase 1 Challenges": {
+    "message": "Phase 1 Challenges",
+    "description": "The label for category Phase 1 Challenges in sidebar incentivizedTestnetSidebar"
+  },
+  "sidebar.incentivizedTestnetSidebar.category.Phase 2 Challenges": {
+    "message": "Phase 2 Challenges",
+    "description": "The label for category Phase 2 Challenges in sidebar incentivizedTestnetSidebar"
+  },
+  "sidebar.incentivizedTestnetSidebar.category.Phase 3 Challenges": {
+    "message": "Phase 3 Challenges",
+    "description": "The label for category Phase 3 Challenges in sidebar incentivizedTestnetSidebar"
+  },
+  "sidebar.incentivizedTestnetSidebar.category.Terms and Conditions": {
+    "message": "Terms and Conditions",
+    "description": "The label for category Terms and Conditions in sidebar incentivizedTestnetSidebar"
+  },
+  "sidebar.incentivizedTestnetSidebar.category.Redeem Your Tokens": {
+    "message": "Redeem Your Tokens",
+    "description": "The label for category Redeem Your Tokens in sidebar incentivizedTestnetSidebar"
+  }
+}

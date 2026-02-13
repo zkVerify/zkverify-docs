@@ -1,5 +1,5 @@
 ---
-title: "3C.2 Production-Style Examples"
+title: "Production-Style Examples"
 sidebar_position: 3
 ---
 The three examples in this section are not “run and done.” They put real engineering problems into executable structures. Their common theme: you must handle **state reuse, replay attacks, and result persistence**. If you have only done minimal examples, this is the step that upgrades you from “demo-grade” to “ship-ready.”

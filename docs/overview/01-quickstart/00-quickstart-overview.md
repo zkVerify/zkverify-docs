@@ -1,5 +1,5 @@
 ---
-title: "1. Quickstart (Verify Once in 10–20 Minutes)"
+title: "Quickstart"
 sidebar_position: 1
 ---
 

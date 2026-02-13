@@ -1,5 +1,5 @@
 ---
-title: "1.1 Quickstart"
+title: "Quickstart"
 sidebar_position: 2
 ---
 

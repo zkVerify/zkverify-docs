@@ -1,5 +1,5 @@
 ---
-title: "1.1 Quickstart"
+title: "快速上手"
 sidebar_position: 2
 ---
 
@@ -86,3 +86,9 @@ await session.verify()
 ## 常见卡点
 
 最常见的问题是把 vk 或 public inputs 传错格式，导致验证结果一直不出来。Kurier 路线可以先确认 `register-vk` 是否成功写回 vk hash，再提交 proof；zkVerifyJS 路线则需要确认账户里有 tVFY 否则交易不会被链接受。
+
+## 延伸阅读（ZK Escrow 实战教程）
+
+- [教程 01：纯操作版](/overview/quickstart/tutorial-01-operations-only)
+- [教程 02：核心代码解读](/overview/quickstart/tutorial-02-core-code-explained)
+- [教程 03：常见坑与规避手册](/overview/quickstart/tutorial-03-common-pitfalls-and-how-to-avoid)

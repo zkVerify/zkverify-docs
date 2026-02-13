@@ -1,5 +1,5 @@
 ---
-title: "2.4 Setup Differences (Explicit Comparison)"
+title: "Setup Differences"
 sidebar_position: 5
 ---
 

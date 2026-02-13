@@ -1,5 +1,5 @@
 ---
-title: "2.3 Artifact Overview Table (The Complete Map)"
+title: "产物总览表"
 sidebar_position: 4
 ---
 

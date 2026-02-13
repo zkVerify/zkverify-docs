@@ -1,5 +1,5 @@
 ---
-title: "3C. I Just Want Examples (Examples / Cookbook)"
+title: "I Just Want Examples"
 sidebar_position: 1
 ---
 If your goal is simple—“give me an example that runs”—this path is for you. Many engineers are not unwilling to learn concepts, they just lack a starting point to validate their approach: run a working sample first, confirm the pipeline, then expand into more complex scenarios. This chapter is positioned as “runnable + modifiable,” not “theory.”

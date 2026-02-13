@@ -1,5 +1,5 @@
 ---
-title: "4.2 Handle Valid Proof (What to Do After Verification)"
+title: "如何处理有效证明"
 sidebar_position: 3
 ---
 这一页回答一个直接的工程问题：**proof 验证通过后，你到底应该做什么？** 你可以在 Web2 侧消费结果，也可以在合约侧消费结果。两条路径的区别不在“验证有没有成功”，而在“你要把结果写到哪里、由谁来信任”。

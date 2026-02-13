@@ -1,5 +1,5 @@
 ---
-title: "3A.2 One Consistent Example: Merkle Membership"
+title: "一个统一示例：Merkle 成员证明"
 sidebar_position: 3
 ---
 这一节只做一件事：用一个最小的 Merkle membership 例子，把“我在树里”的证明说清楚。你不会看到大段代码，但会看到足够的输入/输出结构，让你知道哪些东西是公开的、哪些必须留在私有侧。

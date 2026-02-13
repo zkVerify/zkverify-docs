@@ -1,5 +1,5 @@
 ---
-title: "3A.3 Setup Differences Across Proof Systems (Comparison + Guidance)"
+title: "不同证明系统的 Setup 差异"
 sidebar_position: 4
 ---
 这一节解决一个新手最常问的问题：**我到底该选哪条证明系统路线？** 这里不讲语法细节，只讲你会真实承担的工程代价。你最终在做的，不是“选名词”，而是选一套成本结构：proof 有多大、验证有多贵、是否需要可信 setup、以及本地 proving 会不会变成瓶颈。

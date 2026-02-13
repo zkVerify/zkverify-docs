@@ -1,5 +1,5 @@
 ---
-title: "4. Common Questions (FAQ + Troubleshooting)"
+title: "Common Questions"
 sidebar_position: 1
 ---
 This chapter is not a learning path, but an **entry point for debugging**. You come here when the flow is stuck: no verification events, no aggregation receipt, contract verification failures, or status stuck at `Submitted`. The structure is not “concept explanation,” but “symptom → cause → fix.”

@@ -1,5 +1,5 @@
 ---
-title: "0.3 Two Modes (Critical to Understand From the Start)"
+title: "Two Modes"
 sidebar_position: 4
 ---
 zkVerify has two modes: verify-only and verify + aggregate. We’ll describe each path first, then compare the boundary.

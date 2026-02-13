@@ -1,5 +1,5 @@
 ---
-title: "3. Four Paths (Role- and Goal-Based Navigation)"
+title: "Four Paths"
 sidebar_position: 1
 ---
 

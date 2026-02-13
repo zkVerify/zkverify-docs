@@ -1,5 +1,5 @@
 ---
-title: "4.3 Glossary"
+title: "Glossary"
 sidebar_position: 4
 ---
 This page is an “engineering quick reference.” It does not cover full theory; it covers terms you encounter most often in practice: what they are, why they appear in your flow, and what happens if you ignore them. After reading, you should place each term back into the system flow, not just memorize the literal meaning.

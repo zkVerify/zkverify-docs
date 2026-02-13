@@ -1,5 +1,5 @@
 ---
-title: "3C.1 Minimal Examples"
+title: "Minimal Examples"
 sidebar_position: 2
 ---
 This page gives three “minimal runnable” examples. It does not chase fancy features; it only targets **a visible verification loop**. Once you run them, you will know the roles of proofs, public inputs, verification events, and (when needed) aggregation results in an engineering context. Each example is deliberately scoped so you can see results within 10–20 minutes.

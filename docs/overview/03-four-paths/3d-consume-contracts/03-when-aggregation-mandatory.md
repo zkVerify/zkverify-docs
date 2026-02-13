@@ -1,5 +1,5 @@
 ---
-title: "3D.3 When Aggregation Is Mandatory"
+title: "When Aggregation Is Mandatory"
 sidebar_position: 4
 ---
 This section answers one question: **when is aggregation mandatory?** You can think of it as “does the contract require a receipt.” If the consumer is on-chain, the contract needs a receipt to verify, so you must aggregate; if the consumer is on the application side, you can stop at the verification event.

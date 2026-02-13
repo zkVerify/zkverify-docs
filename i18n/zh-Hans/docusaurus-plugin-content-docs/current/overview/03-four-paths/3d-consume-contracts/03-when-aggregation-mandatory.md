@@ -1,5 +1,5 @@
 ---
-title: "3D.3 When Aggregation Is Mandatory"
+title: "何时必须使用聚合"
 sidebar_position: 4
 ---
 这一节只回答一个问题：**什么时候聚合是必须的？** 你可以把它理解成“合约要不要验收单”的问题。如果消费端在链上，合约需要 receipt 才能验证，你就必须走聚合；如果消费端在应用侧，你可以停在验证事件上。

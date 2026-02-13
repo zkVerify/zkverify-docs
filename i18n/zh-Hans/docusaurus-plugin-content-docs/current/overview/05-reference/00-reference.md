@@ -1,5 +1,6 @@
 ---
-title: "5. Reference (Not a Primary Learning Path)"
+title: "参考资料"
+sidebar_label: "参考资料"
 sidebar_position: 1
 ---
 

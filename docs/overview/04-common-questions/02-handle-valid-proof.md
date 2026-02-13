@@ -1,5 +1,5 @@
 ---
-title: "4.2 Handle Valid Proof (What to Do After Verification)"
+title: "Handle Valid Proof"
 sidebar_position: 3
 ---
 This page answers a direct engineering question: **after a proof is verified, what should you do?** You can consume results on the Web2 side or on the contract side. The difference is not “whether verification succeeded,” but “where you record the result and who trusts it.”

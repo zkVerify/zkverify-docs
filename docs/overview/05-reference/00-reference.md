@@ -1,5 +1,5 @@
 ---
-title: "5. Reference (Not a Primary Learning Path)"
+title: "Reference"
 sidebar_position: 1
 ---
 

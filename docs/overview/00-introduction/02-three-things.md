@@ -1,5 +1,5 @@
 ---
-title: "0.2 The Three Things You Do When Building a zkVerify Project (Minimal Model)"
+title: "The Three Things You Do When Building a zkVerify Project"
 sidebar_position: 3
 ---
 

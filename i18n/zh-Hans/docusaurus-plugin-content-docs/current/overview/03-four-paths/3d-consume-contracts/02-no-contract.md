@@ -1,5 +1,5 @@
 ---
-title: "3D.2 I Do Not Have a Contract (System-Level Consumption)"
+title: "我没有合约"
 sidebar_position: 3
 ---
 这一节写给“结果只在 Web2/系统侧消费”的场景。你不需要 receipt，不需要链上合约，只需要**稳定地拿到验证结果，并把它落到业务系统里**。这听起来简单，但实际工程里容易踩三个坑：事件丢失、重复处理、以及确认深度不足。

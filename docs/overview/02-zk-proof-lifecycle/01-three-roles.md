@@ -1,5 +1,5 @@
 ---
-title: "2.1 The Three Roles (Explicit and Fixed)"
+title: "The Three Roles"
 sidebar_position: 2
 ---
 

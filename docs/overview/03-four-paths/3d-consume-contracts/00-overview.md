@@ -1,5 +1,5 @@
 ---
-title: "3D. I Want to Consume Verification Results in Contracts"
+title: "I Want to Consume Verification Results in Contracts"
 sidebar_position: 1
 ---
 This path solves one question: **when verification results must enter a contract, what on-chain materials do you need?** Many engineering issues are not “is the proof correct,” but “can the contract verify it.” If you ignore aggregation and receipts, you will get stuck in on-chain consumption.

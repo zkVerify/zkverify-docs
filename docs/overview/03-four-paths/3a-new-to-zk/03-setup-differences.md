@@ -1,5 +1,5 @@
 ---
-title: "3A.3 Setup Differences Across Proof Systems (Comparison + Guidance)"
+title: "Setup Differences Across Proof Systems"
 sidebar_position: 4
 ---
 This section answers a common beginner question: **which proof system path should I choose?** No syntax here—only the engineering costs you will actually pay. You are not choosing a label, you are choosing a cost structure: proof size, verification cost, trusted setup dependency, and whether proving becomes a local bottleneck.

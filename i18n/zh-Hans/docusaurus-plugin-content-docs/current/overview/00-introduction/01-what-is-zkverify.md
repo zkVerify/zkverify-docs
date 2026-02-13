@@ -1,5 +1,5 @@
 ---
-title: "0.1 What is zkVerify"
+title: "什么是 zkVerify"
 sidebar_position: 2
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "4.4 High-Frequency Beginner Questions"
+title: "高频新手问题"
 sidebar_position: 5
 ---
 这一页只回答最常被问的四个问题。它不是百科，而是“让你少走弯路”的工程答案。每个问题都按“场景 → 选择 → 后果”展开，避免你在细节里迷路。

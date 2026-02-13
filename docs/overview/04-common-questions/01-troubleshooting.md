@@ -1,5 +1,5 @@
 ---
-title: "4.1 Troubleshooting"
+title: "Troubleshooting"
 sidebar_position: 2
 ---
 This page is a “debug guide,” not a concept review. Treat it as a troubleshooting flow: first locate which layer failed, then check the cause and fix. Most issues are not “the proving algorithm is wrong,” but event listening, domain state, or input version mismatches.

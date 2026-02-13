@@ -1,5 +1,5 @@
 ---
-title: "2. ZK Proof Lifecycle (What Happens From Different Roles’ Perspectives)"
+title: "ZK Proof Lifecycle"
 sidebar_position: 1
 ---
 

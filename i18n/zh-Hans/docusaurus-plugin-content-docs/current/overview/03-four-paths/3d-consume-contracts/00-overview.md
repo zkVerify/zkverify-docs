@@ -1,5 +1,5 @@
 ---
-title: "3D. I Want to Consume Verification Results in Contracts"
+title: "我想在合约中消费验证结果"
 sidebar_position: 1
 ---
 这一条路径只解决一个问题：**当验证结果要进入合约时，你到底需要哪些链上材料？** 很多工程问题不是“proof 是否正确”，而是“合约能不能验证它”。如果你忽略聚合和 receipt，你就会在链上消费时卡住。

@@ -1,5 +1,5 @@
 ---
-title: "1.3 What Just Happened (One Page, Shallow but Clear)"
+title: "What Just Happened"
 sidebar_position: 4
 ---
 

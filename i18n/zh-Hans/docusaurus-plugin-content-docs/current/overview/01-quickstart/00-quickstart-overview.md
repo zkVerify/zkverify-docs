@@ -1,5 +1,5 @@
 ---
-title: "1. Quickstart (Verify Once in 10–20 Minutes)"
+title: "快速上手总览"
 sidebar_position: 1
 ---
 

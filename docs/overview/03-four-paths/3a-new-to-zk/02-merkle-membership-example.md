@@ -1,5 +1,5 @@
 ---
-title: "3A.2 One Consistent Example: Merkle Membership"
+title: "One Consistent Example: Merkle Membership"
 sidebar_position: 3
 ---
 This section does one thing: use a minimal Merkle membership example to make “I am in this tree” clear. You won’t see large code blocks, but you will see enough input/output structure to know what’s public and what must stay private.

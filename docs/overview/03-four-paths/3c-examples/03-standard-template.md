@@ -1,5 +1,5 @@
 ---
-title: "3C.3 Standard Template for Every Example"
+title: "Standard Template for Every Example"
 sidebar_position: 4
 ---
 This page is not a new example, but **a “writing template” every example must follow**. It has one purpose: let readers see at a glance what problem the example solves, which inputs must remain private, and where the result flows. Without a unified template, examples become fragments that “run but cannot be understood.”

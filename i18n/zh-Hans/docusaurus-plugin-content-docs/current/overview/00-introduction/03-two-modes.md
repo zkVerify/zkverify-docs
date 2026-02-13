@@ -1,5 +1,5 @@
 ---
-title: "0.3 Two Modes (Critical to Understand From the Start)"
+title: "两种模式"
 sidebar_position: 4
 ---
 zkVerify 的两种模式是：verify-only 和 verify + aggregate。先把两条路径各自讲清楚，再对比它们的边界。

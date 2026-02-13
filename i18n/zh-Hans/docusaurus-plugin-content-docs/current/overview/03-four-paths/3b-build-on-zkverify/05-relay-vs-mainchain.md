@@ -1,5 +1,5 @@
 ---
-title: "3B.5 Relay vs Mainchain API"
+title: "Relay 与 Mainchain API 对比"
 sidebar_position: 6
 ---
 这一节解决一个工程决策问题：**你是用 Kurier 这样的 relay API，还是直接和主链交互？** 这不是“高端/低端”的区别，而是“工程控制权 vs 接入复杂度”的取舍。你要先看清楚你的系统目标和你愿意承担的链上细节。

@@ -1,5 +1,5 @@
 ---
-title: "3A.1 Minimal ZK Concepts You Must Know"
+title: "必须了解的最小 ZK 概念"
 sidebar_position: 2
 ---
 

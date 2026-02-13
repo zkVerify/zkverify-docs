@@ -1,5 +1,5 @@
 ---
-title: "3D.1 I Have a Contract (Consume zkVerify Results On-chain)"
+title: "I Have a Contract"
 sidebar_position: 2
 ---
 这一节写给“已经有合约”的人。你关心的不是 proof 有没有生成，而是**合约到底如何判断验证结果可信**。答案很直接：合约不验证 proof，合约验证 receipt（Merkle root）和你的 Merkle path。这条路径决定了你必须走 verify + aggregate。

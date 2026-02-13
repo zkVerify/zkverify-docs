@@ -1,5 +1,5 @@
 ---
-title: "3B.5 Relay vs Mainchain API"
+title: "Relay vs Mainchain API"
 sidebar_position: 6
 ---
 This section addresses an engineering decision: **do you use a relay API like Kurier, or interact with the main chain directly?** This is not “advanced vs. basic,” but a tradeoff between “engineering control vs. integration complexity.” You need to understand your system goals and the on-chain details you are willing to take on.

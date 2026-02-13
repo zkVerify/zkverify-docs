@@ -1,5 +1,5 @@
 ---
-title: "1.3 What Just Happened (One Page, Shallow but Clear)"
+title: "刚刚发生了什么"
 sidebar_position: 4
 ---
 

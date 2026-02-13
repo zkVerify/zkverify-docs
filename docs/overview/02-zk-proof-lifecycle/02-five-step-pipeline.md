@@ -1,5 +1,5 @@
 ---
-title: "2.2 The Five-Step Pipeline (With Inputs and Outputs)"
+title: "The Five-Step Pipeline"
 sidebar_position: 3
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "3B.4 Proof Aggregation Engine (Explained in Context)"
+title: "Proof Aggregation Engine"
 sidebar_position: 5
 ---
 这一节讲“聚合引擎到底做了什么，以及你什么时候必须用它”。如果你只是做 verify‑only，这一页几乎可以跳过；但只要你要把结果交给链上合约消费，它就会变成主干路径。

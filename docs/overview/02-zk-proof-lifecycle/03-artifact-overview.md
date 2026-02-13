@@ -1,5 +1,5 @@
 ---
-title: "2.3 Artifact Overview Table (The Complete Map)"
+title: "Artifact Overview Table"
 sidebar_position: 4
 ---
 

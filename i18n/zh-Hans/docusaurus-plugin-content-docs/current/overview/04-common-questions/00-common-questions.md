@@ -1,5 +1,5 @@
 ---
-title: "4. Common Questions (FAQ + Troubleshooting)"
+title: "常见问题"
 sidebar_position: 1
 ---
 这一章不是学习路径，而是**排错入口**。你来这里通常是因为流程卡住了：验证事件没出现、聚合没有 receipt、合约验证失败、或者状态一直停在 `Submitted`。这章的写法不会按“概念讲解”展开，而是尽量按“症状 → 原因 → 处理方式”组织。

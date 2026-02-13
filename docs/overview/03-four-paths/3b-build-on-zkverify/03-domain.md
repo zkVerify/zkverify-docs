@@ -1,5 +1,5 @@
 ---
-title: "3B.3 Domain (Explained in Context, Not as an Operation)"
+title: "Domain"
 sidebar_position: 4
 ---
 Domain 是 proof 提交之后的第一道“分流闸口”。你不需要把它理解成一个抽象概念，但必须知道它在系统里出现的准确位置：**proof 提交时带上 domainId，系统就把 proof 路由到对应的聚合队列；不带 domainId，则不进入聚合**。这个行为决定了后续会不会出现 receipt、会不会有链上可用的结果。

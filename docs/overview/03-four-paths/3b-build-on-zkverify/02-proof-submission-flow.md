@@ -1,5 +1,5 @@
 ---
-title: "3B.2 Proof Submission Flow (Core Section)"
+title: "Proof Submission Flow"
 sidebar_position: 3
 ---
 This section explains “what happens after proof submission.” The place you most often get stuck is not “how to submit,” but **how the system routes after submission**: which paths emit verification events, which enter aggregation, and which cases are rejected while the transaction still lands on-chain. Once you understand this flow, you can decide which events to listen to and when to take the next step.

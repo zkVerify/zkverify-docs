@@ -1,5 +1,5 @@
 ---
-title: "1.2 Quickstart (Optional Advanced Page)"
+title: "Quickstart Advance"
 sidebar_position: 3
 ---
 
