@@ -355,8 +355,17 @@ pub type Pubs = Vec<[u8; 32]>;
 #### settlementUltrahonkPallet Types
 
 ```rust
-pub type Proof = Vec<u8>;
-pub type Vk = [u8; 1760];
+// Auxiliary type
+// Vector size is limited by the evaluation domain size
+pub enum Proof {
+    ZK(Vec<u8>),
+    Plain(Vec<u8>),
+}
+
+pub enum VersionedProof {
+    V3_0(Proof),
+}
+pub type Vk = [u8; 1888];
 pub type Pubs = Vec<[u8; 32]>;
 ```
 
