@@ -50,3 +50,4 @@ We have created built-in verifier pallets for different proving schemes to suppo
 - Risc Zero
 - Plonky2
 - SP1
+- TEE (Intel TDX)
