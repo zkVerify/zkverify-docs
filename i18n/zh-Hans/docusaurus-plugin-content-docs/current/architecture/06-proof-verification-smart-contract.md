@@ -6,7 +6,7 @@ title: 证明验证智能合约
 
 ## Overview
 
-zkVerify 智能合约部署在多条链上，由授权 relayer 提交聚合。部署链列表见[此处](../useful-links/01-useful-links.md)。
+zkVerify 智能合约部署在多条链上，由授权 relayer 提交聚合。部署链列表见[此处](../handbook/99-resources/01-useful-links.md)。
 
 ## Storage Variables
 

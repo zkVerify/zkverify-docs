@@ -1,0 +1,8 @@
+{
+  "label": "我想在合约中消费验证结果",
+  "position": 4,
+  "link": {
+    "type": "doc",
+    "id": "handbook/four-paths/3d-consume-contracts/overview"
+  }
+}

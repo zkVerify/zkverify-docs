@@ -73,19 +73,19 @@ component main { public [ b ] } = Example();
 
 先用 noirup 安装 Noir 工具链，并安装 Noir 使用的 Barretenberg Backend。执行：
 
-1. Install noirup by running the following command:
+1. 运行以下命令安装 `noirup`：
 
 ```bash
 curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
 ```
 
-2. Running noirup will install the latest version of Noir Toolkit
+2. 运行 `noirup` 安装最新版 Noir Toolkit：
 
 ```bash
 noirup
 ```
 
-3. Install bbup by running the following command:
+3. 运行以下命令安装 `bbup`：
 
 ```bash
 curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
@@ -95,7 +95,7 @@ curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/head
 当前 verifier 兼容 `bb`/`bb.js` 生成的 Noir 证明版本在 `v0.84.0` 及以上、不包含 `v0.86.*`。
 :::
 
-4. Install Barretenberg's Backend by running bbup command:
+4. 使用 `bbup` 安装 Barretenberg Backend：
 
 ```bash
 bbup -v <version>
@@ -205,31 +205,31 @@ ZKV_PUBS_HEX_FILE_PATH="./target/zkv_pubs.hex"
 <TabItem value="ultraplonk" label="Ultraplonk">
 本节略，原文未提供额外步骤，可参考 UltraHonk 转换与提交流程，使用相应的 Ultraplonk 生成器与输入。
 
-We will use the quickstart Noir Lang guide to generate an UltraPlonk proof and will verify it on zkVerify. We will not be going in detail about Noir implementation, our focus would be on verifying those proofs efficiently on zkVerify.
+我们将使用 Noir Lang 的快速入门生成 UltraPlonk proof，并在 zkVerify 上验证。这里不会深入讲解 Noir 的实现细节，重点是如何高效地在 zkVerify 上验证这些 proof。
 
-## Steps Involved
+## 步骤
 
-- Installing Noir using noirup, and also installing bb (Barretenberg's Backend) using bbup
-- Generating Noir UltraPlonk proofs
-- Converting the proof and vk to required hex format using Noir-CLI
-- Verifying our proofs on zkVerify and getting proof receipts
-- Verifying the proof receipts on Ethereum
+- 使用 `noirup` 安装 Noir，并使用 `bbup` 安装 bb（Barretenberg Backend）
+- 生成 Noir UltraPlonk proof
+- 使用 Noir-CLI 将 proof 和 vk 转换为所需的 hex 格式
+- 在 zkVerify 上验证 proof 并获得 proof receipt
+- 在以太坊上验证 proof receipt
 
-To start this tutorial, first we need to install the Noir toolkit using noirup tool. Also, to generate the proofs we need to install Barretenberg's Backend used by Noir Toolkit. Run the following commands to install the requirements:
+开始本教程前，首先需要用 `noirup` 安装 Noir 工具链。为了生成 proof，还需要安装 Noir Toolkit 使用的 Barretenberg Backend。请执行以下命令安装这些依赖：
 
-1. Install noirup by running the following command:
+1. 运行以下命令安装 `noirup`：
 
 ```bash
 curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
 ```
 
-2. Running noirup will install the latest version of Noir Toolkit
+2. 运行 `noirup` 安装最新版 Noir Toolkit：
 
 ```bash
 noirup
 ```
 
-3. Install bbup by running the following command:
+3. 运行以下命令安装 `bbup`：
 
 ```bash
 curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/master/barretenberg/bbup/install | bash
@@ -242,34 +242,34 @@ You can do this via the command:
 `bbup -v <version>`
 :::
 
-4. Install Barretenberg's Backend by running bbup command:
+4. 运行 `bbup` 安装 Barretenberg Backend：
 
 ```bash
 bbup -v <version>
 ```
 
-5. Create hello_world noir project using the following command:
+5. 使用以下命令创建 `hello_world` Noir 项目：
 
 ```bash
 nargo new hello_world
 ```
 
-After implementing all the commands given above, you would have created the hello-world example Noir project. To learn more about this project you can check out [Noir docs](https://noir-lang.org/docs/getting_started/quick_start). Now we will generate proofs using the Noir toolkit for our hello_world project.
+执行完以上命令后，你就创建好了 hello-world 示例 Noir 项目。想进一步了解这个项目，可以阅读 [Noir docs](https://noir-lang.org/docs/getting_started/quick_start)。接下来我们会为 `hello_world` 项目生成 proof。
 
-To generate proofs, first we need to create a `Prover.toml` file, which will hold our inputs for the hello_world noir circuit. Populate the `Prover.toml` file with the inputs given below:
+要生成 proof，首先需要创建一个 `Prover.toml` 文件，用来保存 `hello_world` Noir 电路的输入。请按下列内容填写：
 
 ```toml
 x = "1"
 y = "2"
 ```
 
-Let's execute our hello_world circuit and get our witness value, which will be used to generate proofs and vk. Use the following command to execute:
+接着执行 `hello_world` 电路并获得 witness，它会用于生成 proof 和 vk。执行以下命令：
 
 ```bash
 nargo execute
 ```
 
-Once we have generated our witness, we can generate proof and vk using the bb toolkit. Use the following command to generate the required files:
+生成 witness 后，就可以用 `bb` 工具生成 proof 和 vk。执行以下命令生成所需文件：
 
 ```bash
 # To generate proof
@@ -280,52 +280,52 @@ bb write_vk -b ./target/hello_world.json -o ./target/vk
 
 ```
 
-After running these commands, you will have two files, namely: `proof` and `vk` inside the `target` folder which will be used for verification.
+执行完这些命令后，你会在 `target` 目录下得到 `proof` 和 `vk` 两个文件，后续验证会用到它们。
 </TabItem>
 
 <TabItem value="risc-zero" label="Risc Zero">
 请结合 Risc Zero 官方教程生成证明，之后在 zkVerifyJS 或 PolkadotJS 提交时按 Risc Zero 选项填写 proof、image_id 与 public inputs，并指定 Domain ID。
 
-This tutorial takes you through the process of building a Risc0 zkVM application.
+本教程将带你完成一个 Risc0 zkVM 应用的构建过程。
 
-After building the application, you can run it locally providing different inputs and it will give you back a proof of execution of its code. Then you can submit this proof on zkVerify Mainchain and check it gets correctly verified and included in a block.
+应用构建完成后，你可以在本地传入不同输入运行它，它会返回一份代码执行证明。之后你可以把这份 proof 提交到 zkVerify Mainchain，并检查它是否被正确验证并写入区块。
 
-Check out [this section](https://dev.risczero.com/api/zkvm/) of Risc0 documentation for additional information on what a zkVM application is.
+如果你想进一步了解 zkVM 应用是什么，可以阅读 Risc0 文档中的 [这一节](https://dev.risczero.com/api/zkvm/)。
 
-## Prerequisites
+## 前置条件
 
-- Risc0 installation requirements: check out [these steps](https://dev.risczero.com/api/zkvm/install#prerequisites).
-- Risc0 installation: check out [these steps](https://dev.risczero.com/api/zkvm/install#install).
-- Machine requirements: 16 GB RAM.
+- Risc0 安装前置要求：参考 [这些步骤](https://dev.risczero.com/api/zkvm/install#prerequisites)。
+- Risc0 安装方法：参考 [这些步骤](https://dev.risczero.com/api/zkvm/install#install)。
+- 机器要求：16 GB RAM。
 
 :::tip[**Toolchain version**]
 
-Note this tutorial is based on version `2.2.0` of Risc0 toolchain. Very likely you should be able to follow it using a more recent version, but in case you encounter any issue you can explicitly target that version with command `rzup --version 2.2.0`.
+注意：本教程基于 Risc0 toolchain `2.2.0` 版本编写。大概率也可以使用更新版本，但如果遇到问题，可以显式切换到该版本：`rzup --version 2.2.0`。
 
 :::
 
-## Building the application
+## 构建应用
 
-In this tutorial you will build an application which receives a string as input, performs its sha256 hashing and returns back the hash as output. Leveraging the zero knowledge feature of Risc0 zkVM, you are able to show that you know some input that hashes to that specific output without actually showing the input. This use case can be significant for example when proving ownership of confidential data, like a password or a private key.
+在本教程中，你将构建一个应用：它接收一个字符串输入，对其执行 sha256 哈希，并把哈希结果作为输出返回。借助 Risc0 zkVM 的零知识特性，你可以证明自己知道某个输入能产生该输出，而无需公开输入本身。这个场景在证明敏感数据的所有权时很有用，例如密码或私钥。
 
 :::tip[**Don't get confused with terminology!**]
 
-Make sure not to make confusion between _application inputs_ and _verification public inputs_. When you run the application it is supposed you are in a private environment, you provide it with whatever application inputs you want and you have to keep them private; after the run, you get back the proof of execution and the outputs of the execution. The outputs can be safely shared with other parties, indeed they become the public inputs of the verification phase (performed by other parties).
+请不要混淆 _application inputs_ 和 _verification public inputs_。运行应用时，默认你处于私有环境，可以提供任意 application inputs，并且这些输入应保持私密；运行结束后，你会得到执行 proof 和执行输出。输出可以安全地分享给其他人，因为它们会成为验证阶段的 public inputs。
 
 :::
 
-In order to build the application, go through the following steps:
+要构建这个应用，请按以下步骤进行：
 
-- Initialize a new Risc0 project typing within a terminal:
+- 在终端中初始化一个新的 Risc0 项目：
 
   ```bash
   cargo risczero new hasher --guest-name hasher_guest
   cd hasher
   ```
 
-  This will be your working directory.
+  这将成为你的工作目录。
 
-- Modify the host program (just consider it as the code that is running the zkVM):
+- 修改 host 程序（可将其理解为运行 zkVM 的那部分代码）：
 
   - Open the file `hasher/host/Cargo.toml` with a text editor and add at the bottom the following lines:
 
@@ -431,41 +431,41 @@ In order to build the application, go through the following steps:
   cargo build --release
   ```
 
-## Running the application
+## 运行应用
 
-You are now ready to run your application!
+现在你已经可以运行应用了。
 
-Open a terminal located at your working directory and type the command:
+在工作目录打开终端，执行以下命令：
 
 ```bash
 RISC0_DEV_MODE=0 cargo run --release -- "zkVerify is da best!"
 ```
 
-Replacing `zkVerify is da best!` with your desired input.
+你可以将 `zkVerify is da best!` 替换成自己想测试的输入。
 
-In summary, the above command will:
+总结一下，上面的命令会：
 
-- Start a Risc0 zkVM using the modified host program.
-- Read the application input your provided as command line argument (`zkVerify is da best!` in this case).
-- Perform an execution of the guest program and generate a proof of its execution.
-- Print to the terminal the serialized proof and the serialized output.
-- Perform an optional verification using the proof and the output (using them as verification public input) for double check.
+- 使用修改后的 host 程序启动一个 Risc0 zkVM。
+- 读取你通过命令行参数提供的 application input（这里是 `zkVerify is da best!`）。
+- 执行 guest 程序，并生成执行 proof。
+- 在终端打印序列化后的 proof 和序列化后的输出。
+- 使用 proof 和输出（把输出作为 verification public input）做一次可选的本地验证，作为双重确认。
 
-Finally you need to save the following items:
+最后，你需要保存以下内容：
 
-- The serialized proof (`receipt_inner_bytes_array` string).
-- The serialized outputs (`receipt_journal_bytes_array`).
-- The guest program fingerprint, known as image id (`image_id_hex`).
+- 序列化后的 proof（`receipt_inner_bytes_array` 字符串）。
+- 序列化后的输出（`receipt_journal_bytes_array`）。
+- guest 程序的指纹，也就是 image id（`image_id_hex`）。
 
-They will be used respectively as proof, public inputs and verification key during the verification phase.
+它们会在后续验证阶段分别作为 proof、public inputs 和 verification key 使用。
 
-Now that you have learned how to set up and run your Risc0 zkVM application you can play a bit with the guest program code and modify the execution logic.
+现在你已经学会了如何搭建并运行 Risc0 zkVM 应用，可以继续修改 guest 程序代码，尝试调整执行逻辑。
 </TabItem>
 
 <TabItem value="sp1" label="SP1">
 
-Submitting a SP1 proof to zkVerify SP1 verification pallet requires first to generate a compressed SP1 proof.
-To quickly try this out, you can follow the [official SP1 quickstart guide](https://docs.succinct.xyz/docs/sp1/getting-started/quickstart) for creating an example fibonacci application, and then execute the following code, in place of the provided `script/main.rs`:
+将 SP1 proof 提交给 zkVerify 的 SP1 verification pallet 之前，需要先生成一个 compressed SP1 proof。
+如果你想快速试一遍，可以先按照 [官方 SP1 quickstart guide](https://docs.succinct.xyz/docs/sp1/getting-started/quickstart) 创建一个 fibonacci 示例应用，然后用下面这段代码替换 `script/main.rs`：
 
 ```rust
 use sp1_sdk::{include_elf, Prover, ProverClient, SP1Stdin};
@@ -495,17 +495,17 @@ fn main() {
 <Tabs groupId="sp1-zkv-sdk">
 <TabItem value="with-sdk" label="With sp1_zkv_sdk">
 
-After having obtained a compressed proof, it's necessary to post-process the proof (alongside the verification key, and public inputs) to obtain a `serialized_proof`, a `vk_hash`, and `public_values` as required by the SP1 verification pallet.
-The [`sp1_zkv_sdk`](https://github.com/zkVerify/sp1-verifier/tree/main/sp1-zkv-sdk) crate contains utility functions to perform the relevant conversions.
+获得 compressed proof 之后，还需要对 proof、verification key 和 public inputs 做后处理，生成 SP1 verification pallet 所需的 `serialized_proof`、`vk_hash` 和 `public_values`。
+[`sp1_zkv_sdk`](https://github.com/zkVerify/sp1-verifier/tree/main/sp1-zkv-sdk) crate 提供了完成这些转换的辅助函数。
 
-Add these following dependencies below the `[dependencies]` tab in your Cargo.toml file of the script folder:
+请在 `script` 目录下的 `Cargo.toml` 中，把下列依赖加入 `[dependencies]`：
 
 ```toml
 bincode = { version = "2", features = ["serde"] }
 sp1-zkv-sdk = { git="https://github.com/zkVerify/sp1-verifier" }
 ```
 
-And then add the following imports to your `script/Cargo.toml`:
+然后在代码中加入以下 imports：
 
 ```rust
 use sp1_zkv_sdk::*; // for the `convert_to_zkv` and `hash_bytes` methods.
@@ -529,7 +529,7 @@ fn to_hex_with_prefix(bytes: &[u8]) -> String {
 }
 ```
 
-Now, add these lines after the proof is generated by the SP1 prover sdk:
+接着，在 SP1 prover SDK 生成 proof 之后，补上以下代码：
 
 ```rust
 // Convert proof and vk into a zkVerify-compatible proof.
@@ -562,13 +562,13 @@ file.write_all(json_string.as_bytes()).unwrap();
 
 </TabItem>
 <TabItem value="without-sdk" label="Without sp1_zkv_sdk">
-If you'd rather not depend on `sp1_zkv_sdk` in your application, the following sections show code snippets to perform the required conversions.
-First you would need to add these following dependencies below the `[dependencies]` tab in your Cargo.toml file of the script folder:
+如果你不想在应用中依赖 `sp1_zkv_sdk`，下面这些小节展示了如何手动完成所需转换。
+首先需要在 `script` 目录下的 `Cargo.toml` 的 `[dependencies]` 中加入：
 ```toml
 bincode = { version = "2", features = ["serde"] }
 ```
 
-Next we need to import all the important modules and create a structure to store our proof. Add these following lines after all the imports in `script/Cargo.toml` file:
+然后导入必要模块，并定义一个结构来保存 proof。请在 imports 后加入以下代码：
 
 ```rust
 use sp1_sdk::HashableKey;   // for the `hash_babybear` method.
@@ -594,7 +594,7 @@ fn to_hex_with_prefix(bytes: &[u8]) -> String {
 
 ### Proof
 
-The SP1 verification pallet supports shrunk STARK proofs. Here's the code to generate it from the `proof` obtained in the section `Proof generation`, you need to paste this after the proof is generated by the SP1 prover SDK:
+SP1 verification pallet 支持 shrunk STARK proof。下面这段代码可以从 `Proof generation` 小节得到的 `proof` 中生成所需数据。请把它放在 SP1 prover SDK 生成 proof 之后：
 
 ```rust
 // Extract the inner compressed proof.
@@ -631,7 +631,7 @@ let serialized_proof = bincode::serde::encode_to_vec(&zkv_proof, bincode::config
 
 ### Verification Key
 
-The SP1 verification pallet accepts verification keys hashed with the `hash_babybear` method, and serialized as little endian bytes. Here's a code snippet showing the process:
+SP1 verification pallet 接收通过 `hash_babybear` 方法哈希、并以 little endian bytes 序列化的 verification key。示例如下：
 
 ```rust
 // `vk` is the verification key obtained from `ProverClient::setup` method.
@@ -640,7 +640,7 @@ let vk_hash: [u8; 32] = vk.hash_bytes();
 
 ### Public Values
 
-SP1 verification pallet accepts public inputs expressed as a vector of bytes, which can be retrieved from the initial `SP1ProofWithPublicValues` proof:
+SP1 verification pallet 接收以 bytes 向量表示的 public inputs，可以直接从最初的 `SP1ProofWithPublicValues` proof 中提取：
 
 ```rust
 let public_values = proof.public_values.to_vec();
@@ -648,7 +648,7 @@ let public_values = proof.public_values.to_vec();
 
 ### Storing the output
 
-Once we have generated all the proof artifacts, we will store it in a json file which will be used later while verification. Paste the following code snippet to store your artifacts into the required structure:
+当所有 proof artifacts 都生成后，我们会把它们写入一个 json 文件，供后续验证使用。请加入以下代码，把这些 artifacts 保存为所需结构：
 
 ```rust
 let output = Output{
@@ -671,42 +671,42 @@ file.write_all(json_string.as_bytes()).unwrap();
 <TabItem value="ezkl" label="EZKL">
 参考 ezkl 教程生成证明，使用生成的 proof、vk、public inputs，通过 zkVerifyJS 或 PolkadotJS 按 ezkl 选项提交，并选择对应 Domain ID。
 
-We will use the quickstart guide by zkonduit in order to generate an EZKL proof, and we will then verify it on zkVerify. We will not be going into detail about EZKL's implementation, our focus would be on verifying those proofs efficiently on zkVerify.
+我们将使用 zkonduit 的 quickstart guide 生成 EZKL proof，然后在 zkVerify 上完成验证。这里不会展开讲 EZKL 的内部实现，重点放在如何高效地在 zkVerify 上验证这些 proof。
 
-## Steps Involved
+## 步骤
 
-- Installing EZKL and dependencies
-- Defining a model and exporting it to ONNX format
-- Generating EZKL proofs
-- Converting the proof, vk, and instances (public inputs) to required hex format using Bash
-- Verifying our proofs on zkVerify and getting proof receipts
-- Verifying the proof receipts on Ethereum
+- 安装 EZKL 及其依赖
+- 定义模型并导出为 ONNX 格式
+- 生成 EZKL proof
+- 使用 Bash 将 proof、vk 和 instances（public inputs）转换为所需 hex 格式
+- 在 zkVerify 上验证 proof 并获得 proof receipt
+- 在以太坊上验证 proof receipt
 
-To start this tutorial, first we need to install the EZKL zkML library. For the purposes of this tutorial, we will be primarily using the Bash CLI. However, for defining our toy model, we will rely on Python3 and PyTorch. Other frameworks should also be compatible, as long as you are able to export your model into `.onnx` format. For alternatives, please consult the [EZKL documentation](https://docs.ezkl.xyz/getting-started/setup/) by zkonduit and the [ONNX documentation](https://onnx.ai/onnx/intro/). Use of a virtual environment is recommended. Run the following commands to install the requirements:
+开始本教程前，首先需要安装 EZKL zkML 库。本教程主要使用 Bash CLI；但在定义示例模型时，会借助 Python3 和 PyTorch。只要你能把模型导出为 `.onnx` 格式，其他框架也同样可行。更多替代方案可参考 zkonduit 提供的 [EZKL documentation](https://docs.ezkl.xyz/getting-started/setup/) 和 [ONNX documentation](https://onnx.ai/onnx/intro/)。建议使用虚拟环境。请执行以下命令安装依赖：
 
-1. Install ezkl by running the following command:
+1. 运行以下命令安装 `ezkl`：
 
 ```bash
 curl https://raw.githubusercontent.com/zkonduit/ezkl/main/install_ezkl_cli.sh | bash
 ```
 
-2. Install ONNX:
+2. 安装 ONNX：
 
 ```bash
 pip install onnx
 ```
 
-3. Install PyTorch:
+3. 安装 PyTorch：
 
 ```bash
 pip install torch torchvision
 ```
 
-4. Define your model, export it to `network.onnx`, and create an `input.json` file:
+4. 定义模型，导出到 `network.onnx`，并创建 `input.json` 文件：
 
-_Important:_ If you already have an exported model (`network.onnx`) and inputs file (`input.json`), you may skip this step completely.
+_重要：_ 如果你已经准备好了导出的模型（`network.onnx`）和输入文件（`input.json`），可以完全跳过这一步。
 
-For illustration, let's create a Python script defining a simple model that learns the linear function $y = 2x + 1$. We will call it `export_model.py`.
+为了说明流程，我们创建一个 Python 脚本，定义一个学习线性函数 $y = 2x + 1$ 的简单模型。文件名就叫 `export_model.py`。
 
 ```python
 import torch
@@ -748,90 +748,90 @@ with open(json_path, 'w') as f:
 print(f"Input data saved to {json_path}")
 ```
 
-Grant the script execution permissions by running `chmod +x export_model.py` from a Bash shell and then run it by issuing the command `python3 export_model.py`. After the script finishes, you should have two files, namely, `network.onnx` and `input.json`. We are now ready to start using `ezkl`.
+先在 Bash 中运行 `chmod +x export_model.py` 给脚本执行权限，然后执行 `python3 export_model.py`。脚本完成后，你应该会得到两个文件：`network.onnx` 和 `input.json`。这时就可以开始使用 `ezkl` 了。
 
-5. Generate Settings:
-   The first command that you need to issue to `ezkl` is for generating the initial circuit parameters for your model. To inspect the model and create such a configuration file, run:
+5. 生成 Settings：
+   首先需要让 `ezkl` 为模型生成初始电路参数。要检查模型并创建这份配置文件，请运行：
 
 ```bash
 ezkl gen-settings -M network.onnx -O settings.json
 ```
 
-This should generate `settings.json`.
+这一步会生成 `settings.json`。
 
-6. Calibrate Settings (Optional):
+6. 校准 Settings（可选）：
 
-This step is _optional_, but crucial as it runs a mock forward pass to determine the best fixed-point scaling for the numbers in your model. This step essentially fine-tunes your `settings.json` parameters to better match your actual model and data, which in turn helps prevent proofs from failing due to arithmetic errors. You will need to provide a `calibration.json` data file to the `calibrate-settings` command. The data in this file must match the (tensor) shape and structure of `input.json`, differing only in the specific values used (which should be representative, not dummy). `ezkl` can use this data to automatically tune and optimize the circuit settings (e.g., scales, constraints, and logrows). For the purpose of this tutorial, we will keep things simple and use `input.json` as our calibration data file. To commence calibration, run:
+这一步 _可选_，但很关键，因为它会运行一次模拟前向传播，以确定模型中数值最合适的 fixed-point scaling。实质上，它会微调 `settings.json` 的参数，使之更贴近你的真实模型和数据，从而降低 proof 因算术误差失败的概率。你需要为 `calibrate-settings` 命令提供一个 `calibration.json` 数据文件。该文件的数据形状和结构必须与 `input.json` 保持一致，只是具体数值不同，并且这些数值应具有代表性，而不是随便填的 dummy 数据。`ezkl` 会利用这份数据自动调优电路设置（例如 scales、constraints 和 logrows）。为了简化教程，我们直接使用 `input.json` 作为校准数据文件。执行以下命令开始校准：
 
 ```bash
 ezkl calibrate-settings -D input.json -M network.onnx --settings-path settings.json
 ```
 
-This modifies `settings.json` with optimal parameters.
+这一步会用优化后的参数更新 `settings.json`。
 
-7. Compile the Model:
+7. 编译模型：
 
-This step transforms your neural network into an arithmetic circuit, the fundamental object for which we can create proofs. Run:
+这一步会把神经网络转换成 arithmetic circuit，这是生成 proof 的基础对象。请运行：
 
 ```bash
 ezkl compile-circuit -M network.onnx --settings-path settings.json --compiled-circuit model.compiled
 ```
 
-This should generate the `model.compiled` file which contains an optimized format of the model for zero-knowledge proofs.
+这一步会生成 `model.compiled` 文件，其中包含适用于零知识证明的模型优化格式。
 
-8. Download the relevant SRS file:
+8. 下载对应的 SRS 文件：
 
-You will need to download a Structured Reference String (SRS) file according to what commitment scheme you are using (by default, that's KZG) and the number of `logrows`. This information is specified in your circuit settings file. To commence the download, issue the command:
+你需要根据所使用的 commitment scheme（默认是 KZG）以及 `logrows` 的数量下载相应的 Structured Reference String（SRS）文件。这些信息都写在 circuit settings 文件中。执行以下命令开始下载：
 
 ```bash
 ezkl get-srs -S settings.json
 ```
 
-By default, any downloaded SRS is saved in `~/.ezkl/srs`.
+默认情况下，下载的 SRS 会保存在 `~/.ezkl/srs`。
 
-9. Run the Trusted Setup to generate the cryptographic keys:
+9. 执行 Trusted Setup，生成加密密钥：
 
-Run the command:
+执行以下命令：
 
 ```bash
 ezkl setup -M model.compiled --pk-path pk.key --vk-path vk.key
 ```
 
-You should now have a proving key (for the prover) in `pk.key` and a verification key (for the verifier) in `vk.key`.
+此时你应该已经得到 `pk.key`（prover 使用的 proving key）和 `vk.key`（verifier 使用的 verification key）。
 
-10. Generate the witness:
+10. 生成 witness：
 
-This step creates a witness file from your input data and compiled model. Simply run:
+这一步会根据你的输入数据和编译后的模型生成 witness 文件。直接运行：
 
 ```bash
 ezkl gen-witness -M model.compiled -D input.json -V vk.key -O witness.json
 ```
 
-This should generate the `witness.json` file.
+这一步会生成 `witness.json` 文件。
 
-11. Prove:
+11. 生成 proof：
 
-To generate a zero-knowledge proof using the witness and other artifacts, run:
+要利用 witness 和其他 artifacts 生成零知识 proof，请运行：
 
 ```bash
 ezkl prove -M model.compiled --pk-path pk.key --proof-path proof.json -W witness.json
 ```
 
-and you should now have a JSON file called `proof.json`. This file contains both the proof and the instances (public inputs).
+执行后你会得到一个名为 `proof.json` 的 JSON 文件，其中同时包含 proof 和 instances（public inputs）。
 
-12. Generate the VKA:
+12. 生成 VKA：
 
-The Reusable EZKL verifier relies on an additional artifact called the Verification Key Artifact (or, VKA for short). To generate it, simply run:
+Reusable EZKL verifier 依赖一个额外 artifact，叫做 Verification Key Artifact（简称 VKA）。生成方法如下：
 
 ```bash
 ezkl create-evm-vka -S settings.json --vk-path vk.key --vka-path vka.bytes
 ```
 
-and you should now have an additional file called `vka.bytes`.
+执行后你会额外得到一个 `vka.bytes` 文件。
 
-You are almost set. The artifacts `proof.json` and `vka.bytes` contain all the information necessary for verifying the proof with zkVerify. The final step consists of extracting this data, and converting them to a format compatible for direct use with zkVerify.
+到这里基本就准备好了。`proof.json` 和 `vka.bytes` 这两个 artifact 已经包含了 zkVerify 验证该 proof 所需的全部信息。最后一步是把其中的数据提取出来，并转换成可直接供 zkVerify 使用的格式。
 
-To accomplish this, issue the following Bash commands:
+为此，请执行以下 Bash 命令：
 
 ```bash
 # Convert vka to hexadecimal format
@@ -848,9 +848,9 @@ echo "[$(jq -r '.pretty_public_inputs.outputs | flatten | map("\"\(.)\"") | join
 
 </Tabs>
 
-After generating proofs, there are multiple ways in which you can verify it on [zkVerify](https://zkverify.io). The recommended way to verify proofs on zkVerify is by using the [Kurier](./05-kurier.md). You can verify proofs using anyone of the following :-
+生成 proof 后，你可以通过多种方式在 [zkVerify](https://zkverify.io) 上完成验证。推荐的方式是使用 [Kurier](./05-kurier.md)。你也可以任选以下方式之一进行验证：
 
-1. Using [Kurier](./05-kurier.md)
-2. Using [zkVerifyJS package](./06-zkverify-js.md)
-3. Using [Polkadot.js frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
-4. Using the [subxt](https://github.com/paritytech/subxt) rust crate
+1. 使用 [Kurier](./05-kurier.md)
+2. 使用 [zkVerifyJS package](./06-zkverify-js.md)
+3. 使用 [Polkadot.js frontend](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/extrinsics)
+4. 使用 [subxt](https://github.com/paritytech/subxt) Rust crate

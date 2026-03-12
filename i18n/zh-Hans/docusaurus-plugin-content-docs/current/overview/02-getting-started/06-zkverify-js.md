@@ -17,19 +17,19 @@ import TabItem from '@theme/TabItem';
 
 新建项目并安装 ```zkverify JS```，执行以下命令：
 
-Create a new directory:
+新建目录：
 ```bash
 mkdir proof-submission
 ```
-Navigate to the project directory:
+进入项目目录：
 ```bash
 cd proof-submission
 ```
-Initialise an NPM project:
+初始化 NPM 项目：
 ```bash
 npm init -y && npm pkg set type=module
 ```
-Install zkVerify JS and dotenv:
+安装 `zkverifyjs` 和 `dotenv`：
 ```bash
 npm i zkverifyjs dotenv
 ```

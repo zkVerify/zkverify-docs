@@ -123,9 +123,9 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'usefulSidebar',
+          sidebarId: 'handbookSidebar',
           position: 'left',
-          label: '🌍 Useful Links / Guides',
+          label: '📘 Handbook',
         },
         {
           href: 'https://github.com/zkVerify/zkVerify-docs',

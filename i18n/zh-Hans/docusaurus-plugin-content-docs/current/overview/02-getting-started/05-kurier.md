@@ -17,25 +17,25 @@ import TabItem from '@theme/TabItem';
 
 新建项目并安装 `axios`，执行：
 
-Create a new directory:
+新建目录：
 
 ```bash
 mkdir proof-submission
 ```
 
-Navigate to the project directory:
+进入项目目录：
 
 ```bash
 cd proof-submission
 ```
 
-Initialize an NPM project:
+初始化 NPM 项目：
 
 ```bash
 npm init -y && npm pkg set type=module
 ```
 
-Install axios and dotenv:
+安装 `axios` 和 `dotenv`：
 
 ```bash
 npm i axios dotenv
@@ -44,7 +44,7 @@ npm i axios dotenv
 创建 `.env` 存储 `API_KEY`，用于通过 Kurier 提交证明。需先注册获取 API Key（[主网](https://kurier.xyz) 或 [测试网](https://testnet.kurier.xyz)）。
 
 ```bash
-API_KEY = "generate your API key"
+API_KEY = "填写你生成的 API key"
 ```
 
 新建 `index.js` 作为入口，导入依赖：
@@ -58,24 +58,24 @@ dotenv.config();
 
 初始化 API 地址。
 
-For mainnet:
+主网：
 
 ```js
 const API_URL = "https://api.kurier.xyz";
 ```
 
-For testnet:
+测试网：
 
 ```js
 const API_URL = "https://api-testnet.kurier.xyz";
 ```
 
-**API Documentation**
+**API 文档**
 
 两套环境均提供 Swagger 文档，包含端点、入参与响应，可用于集成与调试：
 
-- Mainnet: https://api.kurier.xyz/docs
-- Testnet: https://api-testnet.kurier.xyz/docs
+- 主网：https://api.kurier.xyz/docs
+- 测试网：https://api-testnet.kurier.xyz/docs
 
 ---
 

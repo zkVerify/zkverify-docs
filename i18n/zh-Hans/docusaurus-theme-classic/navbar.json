@@ -19,9 +19,9 @@
     "message": "🎖️ 激励测试网",
     "description": "Navbar item with label 🎖️ Incentivized Testnet"
   },
-  "item.label.🌍 Useful Links / Guides": {
-    "message": "🌍 实用链接 / 指南",
-    "description": "Navbar item with label 🌍 Useful Links / Guides"
+  "item.label.📘 Handbook": {
+    "message": "📘 手册",
+    "description": "Navbar item with label 📘 Handbook"
   },
   "item.label.GitHub": {
     "message": "GitHub",

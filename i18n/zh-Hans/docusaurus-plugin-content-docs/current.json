@@ -43,6 +43,50 @@
     "message": "参考资料",
     "description": "The label for category Reference in sidebar docsSidebar"
   },
+  "sidebar.handbookSidebar.category.Introduction": {
+    "message": "简介",
+    "description": "The label for category Introduction in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.Quickstart": {
+    "message": "快速上手",
+    "description": "The label for category Quickstart in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.ZK Proof Lifecycle": {
+    "message": "ZK 证明生命周期",
+    "description": "The label for category ZK Proof Lifecycle in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.Four Paths": {
+    "message": "四条路径",
+    "description": "The label for category Four Paths in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.I Am New to ZK": {
+    "message": "我是 ZK 新手",
+    "description": "The label for category I Am New to ZK in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.I Understand ZK and Want to Build on zkVerify": {
+    "message": "我理解 ZK，想在 zkVerify 上构建",
+    "description": "The label for category I Understand ZK and Want to Build on zkVerify in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.I Just Want Examples": {
+    "message": "我只想看示例",
+    "description": "The label for category I Just Want Examples in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.I Want to Consume Verification Results in Contracts": {
+    "message": "我想在合约中消费验证结果",
+    "description": "The label for category I Want to Consume Verification Results in Contracts in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.Common Questions": {
+    "message": "常见问题",
+    "description": "The label for category Common Questions in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.Reference": {
+    "message": "参考资料",
+    "description": "The label for category Reference in sidebar handbookSidebar"
+  },
+  "sidebar.handbookSidebar.category.Resources": {
+    "message": "资源",
+    "description": "The label for category Resources in sidebar handbookSidebar"
+  },
   "sidebar.docsSidebar.category.Getting Started": {
     "message": "入门指南",
     "description": "The label for category Getting Started in sidebar docsSidebar"

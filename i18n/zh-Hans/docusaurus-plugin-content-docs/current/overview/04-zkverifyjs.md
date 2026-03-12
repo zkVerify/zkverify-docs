@@ -1,14 +1,14 @@
 ---
-title: "zkVerifyJS Reference"
+title: "zkVerifyJS 参考"
 ---
 
 import ZkverifyjsReadme from '@site/static/markdown/zkverifyjs.md';
 
-Follow the instructions below to submit a proof using the [zkverifyjs](https://www.npmjs.com/package/zkverifyjs) npm package.
+按照下述说明，使用 [zkverifyjs](https://www.npmjs.com/package/zkverifyjs) npm 包提交 proof。
 
-Before you begin, ensure you have Node.js installed on your machine. You can download and install it from the [official Node.js website](https://nodejs.org/).
+开始前，请确认本机已安装 Node.js。你可以从 [Node.js 官方网站](https://nodejs.org/) 下载并安装。
 
-Run the following commands to verify that Node.js and npm are installed correctly. You should see the version numbers of Node.js and npm:
+运行以下命令，确认 Node.js 与 npm 已正确安装。正常情况下会输出它们的版本号：
 
 ```shell
 node -v
