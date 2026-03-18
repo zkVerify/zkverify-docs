@@ -54,3 +54,4 @@ title: 证明提交流程
   - [**sp1**](./07-verification_pallets/08-sp1.md)
   - [**ultrahonk**](./07-verification_pallets/09-ultrahonk.md)
   - [**ezkl**](./07-verification_pallets/10-ezkl.md)
+  - [**tee**](./07-verification_pallets/11-tee.md)

@@ -28,6 +28,7 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="networks">
 <TabItem value="mainnet" label="Mainnet">
 - Base  
+- Horizen
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 - Sepolia Testnet
@@ -49,3 +50,4 @@ import TabItem from '@theme/TabItem';
 - Risc Zero
 - Plonky2
 - SP1
+- TEE (Intel TDX)

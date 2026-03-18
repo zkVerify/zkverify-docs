@@ -49,17 +49,6 @@ function submitAggregationBatchByDomainId(
 
 相比多次调用 submitAggregation 更省 gas（只付一次基础费用），也避免以太坊 nonce 管理边界情况。
 
-### onAccept（Hyperbridge 提交）
-
-接收包含聚合的 hyperbridge 消息，由 Hyperbridge 接口定义：
-
-```solidity
-function onAccept(IncomingPostRequest memory incoming) external override onlyHost
-```
-
-- 解析 payload 获取 domainId、aggregationId、proofsAggregation
-- 调用内部 `registerAggregation`
-
 ### Verify Proof Aggregation
 
 供提交者的合约验证其证明已被发布的聚合认可。

@@ -87,7 +87,7 @@ import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Buffer } from "buffer";
 
-const API_URL = "https://api-testnet.kurier.xyz";
+const API_URL = "https://api-testnet.kurier.xyz/api/v1";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse){
 
@@ -258,7 +258,7 @@ function concatenatePublicInputsAndProof(publicInputsHex: any, proofUint8: any) 
 
 async function registerVk(vk: any){
 
-  const API_URL = "https://api-testnet.kurier.xyz";
+  const API_URL = "https://api-testnet.kurier.xyz/api/v1";
 
   const params = {
     proofType: "ultraplonk",

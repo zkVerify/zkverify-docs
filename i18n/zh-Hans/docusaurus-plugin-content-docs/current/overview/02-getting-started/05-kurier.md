@@ -61,13 +61,13 @@ dotenv.config();
 主网：
 
 ```js
-const API_URL = "https://api.kurier.xyz";
+const API_URL = "https://api.kurier.xyz/api/v1";
 ```
 
 测试网：
 
 ```js
-const API_URL = "https://api-testnet.kurier.xyz";
+const API_URL = "https://api-testnet.kurier.xyz/api/v1";
 ```
 
 **API 文档**

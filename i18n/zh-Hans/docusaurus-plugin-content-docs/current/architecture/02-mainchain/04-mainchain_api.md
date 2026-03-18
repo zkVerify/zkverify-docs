@@ -172,7 +172,7 @@ RPC 可查询主链节点或提交命令，标准调用见 [官方文档](https:
 - `queue_size`: 可选，待发布聚合上限（默认取 runtime 配置）
 - `aggregate_rules`: 聚合权限规则
 - `proof_rules`: 提交权限规则
-- `delivery`: 派发参数（目的地与价格，目前仅 None 或 Hyperbridge）
+- `delivery`: 派发参数（目的地与价格）
 - `delivery_owner`: 派发 owner（默认调用方）
 
 #### [holdDomain](#holddomain)
@@ -261,6 +261,7 @@ RPC 可查询主链节点或提交命令，标准调用见 [官方文档](https:
 - [settlementPlonky2Pallet](#settlementplonky2pallet-types)
 - [settlementSp1Pallet](#settlementsp1pallet-types)
 - [settlementEzklPallet](#settlementezklpallet-types)
+- [settlementTeePallet](#settlementteepallet-types)
 
 ##### settlementGroth16Pallet Types
 
@@ -369,6 +370,17 @@ pub type Pubs = Vec<u8>;
 pub type Proof = Vec<u8>;
 pub type Vk = Vec<u8>;
 pub type Pubs = Vec<[u8; 32]>;
+```
+
+#### settlementTeePallet Types
+
+```rust
+pub type Proof = Vec<u8>;  // TEE attestation quote, max 8192 bytes
+pub type Pubs = Vec<u8>;   // Max 0 bytes — not used
+pub struct Vk {
+    pub tcb_response: Vec<u8>,   // TCB info JSON response, max 8192 bytes
+    pub certificates: Vec<u8>,   // PEM-encoded certificate chain for TCB signature verification, max 8192 bytes
+}
 ```
 
 ## [Events](#events)

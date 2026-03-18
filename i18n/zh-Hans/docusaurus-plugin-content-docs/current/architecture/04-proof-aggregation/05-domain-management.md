@@ -35,7 +35,6 @@ import TabItem from '@theme/TabItem';
 
 - 聚合就绪（或按内部策略如超时）时，Aggregator Service 会调用 aggregate extrinsic
 - Mechanism 为 “Bot” 的域：我们运行链下 relayer 监听新 Aggregation Receipt 并发布到指定目标链
-- 支持 Hyperbridge 的域：我们运行自有 relayer 到 Hyperbridge 链，并承担费用（目前）
 
 [如下列表](#listdomains)
 
@@ -46,17 +45,16 @@ import TabItem from '@theme/TabItem';
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
 | 2         | Base              | Bot         |
+| 3         | Horizen           | Bot         |
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
 | 175       | Horizen Testnet   | Bot         |
 | 0         | Ethereum Sepolia  | Bot         |
-| 1         | Ethereum Sepolia  | Hyperbridge |
 | 2         | Base Sepolia      | Bot         |
 | 3         | Optimism Sepolia  | Bot         |
 | 4         | Arbitrum Sepolia  | Bot         |
-| 5         | Arbitrum Sepolia  | Hyperbridge |
 | 56        | EDU Chain Testnet | Bot         |
 </TabItem>
 </Tabs>
