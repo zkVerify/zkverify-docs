@@ -60,7 +60,7 @@ Users submitting proofs will equally split both costs, in an amount proportional
 ### Delivery Owner
 
 An account responsible for managing and executing all the on-chain actions required to ensure a successful delivery of a given aggregation according to the delivery mechanism specified within the domain.
-One of its main responsibilities, for instance, is to set an appropriate delivery price to be sure that the actors responsible for the delivery (e.g. Hyperbridge Relayers) will accept the delivery request and perform their duty; this could involve, for instance, monitoring the fees on the destination chain and computing the appropriate conversion rate, communicating with the entity running the relayer, etc.
+One of its main responsibilities, for instance, is to set an appropriate delivery price to be sure that the actors responsible for the delivery (e.g. Relayers) will accept the delivery request and perform their duty; this could involve, for instance, monitoring the fees on the destination chain and computing the appropriate conversion rate, communicating with the entity running the relayer, etc.
 
 The cost for delivery is split equally among all the proof submitters, according to the aggregation size.
 Please note that the delivery owner could set a bigger price than the actual one, to make a profitable margin for itself and be rewarded for the duties it is responsible for.

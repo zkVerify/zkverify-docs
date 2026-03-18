@@ -192,7 +192,7 @@ Arguments:
 - `queue_size`: Optional maximum number of pending aggregations (defaults to runtime configuration)
 - `aggregate_rules`: Security rules for controlling who can aggregate
 - `proof_rules`: Security rules for controlling who can submit proofs
-- `delivery`: Parameters for delivery (destination and price) At the moment destination can only be either None or Hyperbridge
+- `delivery`: Parameters for delivery (destination and price)
 - `delivery_owner`: The delivery owner, as discussed in the previous section (defaults to origin).
 
 #### [holdDomain](#holddomain)
@@ -295,6 +295,7 @@ Register a verification key that can be used later in submit proof calls and emi
 - [settlementPlonky2Pallet](#settlementplonky2pallet-types)
 - [settlementSp1Pallet](#settlementsp1pallet-types)
 - [settlementEzklPallet](#settlementezklpallet-types)
+- [settlementTeePallet](#settlementteepallet-types)
 
 ##### settlementGroth16Pallet Types
 
@@ -405,6 +406,17 @@ pub type Pubs = Vec<u8>;
 pub type Proof = Vec<u8>;
 pub type Vk = Vec<u8>;
 pub type Pubs = Vec<[u8; 32]>;
+```
+
+#### settlementTeePallet Types
+
+```rust
+pub type Proof = Vec<u8>;  // TEE attestation quote, max 8192 bytes
+pub type Pubs = Vec<u8>;   // Max 0 bytes — not used
+pub struct Vk {
+    pub tcb_response: Vec<u8>,   // TCB info JSON response, max 8192 bytes
+    pub certificates: Vec<u8>,   // PEM-encoded certificate chain for TCB signature verification, max 8192 bytes
+}
 ```
 
 ## [Events](#events)

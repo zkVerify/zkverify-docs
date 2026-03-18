@@ -27,7 +27,8 @@ Users submits a Merkle Proof to the zkVerify contract on-chain in order to verif
 
 <Tabs groupId="networks">
 <TabItem value="mainnet" label="Mainnet">
-- Base  
+- Base
+- Horizen
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 - Sepolia Testnet
@@ -49,3 +50,4 @@ We have created built-in verifier pallets for different proving schemes to suppo
 - Risc Zero
 - Plonky2
 - SP1
+- TEE (Intel TDX)
