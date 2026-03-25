@@ -8,6 +8,7 @@ sidebar_position: 8
 ## First, what this project is for
 
 [polyverified](https://github.com/JetHalo/polyverified) is a paid signal product for Polymarket. Users do not arrive and read the conclusions for free. They pay through `x402` first, then unlock the directional signal for the current market. The current primary line is hourly `BTC / ETH` signals, while daily `Gold / Silver` signals are also still supported.
+If you want to look at the live product before setting it up locally, open the [Poly Verified demo](https://polyverified-production.up.railway.app/). This is the current demo entry point for the project.
 
 The real problem this product is trying to solve is larger than "how to sell a signal." Prediction products are always vulnerable to the same suspicion: did you really publish that signal before the result was known? People look at win rate, but what they really care about is whether losing calls were deleted, whether direction was changed after the fact, and whether timestamps were backfilled.
 

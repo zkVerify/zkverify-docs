@@ -7,6 +7,7 @@ sidebar_position: 5
 
 这个教程对应的是仓库里的 `direct` 提交流程。
 如果你想边看文档边对照代码，直接打开 [JetHalo/zk-Escrow 的 `direct` 分支](https://github.com/JetHalo/zk-Escrow/tree/direct) 会更顺手一些。
+如果你想先看实际效果，可以直接打开 [zkEscrow direct 模式演示地址](https://zk-escrow-direct.vercel.app/escrow)。这个地址对应的就是这篇教程讲的 direct 路线。
 
 浏览器本地生成 Groth16 proof，服务端把 `proof`、`publicSignals` 和 `vk` 直接提交给 Kurier。Kurier 状态进入 `finalized` 之后，前端再请求授权签名，最后调用链上 `finalize`。
 

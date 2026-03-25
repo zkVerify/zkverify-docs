@@ -6,6 +6,7 @@ sidebar_position: 7
 # Set Up a zkVote Development Environment
 
 If you want to install while reading the code at the same time, start from the [zkvote](https://github.com/JetHalo/zkvote) repository.
+If you want to see the live app before walking through the setup, open the [zkVote demo](https://zkvote-production.up.railway.app/). This is the demo entry point that matches this guide.
 
 ## First, understand what zkVote is
 

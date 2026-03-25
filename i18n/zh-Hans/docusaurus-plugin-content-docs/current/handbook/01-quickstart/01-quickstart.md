@@ -7,6 +7,8 @@ sidebar_position: 2
 
 为了避免卡在环境配置，这里只保留必要步骤。你需要准备三样东西：proof、vk、public inputs。Kurier 路线会先注册 vk，zkVerifyJS 路线直接在链上提交验证。
 
+如果你想先看一个已经跑起来的例子，可以直接打开 [zkEscrow 演示地址](https://zk-escrow.vercel.app/escrow)。这个示例页能帮助你先建立对整条验证闭环的直觉。
+
 ```mermaid
 flowchart LR
   A[Prepare proof + vk + public inputs] --> B{Choose path}

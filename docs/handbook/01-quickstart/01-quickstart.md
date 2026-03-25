@@ -7,6 +7,8 @@ This page walks you through the shortest path to a successful zkVerify submissio
 
 To avoid getting stuck on environment setup, this page keeps only the minimum steps. You need three things: a proof, a vk, and public inputs. The Kurier path registers the vk first. The zkVerifyJS path submits the verification request directly on-chain.
 
+If you want to look at a running example first, open the [zkEscrow demo](https://zk-escrow.vercel.app/escrow). It gives you a concrete feel for the end-to-end verification loop before you wire your own app.
+
 ```mermaid
 flowchart LR
   A[Prepare proof + vk + public inputs] --> B{Choose path}

@@ -7,6 +7,7 @@ sidebar_position: 5
 
 This tutorial follows the repository's `direct` submission flow.
 If you want to read the docs side by side with the code, it is easiest to keep [JetHalo/zk-Escrow's `direct` branch](https://github.com/JetHalo/zk-Escrow/tree/direct) open as you go.
+If you want to see the live app first, open the [zkEscrow direct-mode demo](https://zk-escrow-direct.vercel.app/escrow). It follows the same direct path described in this tutorial.
 
 The browser generates a Groth16 proof locally, the server submits `proof`, `publicSignals`, and `vk` directly to Kurier, and once Kurier reaches `finalized`, the frontend requests an authorization signature before calling on-chain `finalize`.
 

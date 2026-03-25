@@ -6,6 +6,7 @@ sidebar_position: 6
 # 本地安装 zkp2p
 
 如果你想从和这篇说明完全一致的代码开始，可以直接使用 [zkp2p-demo](https://github.com/JetHalo/zkp2p-demo) 这个仓库。
+如果你想先看页面效果，可以直接打开 [zkp2p 演示地址](https://zkp2p-demo-web.vercel.app/)。这个地址就是这篇文档对应的 demo 入口。
 
 ## 这个项目是做什么的
 

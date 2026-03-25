@@ -6,6 +6,7 @@ sidebar_position: 6
 # Local zkp2p Setup
 
 If you want to start from the exact codebase used in this guide, use the [zkp2p-demo](https://github.com/JetHalo/zkp2p-demo) repository directly.
+If you want to see the product first, open the [zkp2p demo](https://zkp2p-demo-web.vercel.app/). This is the live entry point for the demo described in this guide.
 
 ## What this project does
 

@@ -8,6 +8,7 @@ sidebar_position: 8
 ## 先说这个项目是干什么的
 
 [polyverified](https://github.com/JetHalo/polyverified) 做的是一个给 Polymarket 用的付费信号产品。用户不是进来免费看结论，而是先通过 `x402` 付费，再拿到这一期 market 的方向信号。当前主线是 `BTC / ETH` 的 hourly signal，同时也保留了 `Gold / Silver` 的 daily signal。
+如果你想先看实际产品，再回来对照本地安装，可以直接打开 [Poly Verified 演示地址](https://polyverified-production.up.railway.app/)。这个地址就是当前对应的演示入口。
 
 这个产品真正想解决的问题，也不是“怎么把信号卖出去”这么简单。做预测产品最容易被怀疑的一点，是你到底是不是在结果出来之前就发过这条 signal。很多人会看胜率，但大家更在意的是：错的单子有没有删掉，方向有没有改过，时间有没有往前补。
 
@@ -406,4 +407,3 @@ npm run zk:prove-signal -- <signal-id>
 ### `ZKVERIFY_RPC_URL is required` 或 `ZKVERIFY_SEED is required`
 
 说明你已经进入 proof 提交流程，但 `zkVerify` 账户还没有配置完整。proof 在本地生成成功，不代表已经提交到外部验证网络；少了这两个配置，流程会停在提交前。
-
