@@ -1,0 +1,30 @@
+{
+  "logo.alt": {
+    "message": "zkVerify",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.🚀 Introduction": {
+    "message": "🚀 简介",
+    "description": "Navbar item with label 🚀 Introduction"
+  },
+  "item.label.🛠️ Build": {
+    "message": "🛠️ 构建",
+    "description": "Navbar item with label 🛠️ Build"
+  },
+  "item.label.⚙️ Staking / Node Operators": {
+    "message": "⚙️ 质押 / 节点运营",
+    "description": "Navbar item with label ⚙️ Staking / Node Operators"
+  },
+  "item.label.🎖️ Incentivized Testnet": {
+    "message": "🎖️ 激励测试网",
+    "description": "Navbar item with label 🎖️ Incentivized Testnet"
+  },
+  "item.label.📘 Handbook": {
+    "message": "📘 手册",
+    "description": "Navbar item with label 📘 Handbook"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

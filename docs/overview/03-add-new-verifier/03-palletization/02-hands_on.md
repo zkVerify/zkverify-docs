@@ -13,7 +13,7 @@ The steps to follow are:
 - From repository root, navigate to verifiers directory (`cd verifiers`) and create your new pallet with the command `cargo new foo --lib`.  This will perform a scaffolding of default files and directories.
 - Open the file `verifiers/foo/Cargo.toml` and adapt sections `package`, `dependencies` and `feature` so that it looks similar to the snippet below:
 
-  ```
+  ```toml
   [package]
   name = "pallet-foo-verifier"
   version = "0.1.0"
@@ -121,7 +121,7 @@ In the case of a NATIVE integration, follow all the steps in the previous paragr
 
 - The file `verifiers/foo/Cargo.toml` should look similar to the snippet below:
 
-  ```
+  ```toml
   [package]
   name = "pallet-foo-verifier"
   version = "0.1.0"
@@ -179,7 +179,7 @@ In the case of a NATIVE integration, follow all the steps in the previous paragr
 
 - Modify the file `native/Cargo.toml` appending the following line after all the other `*-verifier` entries:
 
-  ```
+  ```toml
   foo-verifier = { git = "https://github.com/HorizenLabs/foo-verifier.git", default-features = false, tag = "v0.1.0" }
   ```
 

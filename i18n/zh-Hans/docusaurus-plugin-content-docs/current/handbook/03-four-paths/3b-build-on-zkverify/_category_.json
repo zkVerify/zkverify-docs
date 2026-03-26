@@ -1,0 +1,8 @@
+{
+  "label": "我理解 ZK，想在 zkVerify 上构建",
+  "position": 2,
+  "link": {
+    "type": "doc",
+    "id": "handbook/four-paths/3b-build-on-zkverify/overview"
+  }
+}
