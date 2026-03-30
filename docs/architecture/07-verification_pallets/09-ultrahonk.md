@@ -17,4 +17,4 @@ This pallet implements a verifier for UltraHonk proofs generated with [barretenb
 2. only Keccak256 is supported as the hash function for transcript generation;
 3. recursion is not supported.
 
-- `verify_proof()` uses the [ultrahonk_verifier](https://github.com/zkVerify/ultrahonk_verifier/tree/v0.1.0) crate to verify proofs.
+- `verify_proof()` uses the [ultrahonk_verifier](https://github.com/zkVerify/ultrahonk_verifier/tree/v0.3.0) crate to verify proofs.
