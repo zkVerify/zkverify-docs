@@ -93,7 +93,7 @@ curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/head
 ```
 
 :::warning
-Our verifier is currently compatible with Noir proofs generated through `bb` and `bb.js` versions `v0.84.0` and later, up to but not including version `v0.86.*`.
+Our verifier is currently compatible with Noir proofs generated through `bb` and `bb.js` versions `3.0.0` and later.
 :::
 
 4. Install Barretenberg's Backend by running bbup command:
@@ -129,27 +129,41 @@ Once we have generated our witness, we can generate proof and vk using the `bb` 
 <TabItem value="ZK" label="ZK">
 
 ```bash
-# To generate zero-knowledge proof
-bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak --zk
+# To generate zero-knowledge proof (using Keccak as the hash function)
+bb prove -t evm -b "./target/hello_world.json" -w "./target/hello_world.gz" -o ./target
 ```
 
 </TabItem>
 <TabItem value="Plain" label="Plain">
 
 ```bash
-# To generate a plain proof
-bb prove -s ultra_honk -b ./target/hello_world.json -w ./target/hello_world.gz -o ./target --oracle_hash keccak
+# To generate a plain proof (using Keccak as the hash function)
+bb prove -t evm-no-zk -b "./target/hello_world.json" -w "./target/hello_world.gz" -o ./target
 ```
 
 </TabItem>
 </Tabs>
 
-Generating the `vk` is the same regardless of which flavor you picked:
+Then proceed to generating a `vk` depending on the flavor that you picked:
+
+<Tabs groupId="ultrahonk-write-vk-options">
+<TabItem value="EVM" label="EVM">
 
 ```bash
-# To generate vk
-bb write_vk -s ultra_honk -b ./target/hello_world.json -o ./target --oracle_hash keccak
+# Generate vk for ZK proof (using Keccak as the hash function)
+bb write_vk -t evm -b "./target/hello_world.json" -o ./target
 ```
+
+</TabItem>
+<TabItem value="EVM-no-zk" label="EVM-no-zk">
+
+```bash
+# Generate vk for Plain proof (using Keccak as the hash function)
+bb write_vk -t evm-no-zk -b "./target/hello_world.json" -o ./target
+```
+
+</TabItem>
+</Tabs>
 
 After running these commands, you will have three files, namely: `proof`, `public_inputs`, and `vk` inside the `target` folder which will be used for verification. As a final step, we will convert them to a format compatible with direct use with zkVerify. zkVerify supports both flavors for UltraHonk proofs, but you will need to explicitly convey which flavor was used to generate your proof during this final step. You can do this by setting the `PROOF_TYPE` variable in the script that follows to either `ZK` or `Plain`.
 
@@ -158,44 +172,54 @@ To convert the three files into hex format, run the following Bash script:
 ```bash
 #!/usr/bin/env bash
 
-PROOF_TYPE="ZK"                          # Set to "Plain" if you are using the non-zk variant of UltraHonk
-PROOF_FILE_PATH="./target/proof"         # Adjust path depending on where the Noir-generated proof file is
-VK_FILE_PATH="./target/vk"               # Adjust path depending on where the Noir-generated vk file is
-PUBS_FILE_PATH="./target/public_inputs"  # Adjust path depending on where the Noir-generated public_inputs file is
+PROOF_TYPE="ZK"                # Set to "Plain" if you are using the non-zk variant of UltraHonk
+ARTIFACT_DIR_PATH="./target"   # Adjust path depending on where the Noir-generated artifacts are
+OUTPUT_DIR_PATH="./target"     # Adjust path based on where you would like the zkv-ready artifacts to be placed
 
 # You may ignore these:
-ZKV_PROOF_HEX_FILE_PATH="./target/zkv_proof.hex"
-ZKV_VK_HEX_FILE_PATH="./target/zkv_vk.hex"
-ZKV_PUBS_HEX_FILE_PATH="./target/zkv_pubs.hex"
+PROOF_FILE_PATH="${ARTIFACT_DIR_PATH}/proof"
+VK_FILE_PATH="${ARTIFACT_DIR_PATH}/vk"
+PUBS_FILE_PATH="${ARTIFACT_DIR_PATH}/public_inputs"
+ZKV_PROOF_HEX_FILE_PATH="${OUTPUT_DIR_PATH}/zkv_proof.hex"
+ZKV_VK_HEX_FILE_PATH="${OUTPUT_DIR_PATH}/zkv_vk.hex"
+ZKV_PUBS_HEX_FILE_PATH="${OUTPUT_DIR_PATH}/zkv_pubs.hex"
 
-# Convert proof to hexadecimal format
-{
-  if [ -f "$PROOF_FILE_PATH" ]; then
-    PROOF_BYTES=$(xxd -p -c 256 "$PROOF_FILE_PATH" | tr -d '\n')
-    printf '`{\n    "%s:" "0x%s"\n}`\n' "$PROOF_TYPE" "$PROOF_BYTES" > "$ZKV_PROOF_HEX_FILE_PATH"
-    echo "✅ 'proof' hex file generated at ${ZKV_PROOF_HEX_FILE_PATH}."
-  else
-    echo "❌ Error: Proof file '$PROOF_FILE_PATH' not found. Skipping." >&2
-  fi
-}
+# Get bb version and format it (e.g., 3.0.3 -> V3_0)
+BB_VERSION_FULL=$(bb --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+# Extract major and minor, then join with underscore
+BB_VERSION_KEY=$(echo "$BB_VERSION_FULL" | awk -F. '{print "V" $1 "_" $2}')
+
+# Convert proof to valid JSON
+if [ -f "${PROOF_FILE_PATH}" ]; then
+    PROOF_BYTES=$(xxd -p -c 1000000 "${PROOF_FILE_PATH}" | tr -d '\n')
+    
+    printf '{\n  "%s": {\n    "%s": "0x%s"\n  }\n}\n' \
+        "${BB_VERSION_KEY}" \
+        "${PROOF_TYPE}" \
+        "${PROOF_BYTES}" > "${ZKV_PROOF_HEX_FILE_PATH}"
+
+    echo "✅ Generated ${ZKV_PROOF_HEX_FILE_PATH} with version key ${BB_VERSION_KEY}"
+else
+    echo "❌ Error: Proof file not found." >&2
+fi
 
 # Convert vk to hexadecimal format
 {
-  if [ -f "$VK_FILE_PATH" ]; then
-    printf "\"0x%s\"\n" "$(xxd -p -c 0 "$VK_FILE_PATH")" > "$ZKV_VK_HEX_FILE_PATH"
+  if [ -f "${VK_FILE_PATH}" ]; then
+    printf "\"0x%s\"\n" "$(xxd -p -c 0 "${VK_FILE_PATH}")" > "${ZKV_VK_HEX_FILE_PATH}"
     echo "✅ 'vk' hex file generated at ${ZKV_VK_HEX_FILE_PATH}."
   else
-    echo "❌ Error: Verification key file '$VK_FILE_PATH' not found. Skipping." >&2
+    echo "❌ Error: Verification key file '${VK_FILE_PATH}' not found. Skipping." >&2
   fi
 }
 
 # Convert public inputs to hexadecimal format
 {
-  if [ -f "$PUBS_FILE_PATH" ]; then
-    xxd -p -c 32 "$PUBS_FILE_PATH" | sed 's/.*/"0x&"/' | paste -sd, - | sed 's/.*/[&]/' > "$ZKV_PUBS_HEX_FILE_PATH"
+  if [ -f "${PUBS_FILE_PATH}" ]; then
+    xxd -p -c 32 "${PUBS_FILE_PATH}" | sed 's/.*/"0x&"/' | paste -sd, - | sed 's/.*/[&]/' > "${ZKV_PUBS_HEX_FILE_PATH}"
     echo "✅ 'pubs' hex file generated at ${ZKV_PUBS_HEX_FILE_PATH}."
   else
-    echo "❌ Error: Public inputs file '$PUBS_FILE_PATH' not found. Skipping." >&2
+    echo "❌ Error: Public inputs file '${PUBS_FILE_PATH}' not found. Skipping." >&2
   fi
 }
 
