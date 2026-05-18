@@ -365,9 +365,16 @@ pub enum Proof {
 }
 
 pub enum VersionedProof {
+    V0_84(Proof),
     V3_0(Proof),
+    Legacy(Proof), // same payload format as V0_84; preserves the pre-versioning statement hash
 }
-pub type Vk = [u8; 1888];
+
+pub enum VersionedVk {
+    V0_84([u8; 1719]),
+    V3_0([u8; 1888]),
+    Legacy([u8; 1719]), // backward-compat: raw VK bytes, SHA2-256 hashed
+}
 pub type Pubs = Vec<[u8; 32]>;
 ```
 
