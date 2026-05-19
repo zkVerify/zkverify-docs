@@ -6,6 +6,8 @@ The `zkverifyjs` package is a TypeScript library designed to facilitate sending 
 
 The following zero-knowledge proof systems are supported:
 
+Proof configuration enums and interfaces are exported from `zkverifyjs`, including `Risc0Version`, `UltrahonkVersion`, `UltrahonkVariant`, `TeeVariant`, `UltrahonkConfig`, and `TeeConfig`.
+
 ### FFlonk
 ```typescript
 session.verify().fflonk().execute({...})
@@ -69,13 +71,32 @@ session.verify().ezkl().execute({...})
 ```
 
 ### UltraHonk
+Supports versions: `V0_84`, `V3_0`, `Legacy`
 Supports variants: `Plain`, `ZK`
 
-**Note for v1.3.0+**: The `variant` option is required for runtime version 1.3.0 or later.
+`Legacy` uses the `V0_84` backend but reproduces the pre-versioning statement
+hash (raw VK SHA2-256, no version component in the statement hash). Use it
+only if you integrated UltraHonk before runtime `v1.6.0` and need your
+existing on-chain verifier contracts / statement hashes to keep working
+unchanged. For new integrations, pick `V0_84` or `V3_0`.
+
+**Note for zkverifyjs v3.1.0+ and runtime v1.6.1+**: The `version` and `variant` options are required. If `version` is omitted, zkverifyjs defaults to `Legacy` for backwards compatibility and logs a warning.
 
 ```typescript
 session.verify().ultrahonk({
+  version: UltrahonkVersion.V3_0,
   variant: UltrahonkVariant.Plain
+}).execute({...})
+```
+
+### TEE
+Supports variants: `Intel`
+
+**Note for zkverifyjs v2.4.0+ and runtime v1.6.0+**: The `variant` option is required. If omitted, zkverifyjs defaults to `Intel` for backwards compatibility and logs a warning.
+
+```typescript
+session.verify().tee({
+  variant: TeeVariant.Intel
 }).execute({...})
 ```
 
@@ -357,7 +378,7 @@ You can listen for transaction events using the events emitter. Common events in
 - `error`: Triggered if an error occurs during the transaction process.
 
 ```typescript
-import {Risc0Version} from "./enums";
+import { Risc0Version } from 'zkverifyjs';
 
 const {events, transactionResult} = await session
         .verify()
@@ -532,6 +553,8 @@ Note: if any proof fails, `success` boolean will be false and `message` will be 
 ## Domain Management (Aggregate Pallet)
 
 It is possible to define a domain that has some properties and an owner.  The following flow shows how to register, hold and unregister a domain:
+
+`registerDomain(aggregationSize, queueSize?, domainOptions, signerAccount?)` — `aggregationSize` must be 1–128 inclusive; `queueSize` must be 1–16 inclusive and defaults to 16 when omitted (passing `0` throws — the default only applies when the argument is not supplied).
 
 ```typescript
 session = await zkVerifySession
@@ -761,6 +784,29 @@ await zkVerifySession.start()
 - withAccount: Create a full session with ability send transactions get account info by using .withAccount('seed-phrase') and specifying your own seed phrase, cannot be used with `withWallet()`.
 - withWallet: Establish connection to a browser extension based substrate wallet like talisman or subwallet, cannot be used with `withAccount()`;
 - readOnly: Start the session in read-only mode, unable to send transactions or retrieve account info.
+
+### Connection tuning
+
+`.Custom()` accepts two optional fields to control connection behavior. Useful for long-running clients that need explicit timeouts or want to control reconnect cadence.
+
+```typescript
+const session = await zkVerifySession
+  .start()
+  .Custom({
+    websocket: "wss://my-node",
+    rpc: "https://my-node",
+    wsProvider: {
+      autoConnectMs: 10000,  // delay between reconnect attempts (default 2500)
+      timeout: 30000,        // per-request timeout in ms
+    },
+    syncTimeoutMs: 120000,   // give up if the node is still syncing after 120s (default 300000)
+  })
+  .withAccount('your-seed-phrase');
+```
+
+- `wsProvider.autoConnectMs`: ms between reconnect attempts. Pass `false` to disable auto-reconnect entirely, then subscribe to `session.provider.on('disconnected', ...)` to implement your own retry policy with a hard upper bound. This is the recommended pattern when you need to give up after N failed reconnects rather than retrying forever.
+- `wsProvider.timeout`: per-request timeout in ms.
+- `syncTimeoutMs`: max time to wait for the node to finish syncing during session start. Throws if exceeded. Default 5 minutes.
 
 ## `zkVerifySession.close`
 
@@ -1132,11 +1178,10 @@ session.registerDomain(aggregationSize, queueSize, domainOptions, accountAddress
 * @param `{number}` aggregationSize - The size of the aggregation, integer equal to or less than 128.
 * @param `{number}` queueSize: an optional integer smaller equal than 16. 16 if it's null.
 * @param `{DomainOptions}` domainOptions: additional options required to register the domain.
-  - `destination`: Destination type (None or Hyperbridge)
+  - `destination`: Destination type (Destination.None)
   - `aggregateRules`: Security rules for aggregation (AggregateSecurityRules)
   - `proofSecurityRules`: **(v1.3.0+ REQUIRED)** Security rules for proof submission (ProofSecurityRules)
   - `deliveryOwner`: Optional account address for delivery ownership
-  - `deliveryInput`: Required if destination is Hyperbridge
 * @param `{number}` accountAddress - Optionally provide an account address attached to the session to send the transaction from.
 * Returns `{ events: EventEmitter; transactionResult: Promise<DomainTransactionInfo> }`
 

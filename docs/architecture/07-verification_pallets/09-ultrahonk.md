@@ -10,6 +10,24 @@ title: Ultrahonk Verifier
 - vk: `keccak256(vk.encode())`
 - pubs: `keccak256(pubs)`
 
+### Supported versions
+
+The pallet accepts proofs wrapped in a `VersionedProof` / `VersionedVk` enum.
+The variant selects both the verification backend and the statement-hash
+encoding.
+
+| Variant  | Backend    | VK hash                  | `verifier_version_hash`        | When to use                                                                                                                                                                                                |
+| -------- | ---------- | ------------------------ | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `V0_84`  | `bb` v0.84 | `keccak256(SCALE(vk))`   | `sha256("ultrahonk:v0.84")`    | New integrations that still produce proofs with `bb` v0.84.                                                                                                                                                |
+| `V3_0`   | `bb` v3.x  | `keccak256(SCALE(vk))`   | `sha256("ultrahonk:v3.0")`     | New integrations on the current `bb` toolchain.                                                                                                                                                            |
+| `Legacy` | `bb` v0.84 | `sha256(vk_bytes)`       | `NO_VERSION_HASH` (zero hash)  | Integrations that submitted UltraHonk proofs before versioning was introduced and need the **same statement hash** as before, so their existing on-chain (e.g. Solidity) contracts keep working unchanged. |
+
+`Legacy` is a backward-compatibility shim: same proof payload format and
+same verifier as `V0_84`, but the VK bytes are hashed with SHA2-256 of the
+raw VK (no enum prefix) and the verifier-version component of the statement
+hash is zeroed out — exactly matching what the pallet emitted prior to
+runtime `v1.6.0`. Any new integration should pick `V0_84` or `V3_0` instead.
+
 ### `Verifier` implementation
 
 This pallet implements a verifier for UltraHonk proofs generated with [barretenberg](https://github.com/AztecProtocol/aztec-packages/tree/master/barretenberg) library. This library is part of the Aztec Protocol's suite of cryptographic tools. The [Noir](https://noir-lang.org/docs) compiler generates UltraHonk zk-SNARK proofs using the `barretenberg` library as the backend. To generate proofs from Noir code, the [nargo](https://noir-lang.org/docs/getting_started/installation/) tool is used. Please note that currently:

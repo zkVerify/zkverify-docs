@@ -57,7 +57,14 @@ bytes32 public constant PROVING_SYSTEM_ID = keccak256(abi.encodePacked("sp1"));
 </TabItem>
 </Tabs>
 
-Next we would need to declare the prover version, we want to verify the aggregation for. This is useful as we support multiple prover version for different proof types. 
+Next we would need to declare the prover version, we want to verify the aggregation for. This is useful as we support multiple prover version for different proof types.
+
+:::warning
+We are constantly releasing new provers' versions, as well as totally deprecating old/unsafe ones. Please make sure to take that into account while deploying your DApp to production. You might want to make your contract upgradeable or envision having permissioned setters to modify the VERSION_HASH later.
+See [Supported Proofs](../../architecture/09-supported_proofs.md) 
+:::
+
+
 <Tabs>
 <TabItem value="circom" label="Circom">
 ```solidity
@@ -72,7 +79,7 @@ bytes32 public constant VERSION_HASH = sha256(abi.encodePacked("risc0:v1.1"));
 </TabItem>
 <TabItem value="ultrahonk" label="Ultrahonk">
 ```solidity
-bytes32 public constant VERSION_HASH = sha256(abi.encodePacked(""));
+bytes32 public constant VERSION_HASH = sha256(abi.encodePacked("ultrahonk:v3.0"));
 ```
 </TabItem>
 <TabItem value="ultraplonk" label="Ultraplonk">
@@ -185,7 +192,7 @@ function _changeEndianess(uint256 input) internal pure returns (uint256 v) {
         v =
             ((v &
                 0xFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00) >>
-                8) |
+                1) |
             ((v &
                 0x00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF) <<
                 8);
@@ -193,7 +200,7 @@ function _changeEndianess(uint256 input) internal pure returns (uint256 v) {
         v =
             ((v &
                 0xFFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000) >>
-                16) |
+                2)  |
             ((v &
                 0x0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF) <<
                 16);
@@ -201,7 +208,7 @@ function _changeEndianess(uint256 input) internal pure returns (uint256 v) {
         v =
             ((v &
                 0xFFFFFFFF00000000FFFFFFFF00000000FFFFFFFF00000000FFFFFFFF00000000) >>
-                32) |
+                3)  |
             ((v &
                 0x00000000FFFFFFFF00000000FFFFFFFF00000000FFFFFFFF00000000FFFFFFFF) <<
                 32);
@@ -209,7 +216,7 @@ function _changeEndianess(uint256 input) internal pure returns (uint256 v) {
         v =
             ((v &
                 0xFFFFFFFFFFFFFFFF0000000000000000FFFFFFFFFFFFFFFF0000000000000000) >>
-                64) |
+                4)  |
             ((v &
                 0x0000000000000000FFFFFFFFFFFFFFFF0000000000000000FFFFFFFFFFFFFFFF) <<
                 64);
