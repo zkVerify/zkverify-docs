@@ -45,10 +45,10 @@ For the addresses of the contracts we have deployed on all the destination chain
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
 | 8         | Apechain          | Bot         |
+| 10        | Arbitrum One      | Bot         |
 | 2         | Base              | Bot         |
 | 3         | Horizen           | Bot         |
 | 9         | OP Mainnet        | Bot         |
-| 10        | Arbitrum One      | Bot         |
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 | Domain ID | Chain             | Mechanism   |
