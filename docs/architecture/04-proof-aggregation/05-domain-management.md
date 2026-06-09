@@ -44,18 +44,22 @@ For the addresses of the contracts we have deployed on all the destination chain
 <TabItem value="mainnet" label="Mainnet">
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
+| 8         | Apechain          | Bot         |
+| 10        | Arbitrum One      | Bot         |
 | 2         | Base              | Bot         |
 | 3         | Horizen           | Bot         |
+| 9         | OP Mainnet        | Bot         |
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 | Domain ID | Chain             | Mechanism   |
 | --------- | ----------------- | ----------- |
-| 175       | Horizen Testnet   | Bot         |
-| 0         | Ethereum Sepolia  | Bot         |
-| 2         | Base Sepolia      | Bot         |
-| 3         | Optimism Sepolia  | Bot         |
+| 236       | Apechain Curtis   | Bot         |
 | 4         | Arbitrum Sepolia  | Bot         |
+| 2         | Base Sepolia      | Bot         |
 | 56        | EDU Chain Testnet | Bot         |
+| 0         | Ethereum Sepolia  | Bot         |
+| 175       | Horizen Testnet   | Bot         |
+| 3         | Optimism Sepolia  | Bot         |
 </TabItem>
 </Tabs>
 
