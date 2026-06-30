@@ -23,6 +23,12 @@ We suggest following their guide for the smoothest experience.
 
 Head to [PolkadotJS](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fzkverify-volta-rpc.zkverify.io#/explorer) and navigate to `Network → Staking → Accounts`. PolkadotJS is the standard interface for Substrate chains, including zkVerify. Select `+ Nominator` to begin.
 
+:::info Note for Talisman users
+If you have multiple Substrate accounts connected to Talisman (for example, Polkadot and zkVerify accounts), PolkadotJS may automatically select the wrong account when opening the nominator setup wizard.
+Before continuing, verify that the selected stash account is your zkVerify account holding the VFY tokens you intend to stake.
+If the correct account is not displayed, open `Talisman → Settings → Connected Sites → Substrate → polkadot-js/apps` and ensure that your zkVerify account is enabled for the site.
+:::
+
 ![alt_text](../img/nominators.png)
 
 Choose the nominator account, enter how much VFY you want to stake, and pick where rewards should go (payout account). Bonding locks the tokens as stake; they remain yours but cannot be transferred until unbonded. After filling in the fields, click `Next`.
