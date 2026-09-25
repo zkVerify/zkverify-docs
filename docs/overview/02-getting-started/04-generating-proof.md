@@ -80,10 +80,10 @@ To start this tutorial, first we need to install the Noir toolkit using noirup t
 curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
 ```
 
-2. Running noirup will install the latest version of Noir Toolkit
+2. Install a version of the Noir Toolkit compatible with `bb` v3.0.x (see the warning below):
 
 ```bash
-noirup
+noirup -v 1.0.0-beta.18
 ```
 
 3. Install bbup by running the following command:
@@ -93,13 +93,17 @@ curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/head
 ```
 
 :::warning
-Our verifier is currently compatible with Noir proofs generated through `bb` and `bb.js` versions `3.0.0` and later.
+Our verifier is currently compatible only with Noir proofs generated through `bb` and `bb.js` versions `3.0.x`
+(`V3_0` submission variant). Proofs generated with `bb`/`bb.js` `4.0.0` or later use a different proof format and
+are **rejected** by zkVerify, even though their `vk` has the expected size. Since `noirup` and `bbup` install the
+latest versions by default, make sure to pin them explicitly, e.g. Noir `1.0.0-beta.18` with `bb` `3.0.3`.
+Newer Noir versions produce circuits that `bb` 3.0.x cannot read.
 :::
 
 4. Install Barretenberg's Backend by running bbup command:
 
 ```bash
-bbup -v <version>
+bbup -v 3.0.3
 ```
 
 5. Create hello_world noir project using the following command:
@@ -123,13 +127,15 @@ Let's execute our hello_world circuit and get our witness value, which will be u
 nargo execute
 ```
 
-Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. Noir's implementation of the UltraHonk prover offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is zero knowledge and thus, the verifier learns _nothing_ about the secret input (witness). The latter is slightly faster, but the verifier can learn something about the witness from the proof. Use the following command to generate the required files, depending on which suits your specific needs:
+Once we have generated our witness, we can generate proof and vk using the `bb` toolkit. Noir's implementation of the UltraHonk prover offers two flavors for its proofs: zero-knowledge (ZK) and non-zero-knowledge (Plain). The former is slightly slower but as the name suggests, the resulting proof is zero knowledge and thus, the verifier learns _nothing_ about the secret input (witness). The latter is slightly faster, but the verifier can learn something about the witness from the proof. Use the following commands to generate the required files, depending on which suits your specific needs:
 
 <Tabs groupId="ultrahonk-prover-options">
 <TabItem value="ZK" label="ZK">
 
 ```bash
-# To generate zero-knowledge proof (using Keccak as the hash function)
+# Generate vk for ZK proof (using Keccak as the hash function)
+bb write_vk -t evm -b "./target/hello_world.json" -o ./target
+# Generate zero-knowledge proof (using Keccak as the hash function)
 bb prove -t evm -b "./target/hello_world.json" -w "./target/hello_world.gz" -o ./target
 ```
 
@@ -137,33 +143,32 @@ bb prove -t evm -b "./target/hello_world.json" -w "./target/hello_world.gz" -o .
 <TabItem value="Plain" label="Plain">
 
 ```bash
-# To generate a plain proof (using Keccak as the hash function)
+# Generate vk for Plain proof (using Keccak as the hash function)
+bb write_vk -t evm-no-zk -b "./target/hello_world.json" -o ./target
+# Generate plain proof (using Keccak as the hash function)
 bb prove -t evm-no-zk -b "./target/hello_world.json" -w "./target/hello_world.gz" -o ./target
 ```
 
 </TabItem>
 </Tabs>
 
-Then proceed to generating a `vk` depending on the flavor that you picked:
+Note that the `vk` must be generated before the proof, since `bb prove` reads it from the output directory.
 
-<Tabs groupId="ultrahonk-write-vk-options">
-<TabItem value="EVM" label="EVM">
+:::warning
+The `-t evm` / `-t evm-no-zk` verifier target is **mandatory**, both for `bb prove` and for `bb write_vk`, and must
+be the same in both commands. If you omit it, `bb` defaults to the `noir-recursive` target, which uses Poseidon2
+instead of Keccak256 as the transcript hash: the resulting `vk` is 3680 bytes long instead of the 1888 bytes expected
+by zkVerify, and the proof cannot be verified.
 
-```bash
-# Generate vk for ZK proof (using Keccak as the hash function)
-bb write_vk -t evm -b "./target/hello_world.json" -o ./target
+The same applies to `bb.js`: always pass the `verifierTarget` option to both `generateProof` and
+`getVerificationKey`:
+
+```js
+const options = { verifierTarget: "evm" }; // or "evm-no-zk" for Plain proofs
+const { proof, publicInputs } = await backend.generateProof(witness, options);
+const vk = await backend.getVerificationKey(options);
 ```
-
-</TabItem>
-<TabItem value="EVM-no-zk" label="EVM-no-zk">
-
-```bash
-# Generate vk for Plain proof (using Keccak as the hash function)
-bb write_vk -t evm-no-zk -b "./target/hello_world.json" -o ./target
-```
-
-</TabItem>
-</Tabs>
+:::
 
 After running these commands, you will have three files, namely: `proof`, `public_inputs`, and `vk` inside the `target` folder which will be used for verification. As a final step, we will convert them to a format compatible with direct use with zkVerify. zkVerify supports both flavors for UltraHonk proofs, but you will need to explicitly convey which flavor was used to generate your proof during this final step. You can do this by setting the `PROOF_TYPE` variable in the script that follows to either `ZK` or `Plain`.
 
@@ -188,6 +193,12 @@ ZKV_PUBS_HEX_FILE_PATH="${OUTPUT_DIR_PATH}/zkv_pubs.hex"
 BB_VERSION_FULL=$(bb --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
 # Extract major and minor, then join with underscore
 BB_VERSION_KEY=$(echo "$BB_VERSION_FULL" | awk -F. '{print "V" $1 "_" $2}')
+
+# Only proofs generated with bb 3.0.x are currently supported
+if [ "${BB_VERSION_KEY}" != "V3_0" ]; then
+    echo "❌ Error: bb ${BB_VERSION_FULL} is not supported by zkVerify, please use bb 3.0.x." >&2
+    exit 1
+fi
 
 # Convert proof to valid JSON
 if [ -f "${PROOF_FILE_PATH}" ]; then
