@@ -15,7 +15,7 @@ VFlow is the EVM parachain of zkVerify. A VFlow node also runs an embedded zkVer
 
 A VFlow node includes a zkVerify node, so use at least the RPC node requirements listed in [Getting Started](/node-operators/getting_started#hardware-requirements).
 
-As of September 2026, an archive VFlow RPC node uses about 303 GB on mainnet (87 GB for VFlow and 216 GB for the relay chain) and 413 GB on testnet, and grows by about 19 GB and 14 GB per month respectively. Plan for at least 1000 GB of fast NVMe storage.
+For an archive node, plan for at least 1000 GB of fast NVMe storage.
 
 ## Run with Docker
 
