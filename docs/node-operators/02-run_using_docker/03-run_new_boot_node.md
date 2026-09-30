@@ -4,7 +4,7 @@ title: Run a New Boot Node
 
 ## Prepare the Environment
 
-To run a new boot node (refer to [this page](../01-getting_started.md#node-types.md) for node types) open the terminal and navigate to the root directory of project `compose-zkverify-simplified`:
+To run a new boot node (refer to [this page](../01-getting_started.md#node-types) for node types) open the terminal and navigate to the root directory of project `compose-zkverify-simplified`:
 
 ```bash
 cd compose-zkverify-simplified
@@ -19,7 +19,7 @@ scripts/init.sh
 The interactive session run by the script asks you to provide the following inputs:
 
 - Node type: you need to select boot node.
-- Network: currently only testnet is available.
+- Network: `mainnet` or `testnet`.
 - Node name: just a human readable identifier.
 - Node key (`node_key.dat` file): you can import an already existing key or let the script to randomly generate one for you (refer to [this page](./01-getting_started_docker.md) for node keys).
 

@@ -28,14 +28,16 @@ If you're uncertain about which node type suits your needs, consider starting wi
 
 The hardware requirements are listed in the table below:
 
-| Requirement           | RPC node                                  | Boot node | Validator node |
-|-----------------------|-------------------------------------------|-----------|----------------|
-| Core                  | 4                                         | 4         | 8              |
-| Threads per core      | 2                                         | 2         | 2              |
-| Clock speed (GHz)     | ≥ 2.5                                     | ≥ 2.2     | ≥ 3.5          |
-| Memory (GiB)          | 16                                        | 16        | 32             |
-| Bandwidth (Gbps)      | ≥ 1                                       | ≥ 1       | ≥ 1            |
-| Storage Fast NVMe(GB) | ≥ 500 (archive)<br/> ≥ 200 (with pruning) | ≥ 100     | ≥ 500          |
+| Requirement           | RPC node                                   | Boot node | Validator node |
+|-----------------------|--------------------------------------------|-----------|----------------|
+| Core                  | 4                                          | 4         | 8              |
+| Threads per core      | 2                                          | 2         | 2              |
+| Clock speed (GHz)     | ≥ 2.5                                      | ≥ 2.2     | ≥ 3.5          |
+| Memory (GiB)          | 16                                         | 16        | 32             |
+| Bandwidth (Gbps)      | ≥ 1                                        | ≥ 1       | ≥ 1            |
+| Storage Fast NVMe(GB) | ≥ 1000 (archive)<br/> ≥ 500 (with pruning) | ≥ 500     | ≥ 500          |
+
+As of September 2026, an archive RPC node uses about 340 GB on mainnet and 445 GB on testnet, and grows by about 23 GB and 12 GB per month respectively. A node with default pruning keeps every block but only recent state, and uses about 210 GB on mainnet and 320 GB on testnet.
 
 :::note
 These requirements are likely to change over time, and it's possible that nodes can run effectively on machines with lower specifications than what are laid out above.

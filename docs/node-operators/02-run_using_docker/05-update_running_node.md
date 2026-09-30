@@ -26,10 +26,10 @@ scripts/update.sh
 The interactive session run by the script asks you for the following inputs:
 
 - Node type: select the type of node you are updating.
-- Network: currently only testnet is available.
+- Network: `mainnet` or `testnet`.
 - Parameters to update: if some parameters cannot be automatically updated you are required to provide a new value for them.
 
-At the end of the session the script will update the directory `deployments/`*`network`*`/`*`network`* with the proper files. You will get a message similar to the following:
+At the end of the session the script will update the directory `deployments/`*`node_type`*`/`*`network`* with the proper files. You will get a message similar to the following:
 
 ```bash
 === Start the compose project with the following command: 
@@ -39,7 +39,7 @@ docker compose -f /home/your_user/compose-zkverify-simplified/deployments/rpc-no
 ========================
 ```
 
-Before launching the node, you can further inspect and customize the execution by manually editing `deployments/`*`network`*`/`*`network`*`/.env` file.
+Before launching the node, you can further inspect and customize the execution by manually editing `deployments/`*`node_type`*`/`*`network`*`/.env` file.
 
 :::warning
 Ensure that you fully understand the implications of customizing the execution manually if you choose to do so.

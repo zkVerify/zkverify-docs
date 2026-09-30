@@ -25,10 +25,10 @@ scripts/update.sh
 脚本交互会询问：
 
 - Node type：选择要更新的节点类型
-- Network：当前仅 testnet
+- Network：`mainnet` 或 `testnet`
 - Parameters to update：无法自动更新的参数需手动提供
 
-结束后脚本会更新 `deployments/`*`network`*`/`*`network`*，并提示类似：
+结束后脚本会更新 `deployments/`*`node_type`*`/`*`network`*，并提示类似：
 
 ```bash
 === Start the compose project with the following command: 
@@ -38,7 +38,7 @@ docker compose -f /home/your_user/compose-zkverify-simplified/deployments/rpc-no
 ========================
 ```
 
-如需自定义，可手动编辑 `deployments/`*`network`*`/`*`network`*`/.env`。
+如需自定义，可手动编辑 `deployments/`*`node_type`*`/`*`network`*`/.env`。
 
 :::warning
 手动修改需理解其影响。
