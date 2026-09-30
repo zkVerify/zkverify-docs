@@ -4,7 +4,7 @@ title: Run a New RPC Node
 
 ## Prepare the Environment
 
-To run a new RPC node (refer to [this page](../01-getting_started.md#node-types) for node types) open a terminal and navigate to the root directory of project `compose-zkverify-simplified`:
+To run a new RPC node (refer to [this page](../01-getting_started.md#node-types.md) for node types) open a terminal and navigate to the root directory of project `compose-zkverify-simplified`:
 
 ```bash
 cd compose-zkverify-simplified
@@ -18,14 +18,11 @@ scripts/init.sh
 
 The interactive session run by the script asks you for the following inputs:
 
-- Node type: select `rpc-node`.
+- Node type: select RPC node.
 - Network: `mainnet` or `testnet`.
 - Node name: a human readable identifier.
-- Public address: optional, set it only if the machine has a public IP address or hostname that other nodes can reach.
-- Category of methods to expose: `safe` (default, use it if your machine is externally reachable), `unsafe` or `auto`.
+- Category of methods to expose: allows you to specify if you want to expose only safe methods (in case your machine is externally reachable) or all methods.
 - Archival feature: allows you to specify if you want to maintain a full or partial copy of the blockchain.
-- RPC limits: optional maximum number of RPC connections (default 100) and maximum length of RPC batch requests (default no limit).
-- Transaction pool limits: optional maximum number of transactions (default 8192) and maximum total size in kilobytes (default 20480).
 
 At the end of the session the script will populate the directory `deployments/rpc-node/`*`network`* with the proper files.  You will get a message similar to the following:
 
@@ -36,8 +33,6 @@ At the end of the session the script will populate the directory `deployments/rp
 docker compose -f /home/your_user/compose-zkverify-simplified/deployments/rpc-node/testnet/docker-compose.yml up -d
 ========================
 ```
-
-The examples on this page use testnet. For mainnet, replace `testnet` with `mainnet` in the paths.
 
 Before launching the node, you can further inspect and customize the execution by manually editing `deployments/rpc-node/`*`network`*`/.env` file. Entries under the `# Node miscellaneous` section are related to the Docker container, while those under the `# Node config` section are related to the Substrate node instance.
 
@@ -106,7 +101,7 @@ Focus on these lines:
 - `Starting new tree with id: XXX`: these are the trees associated to the proofs that were sent to the **zkVerify** mainchain (by a wallet, a dAPP, an L2, etc.). They are verified by **zkVerify** and a root publish event is then automatically submitted. The proofs reported here are historical, published weeks or months ago, and are contained in the blocks the node is downloading from the network.
 - `⚙⚙️  Syncing 1171.2 bps, target=#16085 (8 peers), best: #11823 (0xa652…b939), finalized #11776 (0x7564…3273), ⬇ 418.2kiB/s ⬆ 2.7kiB/s`: the current tip of the node (11823), the target tip of the overall chain (16085) and the number of peers your node is connected to (8) is reported in this output.
 
-How long the initial synchronization takes depends on the current chain height, your hardware and your network. To shorten it, restore a daily snapshot as described in [Getting Started](../01-getting_started.md#optional-zkv-node-data-snapshots). At the end of the synchronization you should be able to see something similar to:
+The overall synchronization depends on the actual height of the overall chain, but at the time of writing, it's a fast process requiring less than ten minutes using a standard PC on a home network. At the end of the synchronization you should be able to see something similar to:
 
 ![alt_text](./img/node_synced.png)
 
@@ -134,8 +129,6 @@ docker compose -f /home/your_user/compose-zkverify-simplified/deployments/rpc-no
 docker volume rm zkverify-rpc-testnet_node-data
 ```
 
-On mainnet the volume is named `zkverify-rpc_node-data`.
-
 ## Interacting with the node
 
 It's now time to interact with your node, and the best tool for doing that is PolkadotJS. Open up your preferred browser and type in the search bar this [URL](https://polkadot.js.org/apps/#/explorer). Then make sure you are targeting the local node by checking the dropdown panel in the top left corner:
@@ -143,7 +136,7 @@ It's now time to interact with your node, and the best tool for doing that is Po
 ![alt_text](./img/polkadotjs_check_network.png)
 
 :::note
-In case you are unable to connect, check manually that inside `.env` file the value for configuration `ZKV_CONF_RPC_EXTERNAL` is set to `yes` and that the value for configuration `NODE_NET_RPC_PORT` matches the one you eventually typed in the `custom endpoint` textbox.
+In case you are unable to connect, check manually that inside `.env` file the value for configuration `ZKV_CONF_RPC_EXTERNAL` is set to `true` and that the value for configuration `NODE_NET_RPC_WS_PORT` matches the one you eventually typed in the `custom endpoint` textbox.
 :::
 
 First, you can try submitting some RPC commands for querying the blockchain state. An example could be asking for the block hash at a specific height and then using the result to ask for the full block body.
@@ -164,7 +157,7 @@ Note that if during the execution of script `init.sh` you selected non-archival 
 
 Another type of operation you can perform is sending some tokens from an account to another.  In Substrate, accounts are associated to a pair of keys, one private and one public (very similar to Bitcoin addresses or Ethereum EOAs).
 
-In order to submit extrinsics (transactions, in Substrate terminology) with PolkadotJS from one of your accounts, you need to have a Polkadot-compatible browser extension wallet (like [Talisman](../../overview/02-getting-started/01-connect-a-wallet.md#using-talisman) or [SubWallet](../../overview/02-getting-started/01-connect-a-wallet.md#using-subwallet)) installed. Then, refresh PolkadotJS web-page and the extension will be automatically detected and a pop-up window will appear asking you to connect it:
+In order to submit extrinsics (transactions, in Substrate terminology) with PolkadotJS from one of your accounts, you need to have a Polkadot-compatible browser extension wallet (like [Talisman](https://docs.zkverify.io/tutorials/connect-a-wallet#using-talisman) or [Subwallet](https://docs.zkverify.io/tutorials/connect-a-wallet#using-talisman)) installed. Then, refresh PolkadotJS web-page and the extension will be automatically detected and a pop-up window will appear asking you to connect it:
 
 ![alt_text](./img/talisman_connect.png)
 

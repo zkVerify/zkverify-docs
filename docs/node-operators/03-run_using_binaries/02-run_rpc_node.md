@@ -4,7 +4,7 @@ title: Run a New RPC Node
 
 ## Prepare and Run
 
-To run a new RPC node (refer to [this page](../01-getting_started.md#node-types) for node types) the specific command-line arguments you should set are the following:
+To run a new RPC node (refer to [this page](../01-getting_started.md#node-types.md) for node types) the specific command-line arguments you should set are the following:
 
 | Name           | Description                                                                                                                                                                                                                                                                                                                                                                                                        | Value                                                                                                                                    |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -19,8 +19,6 @@ You can then start with:
 ```bash
 target/production/zkv-relay --name MyZkVerifyRpcNode --base-path /home/your_user/rpc_node_data --chain test --port 30555 --rpc-port 9944 --rpc-external --rpc-cors all --rpc-methods safe --pruning archive
 ```
-
-The example connects to testnet (`--chain test`). Use `--chain mainnet` for mainnet.
 
 :::note
 You can change the values of the above args based on your needs.

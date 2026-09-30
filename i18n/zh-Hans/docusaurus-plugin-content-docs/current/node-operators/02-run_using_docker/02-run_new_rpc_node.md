@@ -4,7 +4,7 @@ title: 运行新 RPC 节点
 
 ## Prepare the Environment
 
-要运行新的 RPC 节点（节点类型见 [此处](../01-getting_started.md#node-types)），在终端进入 `compose-zkverify-simplified` 根目录：
+要运行新的 RPC 节点（节点类型见 [此处](../01-getting_started.md#node-types.md)），在终端进入 `compose-zkverify-simplified` 根目录：
 
 ```bash
 cd compose-zkverify-simplified

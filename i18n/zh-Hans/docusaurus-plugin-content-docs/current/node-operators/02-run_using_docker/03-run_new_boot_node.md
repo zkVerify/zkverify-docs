@@ -4,7 +4,7 @@ title: 运行新 Boot 节点
 
 ## Prepare the Environment
 
-要运行新的 boot 节点（类型见 [此处](../01-getting_started.md#node-types)），进入 `compose-zkverify-simplified` 根目录：
+要运行新的 boot 节点（类型见 [此处](../01-getting_started.md#node-types.md)），进入 `compose-zkverify-simplified` 根目录：
 
 ```bash
 cd compose-zkverify-simplified
@@ -19,7 +19,7 @@ scripts/init.sh
 脚本交互将询问：
 
 - 节点类型：选择 boot node。
-- 网络：`mainnet` 或 `testnet`。
+- 网络：当前仅 testnet。
 - 节点名：自定义标识。
 - 节点密钥（`node_key.dat`）：导入已有或让脚本随机生成（见 [节点密钥说明](./01-getting_started_docker.md)）。
 
