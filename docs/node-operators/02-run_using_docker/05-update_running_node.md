@@ -26,7 +26,7 @@ scripts/update.sh
 The interactive session run by the script asks you for the following inputs:
 
 - Node type: select the type of node you are updating.
-- Network: currently only testnet is available.
+- Network: `mainnet` or `testnet`.
 - Parameters to update: if some parameters cannot be automatically updated you are required to provide a new value for them.
 
 At the end of the session the script will update the directory `deployments/`*`network`*`/`*`network`* with the proper files. You will get a message similar to the following:

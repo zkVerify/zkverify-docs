@@ -25,7 +25,7 @@ scripts/update.sh
 脚本交互会询问：
 
 - Node type：选择要更新的节点类型
-- Network：当前仅 testnet
+- Network：`mainnet` 或 `testnet`
 - Parameters to update：无法自动更新的参数需手动提供
 
 结束后脚本会更新 `deployments/`*`network`*`/`*`network`*，并提示类似：

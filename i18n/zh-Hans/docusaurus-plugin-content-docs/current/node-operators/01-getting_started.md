@@ -27,7 +27,7 @@ title: 快速开始
 | Clock speed (GHz)     | ≥ 2.5                                     | ≥ 2.2     | ≥ 3.5          |
 | Memory (GiB)          | 16                                        | 16        | 32             |
 | Bandwidth (Gbps)      | ≥ 1                                       | ≥ 1       | ≥ 1            |
-| Storage Fast NVMe(GB) | ≥ 500 (archive)<br/> ≥ 200 (with pruning) | ≥ 100     | ≥ 500          |
+| Storage Fast NVMe(GB) | ≥ 1000 (archive)<br/>≥ 500 (with pruning) | ≥ 100     | ≥ 500          |
 
 :::note
 配置可能随时间调整，低配机器亦可能可行。

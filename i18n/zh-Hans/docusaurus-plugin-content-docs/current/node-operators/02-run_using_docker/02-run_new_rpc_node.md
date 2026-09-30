@@ -19,7 +19,7 @@ scripts/init.sh
 脚本交互会询问：
 
 - 节点类型：选择 RPC
-- 网络：当前仅 testnet
+- 网络：`mainnet` 或 `testnet`
 - 节点名：自定义标识
 - RPC 方法暴露范围：仅安全方法或全部
 - Archival：全量或裁剪存储

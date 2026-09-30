@@ -19,7 +19,7 @@ scripts/init.sh
 The interactive session run by the script asks you for the following inputs:
 
 - Node type: select RPC node.
-- Network: currently only testnet is available.
+- Network: `mainnet` or `testnet`.
 - Node name: a human readable identifier.
 - Category of methods to expose: allows you to specify if you want to expose only safe methods (in case your machine is externally reachable) or all methods.
 - Archival feature: allows you to specify if you want to maintain a full or partial copy of the blockchain.
