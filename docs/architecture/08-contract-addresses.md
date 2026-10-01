@@ -14,6 +14,7 @@ import TabItem from '@theme/TabItem';
 | Base | [`Proxy`](https://basescan.org/address/0xCb47A3C3B9Eb2E549a3F2EA4729De28CafbB2b69) | 8453 |
 | Horizen | [`Proxy`](https://horizen.calderaexplorer.xyz/address/0xCb47A3C3B9Eb2E549a3F2EA4729De28CafbB2b69) | 26514 |
 | OP Mainnet | [`Proxy`](https://optimistic.etherscan.io/address/0xcb47a3c3b9eb2e549a3f2ea4729de28cafbb2b69) | 10 |
+| Robinhood Chain | [`Proxy`](https://robinhoodchain.blockscout.com/address/0xCb47A3C3B9Eb2E549a3F2EA4729De28CafbB2b69) | 4663 |
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 | Network | Contract Address | Chain ID |
@@ -24,6 +25,7 @@ import TabItem from '@theme/TabItem';
 | EDU Chain (Testnet) | [`Proxy`](https://edu-chain-testnet.blockscout.com/address/0xd007494945580eEb25522c8e0b2fa798B3F0FDE2) | 656476 |
 | Horizen (Testnet) | [`Proxy`](https://horizen-testnet.explorer.caldera.xyz/address/0x3098A6974649478f0133046e44105AA84e868C21) | 2651420 |
 | Optimism (Sepolia testnet) | [`Proxy`](https://sepolia-optimism.etherscan.io/address/0xBBa17b0Eb3DdF0631c0Cce00E4245E4A2EE49982) | 11155420 |
+| Robinhood Chain (Testnet) | [`Proxy`](https://explorer.testnet.chain.robinhood.com/address/0x147AD899D1773f5De5e064C33088b58c7acb7acf) | 46630 |
 | Sepolia (Ethereum testnet) | [`Proxy`](https://sepolia.etherscan.io/address/0xEA0A0f1EfB1088F4ff0Def03741Cb2C64F89361E) | 11155111 |
 </TabItem>
 </Tabs>

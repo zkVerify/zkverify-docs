@@ -49,6 +49,7 @@ For the addresses of the contracts we have deployed on all the destination chain
 | 2         | Base              | Bot         |
 | 3         | Horizen           | Bot         |
 | 9         | OP Mainnet        | Bot         |
+| 11        | Robinhood Chain   | Bot         |
 </TabItem>
 <TabItem value="testnet" label="Testnet">
 | Domain ID | Chain             | Mechanism   |
@@ -60,6 +61,7 @@ For the addresses of the contracts we have deployed on all the destination chain
 | 0         | Ethereum Sepolia  | Bot         |
 | 175       | Horizen Testnet   | Bot         |
 | 3         | Optimism Sepolia  | Bot         |
+| 301       | Robinhood Chain Testnet | Bot   |
 </TabItem>
 </Tabs>
 
