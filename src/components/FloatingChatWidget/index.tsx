@@ -193,7 +193,7 @@ const FloatingChatWidget: React.FC = () => {
           </div>
           <div className={styles.chatContainer}>
             <Chatbot
-              apiEndpoint="https://ai-agents.horizenlabs.io/webhook/chat"
+              apiEndpoint="https://ai-agents.horizenlabs.io/webhook/chat-hier"
               title=""
               placeholder="Ask me about zkVerify..."
               token={siteConfig.customFields?.chatApiToken as string}
