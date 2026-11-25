@@ -223,7 +223,7 @@ session.subscribe([
   },
 ]);
 
-const {events} = await session.verify().risc0({ version: Risc0Version.V2_1} ) // Mention the R0 version used while proving
+const {events} = await session.verify().risc0({ version: Risc0Version.V3_0} ) // Mention the R0 version used while proving
 .execute({proofData:{
     proof: proof.proof,
     vk: proof.image_id,

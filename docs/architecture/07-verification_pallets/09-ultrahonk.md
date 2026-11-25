@@ -21,12 +21,19 @@ encoding.
 | `V0_84`  | `bb` v0.84 | `keccak256(SCALE(vk))`   | `sha256("ultrahonk:v0.84")`    | New integrations that still produce proofs with `bb` v0.84.                                                                                                                                                |
 | `V3_0`   | `bb` v3.0.x | `keccak256(SCALE(vk))`   | `sha256("ultrahonk:v3.0")`     | New integrations on the current `bb` toolchain.                                                                                                                                                            |
 | `Legacy` | `bb` v0.84 | `sha256(vk_bytes)`       | `NO_VERSION_HASH` (zero hash)  | Integrations that submitted UltraHonk proofs before versioning was introduced and need the **same statement hash** as before, so their existing on-chain (e.g. Solidity) contracts keep working unchanged. |
+| `V5_0`   | `bb` v5.0.x | `keccak256(SCALE(vk))`   | `sha256("ultrahonk:v5.0")`     | Runtime `v2.1.0+` only. Required for ZK proofs — see the note below.                                                                                                                                       |
 
 `Legacy` is a backward-compatibility shim: same proof payload format and
 same verifier as `V0_84`, but the VK bytes are hashed with SHA2-256 of the
 raw VK (no enum prefix) and the verifier-version component of the statement
 hash is zeroed out — exactly matching what the pallet emitted prior to
 runtime `v1.6.0`. Any new integration should pick `V0_84` or `V3_0` instead.
+
+**Runtime `v2.1.0+`:** ZK proofs are only accepted for `V5_0` (Barretenberg
+v5.0.0 or later). The `ZK` variant of `V0_84`, `V3_0` and `Legacy` is rejected
+by the verifier. The `Plain` variant of every version is still supported.
+Public inputs must be 32-byte canonical BN254 field elements (below the scalar
+field modulus).
 
 ### `Verifier` implementation
 

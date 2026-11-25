@@ -178,7 +178,7 @@ if (!fs.existsSync("r0-vkey.json")) {
         const regParams = {
             "proofType": "risc0",
             "proofOptions": {
-                "version": "V2_1"
+                "version": "V3_0"
             },
             "vk": proof.image_id
         }
@@ -310,7 +310,7 @@ const params = {
     "proofType": "risc0",
     "vkRegistered": true,
     "proofOptions": {
-        "version": "V2_1"
+        "version": "V3_0"
     },
     "proofData": {
         "proof": proof.proof,
@@ -411,7 +411,7 @@ const params = {
     "vkRegistered": true,
     "chainId": 11155111,
     "proofOptions": {
-        "version": "V2_1"
+        "version": "V3_0"
     },
     "proofData": {
         "proof": proof.proof,
