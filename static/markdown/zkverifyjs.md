@@ -45,8 +45,6 @@ session.verify().plonky2({
 ### Risc0
 Supports versions: `V2_1`, `V2_2`, `V2_3`, `V3_0`
 
-**Runtime v2.1.0+**: `V2_1` is no longer verified on-chain. zkverifyjs rejects `V2_1` proof submissions on runtime v2.1.0 or later; use `V2_2` or later.
-
 ```typescript
 session.verify().risc0({
   version: Risc0Version.V3_0
@@ -73,23 +71,21 @@ session.verify().ezkl().execute({...})
 ```
 
 ### UltraHonk
-Supports versions: `V0_84`, `V3_0`, `Legacy`, `V5_0` (runtime v2.1.0+)
+Supports versions: `V0_84`, `V3_0`, `Legacy`
 Supports variants: `Plain`, `ZK`
 
-**Note for zkverifyjs v2.4.0+ and runtime v1.6.0+**: The `version` and `variant` options are required. If `version` is omitted, zkverifyjs defaults to:
-- `V0_84` on runtime v1.6.0
-- `Legacy` on runtime v1.6.1+
+`Legacy` uses the `V0_84` backend but reproduces the pre-versioning statement
+hash (raw VK SHA2-256, no version component in the statement hash). Use it
+only if you integrated UltraHonk before runtime `v1.6.0` and need your
+existing on-chain verifier contracts / statement hashes to keep working
+unchanged. For new integrations, pick `V0_84` or `V3_0`.
 
-The `Legacy` default preserves pre-versioning Ultrahonk statement hash compatibility.
-
-**Runtime v2.1.0+**: ZK proofs are only accepted for `V5_0` (Barretenberg v5.0.0 or later). The `ZK` variant of `V0_84`, `V3_0` and `Legacy` is rejected by the verifier, and zkverifyjs rejects those combinations before submission. Because a missing `version` defaults to `Legacy`, ZK proofs must pass `version: UltrahonkVersion.V5_0` explicitly. The `Plain` variant of every version is still supported. Public inputs must be 32-byte canonical BN254 field elements (below the scalar field modulus).
-
-`getVkHash` for `V5_0` verification keys requires an RPC node running a node binary that includes the `V5_0` vk_hash type. Nodes that only enacted the runtime upgrade return an error for `V5_0` VKs.
+**Note for zkverifyjs v3.1.0+ and runtime v1.6.1+**: The `version` and `variant` options are required. If `version` is omitted, zkverifyjs defaults to `Legacy` for backwards compatibility and logs a warning.
 
 ```typescript
 session.verify().ultrahonk({
-  version: UltrahonkVersion.V5_0,
-  variant: UltrahonkVariant.ZK
+  version: UltrahonkVersion.V3_0,
+  variant: UltrahonkVariant.Plain
 }).execute({...})
 ```
 
@@ -120,8 +116,6 @@ Some features are only available on specific runtime versions. The library autom
 2. **Block access to features** not available on older runtimes
 3. **Provide clear error messages** when version requirements aren't met
 
-The session also follows runtime upgrades enacted while it is open: version-dependent defaults, checks and RPC types switch to the new runtime without reconnecting.
-
 # Table of Contents
 
 - [Installation](#installation)
@@ -133,9 +127,6 @@ The session also follows runtime upgrades enacted while it is open: version-depe
     - [Listening to Events](#listening-to-events)
     - [Awaiting the Final Transaction Result](#awaiting-the-final-transaction-result)
     - [Proof Aggregation](#domain-specific-proof-aggregation)
-    - [Optimistic Proof Verification](#optimistic-proof-verification)
-    - [Batch Optimistic Proof Verification](#batch-optimistic-proof-verification)
-    - [Domain Management](#domain-management-aggregate-pallet)
     - [Example Usage](#example-usage)
 - [API Reference](#api-reference)
     - [zkVerifySession.start](#zkverifysessionstart)
@@ -160,7 +151,7 @@ The session also follows runtime upgrades enacted while it is open: version-depe
     - [zkVerifySession.addDerivedAccounts](#zkverifysessionaddderivedaccounts)
     - [zkVerifySession.removeAccount](#zkverifysessionremoveaccount)
     - [zkVerifySession.subscribe](#zkverifysessionsubscribe)
-    - [zkVerifySession.waitForAggregationReceipt](#zkverifysessionwaitforaggregationreceipt)
+    - [zkVerifySession.waitForAggregationReceipt](#waitforaggregationreceipt)
     - [zkVerifySession.unsubscribe](#zkverifysessionunsubscribe)
     - [zkVerifySession.aggregate](#zkverifysessionaggregate)
     - [zkVerifySession.registerDomain](#zkverifysessionregisterdomain)
@@ -170,9 +161,6 @@ The session also follows runtime upgrades enacted while it is open: version-depe
     - [zkVerifySession.removeDomainSubmitters](#zkverifysessionremovedomainsubmitters) (v1.3.0+)
     - [zkVerifySession.api](#zkverifysessionapi)
     - [zkVerifySession.provider](#zkverifysessionprovider)
-    - [zkVerifySession.connection](#zkverifysessionconnection)
-    - [zkVerifySession.readOnly](#zkverifysessionreadonly)
-    - [Runtime version helpers](#runtime-version-helpers)
   
 - [Testing](#testing)
 
@@ -218,15 +206,11 @@ const multiAccountSession = await zkVerifySession.start()
         .zkVerify() // Preconfigured network selection
         .withAccounts(["my seed phrase 1", "my seed phrase 2", "my seed phrase 3"]); // Full session with multiple active accounts
 ```
-4. Full Backend Session (send transactions) with Custom WebSocket:
+4. Full Backend Session (send transactions)  with Custom WebSocket:
 ```typescript
 const session = await zkVerifySession.start()
-        .Custom({
-          websocket: "wss://my-custom-node",
-          rpc: "https://my-custom-node",
-          network: "Volta", // Optional: "Volta" for a testnet node, otherwise mainnet address encoding is used
-        })
-        .withAccount("my seed phrase"); // Full session with active account
+        .zkVerify()
+        .withAccount(); // Full session with active account
 ```
 5. Full Frontend Browser Session (send transactions)  with Supported Network:
 ```typescript
@@ -235,7 +219,6 @@ const session = await zkVerifySession.start()
         .withWallet({
           source: selectedWallet,
           accountAddress: selectedAccount,
-          appName: "My dApp", // Shown by the wallet extension in its access prompt; defaults to "zkVerify"
         }); // Uses browser session context "window"
 ```
 6. Full Frontend Browser Session (send transactions) with Custom WebSocket:
@@ -286,14 +269,14 @@ const { events, transactionResult } = await session
 2. Frontend after establishing a session with `withWallet()`
 
 ```typescript
-import { CurveType, Library, ZkVerifyEvents } from 'zkverifyjs';
+import { CurveType } from './index';
 
 const { events, transactionResult } = await session
   .verify()
   .groth16({
     library: Library.snarkjs,
     curve: CurveType.bn128
-  })
+    })
   .execute({
     proofData: {
       vk: vk,
@@ -303,7 +286,7 @@ const { events, transactionResult } = await session
     domainId: 1, // Optional domain ID for proof categorization
   });
 
-events.on(ZkVerifyEvents.ErrorEvent, (eventData) => {
+events.on('ErrorEvent', (eventData) => {
   console.error(JSON.stringify(eventData));
 });
 
@@ -321,7 +304,7 @@ You can submit a batch of proofs as an array of proof objects.
 
 - All proofs must be the same `ProofType` and proof config (e.g. groth16 created with snarkjs using bn254 curve).
 
-```typescript
+```shell
 const { events, transactionResult } = await session
     .batchVerify(optionalAccountAddress) // You can pass account address here if multiple connected to your session.
     .groth16({
@@ -354,7 +337,7 @@ If any proof fails, all will fail.
 
 ## Registering a Verification Key & Submitting a proof with the Statement Hash
 
-Register your Verification Key on chain and use it in future proof submissions by specifying the `withRegisteredVk()` option.
+Register your Verification Key on chain and use it in future proof submissions by specifying the `registeredVk()` option.
 
 ```typescript
 const { events, transactionResult } = await session
@@ -400,7 +383,7 @@ import { Risc0Version } from 'zkverifyjs';
 const {events, transactionResult} = await session
         .verify()
         .risc0({
-          version: Risc0Version.V3_0
+          version: Risc0Version.V2_1
         })
         .execute({
           proofData: {
@@ -478,18 +461,19 @@ const { events, transactionResult } = await session
         .ultraplonk({
           numberOfPublicInputs: 1
         })
-        .execute({
-          proofData: {
-            proof: proof,
-            //publicSignals: publicSignals, // Not required for ultraplonk
-            vk: vk,
-          },
-          domainId,
-        });
+        .execute(
+            {
+              proofData: {
+                proof: proofData.proof.proof,
+                //publicSignals: proofData.publicSignals, // Not required for ultraplonk
+                vk: proofData.vk,
+            },
+  domainId,
+});
 
 const transactionInfo = await transactionResult;
 
-const receipt = await session.waitForAggregationReceipt(transactionInfo.domainId!, transactionInfo.aggregationId!);
+const receipt = await session.waitForAggregationReceipt(transactionInfo.domainId, transactionInfo.aggregationId);
 
 // Do something with transactionInfo and receipt
 ```
@@ -500,7 +484,7 @@ const receipt = await session.waitForAggregationReceipt(transactionInfo.domainId
 
 In order to get a quick response on whether a proof is valid or not without waiting for the network / block inclusion / finality, the `optimisticVerify` function is provided.
 
-Under the hood this is a wrapper around the `system_dryRun` RPC, which public zkVerify RPC nodes do not expose. Use a `Custom` session pointing at a node you run with the unsafe RPC flags:
+Under the hood this is a wrapper around the `dryRun()` call and requires a `Custom` zkVerify session and the target node to be running with the unsafe flags.
 
 **⚠ WARNING:**
 **Bear in mind unlike regular transactions, dryRun does not consume gas or fees, meaning it can be called repeatedly without cost to the user - consuming CPU and memory resources on the node and leaving it exposed to denial of service.**
@@ -521,14 +505,13 @@ const session = await zkVerifySession
         })
   .withAccount('your-seed-phrase');
 
-const { success, type, message } = await session
-  .optimisticVerify() // Optionally pass an account address if multiple are connected
+const { success, message } = session
+  .optimisticVerify(accountAddress?) // Optional account address
   .risc0({
-    version: Risc0Version.V3_0
+    version: Risc0Version.V2_1
   })
   .withRegisteredVk() // optional
   .nonce(1) // optional nonce
-  .atBlock(blockHashOrNumber) // optional: dry run against a specific block instead of the best block
   .execute({
     proofData: {
       vk: vk,
@@ -543,31 +526,29 @@ const { success, type, message } = await session
 
 You can optimistically verify your batch like so:
 
-```typescript
-const { success, message, failedIndex } = await session
-  .batchOptimisticVerify()
-  .groth16({ library: Library.snarkjs, curve: CurveType.bn128 })
-  .execute([
-    {
-      proofData: {
-        vk: vk,
-        proof: proof,
-        publicSignals: publicSignals,
-      },
-      domainId: 42, // Optional domain ID for proof categorization
+```shell
+const { success, message } = session.batchOptimisticVerify()
+    .groth16({ library: Library.snarkjs, curve: CurveType.bn128 })
+    .execute([{
+    proofData: {
+      vk: vk,
+      proof: proof,
+      publicSignals: publicSignals,
     },
-    {
-      proofData: {
-        vk: vk,
-        proof: proof,
-        publicSignals: publicSignals,
-      },
-      domainId: 42, // Optional domain ID for proof categorization
+    domainId: 42, // Optional domain ID for proof categorization
+  },
+  {
+    proofData: {
+      vk: vk,
+      proof: proof,
+      publicSignals: publicSignals,
     },
-  ]);
+    domainId: 42, // Optional domain ID for proof categorization
+  }
+);
 ```
 
-Note: if any proof fails, `success` will be false, `message` describes the failure and, when it can be attributed, `failedIndex` is the index of the failing proof.
+Note: if any proof fails, `success` boolean will be false and `message` will be provided
 
 ## Domain Management (Aggregate Pallet)
 
@@ -576,22 +557,17 @@ It is possible to define a domain that has some properties and an owner.  The fo
 `registerDomain(aggregationSize, queueSize?, domainOptions, signerAccount?)` — `aggregationSize` must be 1–128 inclusive; `queueSize` must be 1–16 inclusive and defaults to 16 when omitted (passing `0` throws — the default only applies when the argument is not supplied).
 
 ```typescript
-const session = await zkVerifySession
+session = await zkVerifySession
         .start()
         .zkVerify()
-        .withAccount("my seed phrase");
+        .withAccount(wallet);
 
 // Register a Domain
 // Without needing events
-const domainOptions = {
-  destination: Destination.None,
-  aggregateRules: AggregateSecurityRules.Untrusted,
-  proofSecurityRules: ProofSecurityRules.Untrusted,
-};
-const registered = await session.registerDomain(1, 1, domainOptions).transactionResult;
-console.log(registered.domainId);
+const transactionResult = await session.registerDomain(1, 1, { destination: Destination.None, aggregateRules: AggregateSecurityRules.Untrusted }).transactionResult;
+console.log(transactionResult.domainId);
 // If you want to listen to events and also get the transactionResult
-const { events: registerEvents, transactionResult: registerResult } = session.registerDomain(1, 2, domainOptions);
+const { events: registerEvents, transactionResult } = session.registerDomain(1, 2, { destination: Destination.None, aggregateRules: AggregateSecurityRules.Untrusted });
 
 // Listen for events if needed
 registerEvents.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
@@ -607,12 +583,12 @@ registerEvents.on(ZkVerifyEvents.ErrorEvent, (eventData) => {
 });
 
 // await the transactionResult
-const registerInfo = await registerResult;
-const domainId = registerInfo.domainId!;
+const transactionInfo = await transactionResult;
+console.log(transactionInfo.domainId);
 
 // Hold a Domain
 // Without events
-const held = await session.holdDomain(domainId).transactionResult;
+const result = await session.unregisterDomain(domainId).transactionResult;
 // With events
 const { events: holdEvents, transactionResult: holdResult } = session.holdDomain(domainId);
 
@@ -630,12 +606,12 @@ holdEvents.on(ZkVerifyEvents.ErrorEvent, (eventData) => {
 });
 
 // await transaction
-const holdInfo = await holdResult;
-console.log(holdInfo.domainState);
+const transactionInfo = await transactionResult;
+console.log(transactionInfo.domainState);
 
-// Unregister a Domain (once it is in the Removable state)
+// Unregister a Domain
 // Without events
-const unregistered = await session.unregisterDomain(domainId).transactionResult;
+const transactionInfo = await session.unregisterDomain(domainId).transactionResult;
 // With events
 const { events: unregisterEvents, transactionResult: unregisterResult } = session.unregisterDomain(domainId);
 
@@ -653,8 +629,8 @@ unregisterEvents.on(ZkVerifyEvents.ErrorEvent, () => {
 });
 
 // await transactionResult
-const unregisterInfo = await unregisterResult;
-console.log(unregisterInfo.domainState);
+const transactionInfo = await transactionResult;
+console.log(transactionInfo.domainState);
 ```
 
 ## Example Usage
@@ -662,7 +638,7 @@ console.log(unregisterInfo.domainState);
 ### Verify Proof, listen to related transaction events.
 
 ```typescript
-import { zkVerifySession, ZkVerifyEvents, Risc0Version, VerifyTransactionInfo } from 'zkverifyjs';
+import { zkVerifySession, ZkVerifyEvents, TransactionStatus, VerifyTransactionInfo } from 'zkverifyjs';
 
 async function executeVerificationTransaction(proof: unknown, publicSignals: unknown, vk: unknown) {
   // Start a new zkVerifySession on a Custom network (replace 'your-seed-phrase' and 'my-custom-node' with actual value)
@@ -674,19 +650,21 @@ async function executeVerificationTransaction(proof: unknown, publicSignals: unk
           .withAccount('your-seed-phrase');
   
   // Optimistically verify the proof (requires Custom node running in unsafe mode for dryRun() call)
-  const { success, message } = await session.optimisticVerify() // Optionally pass an account address
-          .risc0({
-            version: Risc0Version.V3_0
+  const { success, message } = session.optimisticVerify(address?) // optional address
+          .plonky2({
+            hashFunction: Plonky2HashFunction.Poseidon
           })
+          .withRegisteredVk() // optional
+          .nonce(1) // optional
           .execute({ proofData: {
               vk: vk,
               proof: proof,
               publicSignals: publicSignals },
               domainId: 42 // Optional domain ID for proof categorization
-          });
-
-  if (!success) {
-      throw new Error(`Optimistic Proof Verification Failed: ${message}`);
+          });;
+          
+  if(!success) {
+      throw new Error("Optimistic Proof Verification Failed")
   }
   
   // Add additional dApp logic using fast response from zkVerify
@@ -695,15 +673,15 @@ async function executeVerificationTransaction(proof: unknown, publicSignals: unk
 
   // Execute the verification transaction on zkVerify chain
   const { events, transactionResult } = await session.verify()
-          .risc0({
-            version: Risc0Version.V3_0
+          .plonky2({
+            hashFunction: Plonky2HashFunction.Poseidon
           })
           .execute({ proofData: {
               vk: vk,
               proof: proof,
               publicSignals: publicSignals },
               domainId: 42 // Optional domain ID for proof categorization
-          });
+          });;
 
   // Listen for the 'includedInBlock' event
   events.on(ZkVerifyEvents.IncludedInBlock, (eventData) => {
@@ -718,7 +696,7 @@ async function executeVerificationTransaction(proof: unknown, publicSignals: unk
   });
 
   // Handle errors during the transaction process
-  events.on(ZkVerifyEvents.ErrorEvent, (error) => {
+  events.on('error', (error) => {
     console.error('An error occurred during the transaction:', error);
   });
 
@@ -757,7 +735,7 @@ executeVerificationTransaction(proof, publicSignals, vk);
           .withAccount('your-seed-phrase');
 
 
-  const subscriptionEvents = session.subscribe([
+  session.subscribe([
     {
       event: ZkVerifyEvents.NewAggregationReceipt,
       callback: (eventData) => {
@@ -780,11 +758,6 @@ executeVerificationTransaction(proof, publicSignals, vk);
       }
     }
   ]);
-
-  // Subscription failures and timeouts are reported here
-  subscriptionEvents.on(ZkVerifyEvents.ErrorEvent, (error) => {
-    console.error('Subscription error:', error);
-  });
 ```
 
 # API Reference
@@ -792,25 +765,25 @@ executeVerificationTransaction(proof, publicSignals, vk);
 ## `zkVerifySession.start`
 
 ```typescript
-// Pick ONE network, then at most ONE session mode.
-const session = await zkVerifySession.start()
-        .zkVerify() // Network: .zkVerify(), .Volta() or .Custom({...})
-        .withAccount(process.env.SEED_PHRASE!); // Mode: .withAccount(), .withAccounts(), .withWallet() or .readOnly()
-
-const custom = await zkVerifySession.start()
+await zkVerifySession.start()
+        .zkVerify() // 1. Either preconfigured network selection
         .Custom({
-          websocket: "wss://my-custom-node",
+          websocket: "ws://my-custom-node",
           rpc: "https://my-custom-node",
-          network: "Volta", // Optional
-        })
-        .readOnly();
+          network: "zkVerify", // Optional
+        }) // 2. Or specify a custom network selection
+        .withAccount(process.env.SEED_PHRASE!) // Optional
+        .withWallet({
+          source: selectedWallet,
+          accountAddress: selectedAccount,
+        }) // Optional
+        .readOnly() // Optional
 ```
 
-- Network Selection: Preconfigured options `.zkVerify()` (mainnet) and `.Volta()` (testnet), or your own node with `.Custom({ websocket, rpc, network? })`. For `.Custom()`, `network` selects the account address (SS58) format: pass `"Volta"` for a testnet node; any other value, or omitting it, uses the zkVerify mainnet format. Custom sessions also accept Substrate dev accounts such as `//Alice`, which `.zkVerify()` and `.Volta()` reject.
-- withAccount / withAccounts: Create a full session that can send transactions and read account info, using your own seed phrase(s). Cannot be combined with `withWallet()`.
-- withWallet: Connect to a browser extension wallet such as Talisman or SubWallet. Cannot be combined with `withAccount()`.
-- readOnly: Start the session in read-only mode, unable to send transactions or retrieve account info. Calling the network method alone (e.g. `await zkVerifySession.start().zkVerify()`) is equivalent.
-- Each mode method returns `Promise<zkVerifySession>`, so modes cannot be chained together.
+- Network Selection: Preconfigured options such as `.zkVerify()` & `.Volta()` or provide your own network config using `.Custom({ websocket: "", rpc: "", network: ""})`. network will default to Volta.
+- withAccount: Create a full session with ability send transactions get account info by using .withAccount('seed-phrase') and specifying your own seed phrase, cannot be used with `withWallet()`.
+- withWallet: Establish connection to a browser extension based substrate wallet like talisman or subwallet, cannot be used with `withAccount()`;
+- readOnly: Start the session in read-only mode, unable to send transactions or retrieve account info.
 
 ### Connection tuning
 
@@ -834,12 +807,6 @@ const session = await zkVerifySession
 - `wsProvider.autoConnectMs`: ms between reconnect attempts. Pass `false` to disable auto-reconnect entirely, then subscribe to `session.provider.on('disconnected', ...)` to implement your own retry policy with a hard upper bound. This is the recommended pattern when you need to give up after N failed reconnects rather than retrying forever.
 - `wsProvider.timeout`: per-request timeout in ms.
 - `syncTimeoutMs`: max time to wait for the node to finish syncing during session start. Throws if exceeded. Default 5 minutes.
-
-### Endpoint validation
-
-The `websocket` URL is validated at session start: an unparseable URL, or a scheme other than `wss://` / `ws://`, throws. An unencrypted `ws://` endpoint on a non-loopback host still connects but logs a warning, since a network-position attacker on a plaintext connection can forge the chain state the SDK reports (including verification results). Loopback (`localhost`, `127.0.0.0/8`, `::1`) never warns.
-
-- `allowInsecureWebSocket`: set `true` to silence the `ws://` warning for a trusted private network you control.
 
 ## `zkVerifySession.close`
 
@@ -902,28 +869,27 @@ const { events, transactionResult } = await session
     domainId: 42, // Optional domain ID for proof categorization
   }
   ]); // 1. Directly pass proof data
-// .execute([{ extrinsic: submittableExtrinsic1 }, { extrinsic: submittableExtrinsic2 }]); // 2. OR pass in pre-built SubmittableExtrinsics
+// .execute([{ extrinsic: submittableExtrinsic, domainId: 0 }, 
+// { extrinsic: submittableExtrinsic, domainId: 0 }]); // 2. OR pass in a pre-built SubmittableExtrinsic
 ```
 
 - Proof Type: `.ultraplonk({})` specifies the type of proof to be used and its config. Options available for all supported proof types.
 - Nonce: `.nonce(1)` sets the nonce for the transaction. This is optional and can be omitted if not required.
 - Registered Verification Key: `.withRegisteredVk()` indicates that the verification key being used is registered on the chain. This option is optional and defaults to false.
-- Execute:  You can either send in the raw proof details as an array using `[{ proofData: ... }, { proofData: ... }]` or verify a prebuilt extrinsic array `[{ extrinsic: ... }, { extrinsic: ... }]`. The domain ID is part of a prebuilt extrinsic, so it is not passed separately.
+- Execute:  You can either send in the raw proof details as an array using `[{ proofData: ... }, { proofData: ... }]` or verify a prebuilt extrinsic array `[{ extrinsic: ..., domainId: 0 }, { extrinsic: ..., domainId: 0 }]`
 - Returns: An object containing an EventEmitter for real-time events and a Promise that resolves with the final transaction result.
 
 
 ## `zkVerifySession.optimisticVerify`
 
 ```typescript
-const { success, type, message } = await session
-  .optimisticVerify() // Optionally pass an account address if multiple are connected
-  .groth16({
-    library: Library.snarkjs,
-    curve: CurveType.bn254
+const { success, message } = session
+  .optimisticVerify(address?) // Optional address input
+  .plonky2({
+    hashFunction: Plonky2HashFunction.Poseidon
   })
   .withRegisteredVk() // optional
   .nonce(1) // optional
-  .atBlock(blockHashOrNumber) // optional
   .execute({
     proofData: {
       vk: vk,
@@ -934,24 +900,21 @@ const { success, type, message } = await session
   });
 ```
 
-- Proof Type: `.groth16({...})` specifies the type of proof to be used. Options available for all supported proof types.
+- Proof Type: `.plonky2()` specifies the type of proof to be used. Options available for all supported proof types.
 - Registered Verification Key: `.withRegisteredVk()` indicates that the verification key being used is registered on the chain. This option is optional and defaults to false.
-- At Block: `.atBlock(blockHashOrNumber)` runs the dry run against the given block instead of the best block. Optional.
 - Execute:  You can either send in the raw proof details using `{ proofData: ... }` or verify a prebuilt extrinsic `{ extrinsic: ... }`
-- Returns: `Promise<OptimisticVerifyResult>` with `success`, `type` (an `OptimisticVerificationResultType`: `ok`, `validity_error`, `dispatch_error`, `unknown_error`, `transport_error` or `exception`) and `message`, plus `code` and `verificationError` when the runtime reports them.
+- Returns: A result containing a boolean `success`.  If success is false the response will also contain a `message` with further details related to the failure.
 
 ## `zkVerifySession.batchOptimisticVerify`
 
 ```typescript
-const { success, message, failedIndex } = await session
+const { success, message } = session
   .batchOptimisticVerify()
-  .groth16({
-    library: Library.snarkjs,
-    curve: CurveType.bn254
+  .plonky2({
+    hashFunction: Plonky2HashFunction.Poseidon
   })
   .withRegisteredVk() // optional
   .nonce(1) // optional
-  .atBlock(blockHashOrNumber) // optional
   .execute([{
     proofData: {
       vk: vk,
@@ -971,30 +934,20 @@ const { success, message, failedIndex } = await session
   ]);
 ```
 
-- Proof Type: `.groth16({...})` specifies the type of proof to be used. Options available for all supported proof types.
+- Proof Type: `.plonky2()` specifies the type of proof to be used. Options available for all supported proof types.
 - Registered Verification Key: `.withRegisteredVk()` indicates that the verification key being used is registered on the chain. This option is optional and defaults to false.
-- At Block: `.atBlock(blockHashOrNumber)` runs the dry run against the given block instead of the best block. Optional.
-- Execute:  Send an array of raw proof details `[{ proofData: ... }, ...]` or prebuilt extrinsics `[{ extrinsic: ... }, ...]`.
-- Returns: `Promise<OptimisticVerifyResult>`, as for `optimisticVerify`. If a specific proof caused the failure, `failedIndex` is its index in the input array.
+- Execute:  You can either send in the raw proof details using `{ proofData: ... }` or verify a prebuilt extrinsic `{ extrinsic: ... }`
+- Returns: A result containing a boolean `success`.  If success is false the response will also contain a `message` with further details related to the failure.
 
 
 ## `zkVerifySession.registerVerificationKey`
 
 ```typescript
-const { events, transactionResult } = await session
-  .registerVerificationKey() // Optionally pass an account address if multiple are connected
-  .ultraplonk({
-    numberOfPublicInputs: 1
-  })
-  .nonce(1) // optional
-  .execute(vk);
-
-const { statementHash } = await transactionResult;
+const { events, transactionResult } = await session.registerVerificationKey().ultraplonk().execute(vk);
 ```
 
-- Proof Type: `.ultraplonk({...})` specifies the type of proof and its config. Options available for all supported proof types.
-- Nonce: `.nonce(1)` sets the nonce for the transaction. Optional.
-- Returns: An object containing an EventEmitter and a `transactionResult` Promise resolving to `VKRegistrationTransactionInfo`, whose `statementHash` is the registered VK hash to pass as `vk` with `.withRegisteredVk()`.
+- Proof Type: `.ultraplonk()` specifies the type of proof to be used. Options available for all supported proof types.
+- Returns: A TransactionInfo object containing a statementHash  string.
 
 ## `zkVerifySession.getAggregateStatementPath`
 
@@ -1006,7 +959,7 @@ const result = await session.getAggregateStatementPath(aggregationReceipt.blockH
 - `domainId`: The domain responsible for the aggregation
 - `aggregationId`: The `aggregationId` returned in the transaction result from a successful proof verification
 - `statement`: The `statement` returned in the transaction result from a successful proof verification
-- Returns: An `AggregateStatementPathResult` (Merkle proof) with `root`, `proof`, `numberOfLeaves`, `leafIndex` and `leaf`.
+- Returns: A AggregateStatementPathResult object containing a statementHash  string.
 
 ## `zkVerifySession.getVkHash`
 
@@ -1023,28 +976,19 @@ const vkHash = await session.getVkHash({
 - `proofOptions`: `ProofOptions` object containing the ProofType and an optional `config` object for certain proof types.
 - `verificationKey`: A raw verification key from a supported library
 - Returns: A verification key hash as a 0x string
-- Applies the same runtime-dependent defaults and checks as `verify()` (for example the UltraHonk `version` default).
 
 ## `zkVerifySession.format`
 
 ```typescript
-const { formattedVk, formattedProof, formattedPubs } = await session.format(
-  {
-    proofType: ProofType.ultrahonk,
-    config: { version: UltrahonkVersion.V5_0, variant: UltrahonkVariant.ZK },
-  },
-  proof,
-  publicSignals,
-  vk,
-  registeredVk, // optional
-);
+const { formattedVk, formattedProof, formattedPubs } = await session.format(proofType, proof, publicSignals, vk, version, registeredVk);
+
 ```
-- `proofOptions`: `ProofOptions` object containing the `ProofType` and, for proof types that need one, a `config` object (e.g. `{ version }` for risc0).
+- `proofType`: An enum value representing the type of proof being formatted (e.g., ProofType.groth16).
 - `proof`: The proof data that needs to be formatted.
 - `publicSignals`: The public signals associated with the proof, which are also formatted.
-- `vk`: The verification key, or the registered VK hash when `registeredVk` is true.
+- `vk`: The verification key that may be either registered or unregistered, depending on the context.
+- `version`: (Optional) the version of the proof type being used e.g. for risc0 it could be 'V1_0'
 - `registeredVk`: (Optional) A boolean indicating if the verification key is already registered.
-- Applies the same runtime-dependent defaults and checks as `verify()`, so proof versions the connected runtime no longer verifies are rejected before you build an extrinsic.
 - Returns: A Promise that resolves to a `FormattedProofData` object containing:
   - formattedVk: The formatted verification key.
   - formattedProof: The formatted proof data.
@@ -1067,44 +1011,40 @@ const formattedVk = await session.formatVk(proofOptions, vk);
 - `proofOptions`: `ProofOptions` object containing the ProofType and an optional `config` object for certain proof types.
 - `vk`: A raw verification key from a supported library
 - Returns: a formatted verification key object.
-- Applies the same runtime-dependent defaults as `verify()`.
 
 ## `zkVerifySession.createSubmitProofExtrinsic`
 
-```typescript
-const extrinsic = await session.createSubmitProofExtrinsic(proofType, params, domainId); // domainId optional
+```shell
+const extrinsic = await session.createSubmitProofExtrinsic(proofType, params);
 ```
 
 - `proofType`: ProofType enum - used to obtain the name of the pallet that contains the proof submission method.
-- `params`: A FormattedProofData object containing formatted proof parameters required for the extrinsic (from `session.format`).
-- `domainId`: (Optional) Domain ID for proof aggregation.
+- `params`: A FormattedProofData object containing formatted proof parameters required for the extrinsic.
 - Returns: A Promise that resolves to a `SubmittableExtrinsic<'promise'>`, allowing you to submit the proof to the blockchain.
 
 ## `zkVerifySession.createExtrinsicHex`
 
-```typescript
-const hex = await session.createExtrinsicHex(proofType, params, domainId); // domainId optional
+```shell
+const hex = await session.createExtrinsicHex(proofType, params);
 ```
 
 - `proofType`: ProofType enum - used to obtain the name of the pallet that contains the proof submission method.
 - `params`: A FormattedProofData object of formatted proof parameters needed for the extrinsic.
-- `domainId`: (Optional) Domain ID for proof aggregation.
 - Returns: A Promise that resolves to a hex-encoded string representing the SubmittableExtrinsic.
 
 ## `zkVerifySession.createExtrinsicFromHex`
 
-```typescript
+```shell
 const extrinsic = await session.createExtrinsicFromHex(extrinsicHex);
 ```
 
 - `extrinsicHex`: A string representing the hex-encoded SubmittableExtrinsic to be reconstructed.
 - Returns: A Promise that resolves to a `SubmittableExtrinsic<'promise'>`, allowing you to interact with the reconstructed extrinsic.
-- Only reconstruct hex produced by `createExtrinsicHex` on a host you trust. When an extrinsic is passed to `verify`, `batchVerify` or `optimisticVerify`, the SDK signs it only if it is the `submitProof` call of the verifier pallet for the declared proof type; any other call is rejected.
 
 ## `zkVerifySession.estimateCost`
 
-```typescript
-const estimate: ExtrinsicCostEstimate = await session.estimateCost(extrinsic);
+```shell
+const extrinsic = await session.estimateCost(extrinsic);
 ```
 
 - `extrinsic`: A submitProof SubmittableExtrinsic.
@@ -1119,7 +1059,7 @@ const estimate: ExtrinsicCostEstimate = await session.estimateCost(extrinsic);
 ## `zkVerifySession.getAccountInfo`
 
 ```typescript
-const accountInfo: AccountInfo[] = await session.getAccountInfo(); // Optionally pass an account address to get just that account
+const accountInfo: AccountInfo[] = await session.getAccountInfo();
 console.log(accountInfo[0].address);
 console.log(accountInfo[0].nonce);
 console.log(accountInfo[0].freeBalance);
@@ -1183,19 +1123,18 @@ const account = session.getAccount();
 // Return specific KeyringPair if multiple accounts are connected
 const account2 = session.getAccount("myAccountAddress");
 ```
-- Returns: The KeyringPair object representing the account. If no address is given and several accounts are connected, the first one is returned.
-- The account is used for signing transactions and interacting with the blockchain on behalf of the user.
-- Throws if the session has no accounts (read-only or wallet sessions) or the requested account does not exist.
+- Returns: The KeyringPair object representing the active account in the session, or undefined if the session is in read-only mode.
+- The account is used for signing transactions and interacting with the blockchain on behalf of the user. 
+- If no account is associated with the session (i.e., the session is in read-only mode) or account searched for does not exist, this will error.
 
 ## `zkVerifySession.subscribe`
 
 ```typescript
-const emitter = session.subscribe(subscriptions);
+session.subscribe(subscriptions[]);
 ```
-- Returns: an `EventEmitter`. Callbacks in `subscriptions` are invoked, and every event is also emitted on the returned emitter.
-- `subscriptions` (Optional): An array of subscription objects (SubscriptionEntry[]). Omit it to subscribe to all public events (`NewAggregationReceipt`, `ProofVerified`, `NewProof`, `VkRegistered`, `NewDomain`, `DomainStateChanged`, `AggregationComplete`). Each subscription object contains:
+- `subscriptions[]` (Optional): An array of subscription objects (SubscriptionEntry[]). Each subscription object contains:
   - `event`: The name of the event to subscribe to. This must be a value from `ZkVerifyEvents`.
-  - `callback` (Optional): A function to be called whenever the specified event occurs. Receives an event object as its argument.
+  - `callback`: A function to be called whenever the specified event occurs. Receives an event object as its argument.
   - `options` (Optional): A NewAggregationEventSubscriptionOptions object used to filter which events to listen to. This is only relevant for NewAggregationReceipt events.
 
 `options` Usage:
@@ -1203,20 +1142,13 @@ const emitter = session.subscribe(subscriptions);
 - `undefined`: Subscribe to all NewAggregationReceipt events across all domains.
 - `{ domainId }`: Subscribe to all receipts for a specific domain.
 
-Notes:
-
-- Attach an `error` listener to the returned emitter. A subscription that fails or times out is reported there, and `error` events are only delivered when a listener is attached.
-- `NewAggregationReceipt` is read from finalized blocks. The other runtime events (`ProofVerified`, `NewProof`, `VkRegistered`, `NewDomain`, `DomainStateChanged`, `AggregationComplete`, `CannotAggregate`) follow the best chain and can be delivered for a block that is later discarded by a fork. Act on `transactionResult`, the `finalized` event or `waitForAggregationReceipt` when finality matters.
-
 ## `zkVerifySession.waitForAggregationReceipt`
 
 ```typescript
-const receipt: NewAggregationReceipt = await session.waitForAggregationReceipt(domainId, aggregationId, timeoutMs);
+session.waitForAggregationReceipt(domainId, aggregationId);
 ```
 - `domainId`: The integer value of the domainId expected to aggregate your proof
 - `aggregationId`: The integer value of the aggregationId you want to wait for.
-- `timeout`: (Optional) Milliseconds to wait before rejecting.
-- Returns: A Promise resolving to the `NewAggregationReceipt` (`blockHash`, `domainId`, `aggregationId`, `receipt`) once it is published in a finalized block.
 
 ## `zkVerifySession.unsubscribe`
 
@@ -1240,18 +1172,18 @@ AggregateTransactionInfo contains a `receipt` populated by the `NewAggregationRe
 ## `zkVerifySession.registerDomain`
 
 ```typescript
-const { events, transactionResult } = session.registerDomain(aggregationSize, queueSize, domainOptions, accountAddress);
+session.registerDomain(aggregationSize, queueSize, domainOptions, accountAddress?);
 ```
 - register a new domain where the owner is the signer that emits a new aggregation every aggregationSize proofs and where there could be at most  queueSize aggregation in waiting for publication state.
-* @param `{number}` aggregationSize - The size of the aggregation, an integer from 1 to 128.
-* @param `{number}` queueSize: an integer from 1 to 16. Pass `undefined` to use the default of 16.
+* @param `{number}` aggregationSize - The size of the aggregation, integer equal to or less than 128.
+* @param `{number}` queueSize: an optional integer smaller equal than 16. 16 if it's null.
 * @param `{DomainOptions}` domainOptions: additional options required to register the domain.
   - `destination`: Destination type (Destination.None)
   - `aggregateRules`: Security rules for aggregation (AggregateSecurityRules)
   - `proofSecurityRules`: **(v1.3.0+ REQUIRED)** Security rules for proof submission (ProofSecurityRules)
   - `deliveryOwner`: Optional account address for delivery ownership
-* @param `{string}` accountAddress - Optionally provide an account address attached to the session to send the transaction from.
-* Returns `{ events: EventEmitter; transactionResult: Promise<RegisterDomainTransactionInfo> }`
+* @param `{number}` accountAddress - Optionally provide an account address attached to the session to send the transaction from.
+* Returns `{ events: EventEmitter; transactionResult: Promise<DomainTransactionInfo> }`
 
 **Note for v1.3.0+**: The `proofSecurityRules` parameter is required for network runtimes v1.3.0+.
 
@@ -1264,7 +1196,7 @@ session.holdDomain(domainId, accountAddress?);
 ```
 - put the domain in Hold or Removable state. The state depends if there are some statements that need to be aggregated yet in this domain;  in these states the domain doesn’t accept any other proof but it still remains active for aggregating till there are some aggregations to aggregate. Only the Domain’s owner and the manager can call it
 * @param `{number}` domainId - The ID of the domain to hold.
-* @param `{string}` accountAddress - Optionally provide an account address attached to the session to send the transaction from.
+* @param `{number}` accountAddress - Optionally provide an account address attached to the session to send the transaction from.
 * Returns `{ events: EventEmitter; transactionResult: Promise<DomainTransactionInfo> }`
 
 ## `zkVerifySession.unregisterDomain`
@@ -1274,7 +1206,7 @@ session.unregisterDomain(domainId, accountAddress?);
 ```
 - remove a registered domain in the "Removable" state, refund the owner with the held currency. If everything is ok it will emit a DomainStateChanged event with Removed state.
 * @param `{number}` domainId - The ID of the domain to unregister.
-* @param `{string}` accountAddress - Optionally provide an account address attached to the session to send the transaction from.
+* @param `{number}` accountAddress - Optionally provide an account address attached to the session to send the transaction from.
 * Returns `{ events: EventEmitter; transactionResult: Promise<DomainTransactionInfo> }`
 
 ## `zkVerifySession.addDomainSubmitters`
@@ -1313,7 +1245,7 @@ session.removeDomainSubmitters(domainId, submitters, accountAddress?);
 ```typescript
 const api = session.api;
 ```
-- Uses Polkadot.js API 17.0.1
+- Uses PolkadotJS 15.4.1
 - Returns: The ApiPromise instance connected to the Polkadot.js API.
 - This is the main API object used to interact with the blockchain. It provides methods for querying the chain state, submitting extrinsics, subscribing to events, and more.
 
@@ -1324,44 +1256,6 @@ const provider = session.provider;
 ```
 - Returns: The WsProvider instance connected to the WebSocket endpoint.
 - The provider manages the connection to the blockchain node. It handles WebSocket communication and can be used to interact with the node directly, such as for subscribing to updates or making RPC calls.
-
-## `zkVerifySession.connection`
-
-```typescript
-const { api, provider, runtimeSpec } = session.connection;
-console.log(runtimeSpec.specName, runtimeSpec.specVersion);
-```
-- Returns: The connection details for the session: `api`, `provider` and `runtimeSpec`, plus the connected accounts or wallet for full sessions.
-- `runtimeSpec.specVersion` follows runtime upgrades enacted while the session is open.
-
-## `zkVerifySession.readOnly`
-
-```typescript
-if (session.readOnly) {
-  // Cannot send transactions
-}
-```
-- Returns: `true` when the session has no accounts or wallet attached.
-
-## Runtime version helpers
-
-Helpers to branch on the runtime version of the connected network:
-
-```typescript
-import { isVersionAtLeast, requireVersionAtLeast, RuntimeVersion } from 'zkverifyjs';
-
-const { runtimeSpec } = session.connection;
-
-if (isVersionAtLeast(runtimeSpec, RuntimeVersion.V2_1_0)) {
-  // e.g. UltraHonk V5_0 is available
-}
-
-requireVersionAtLeast(runtimeSpec, RuntimeVersion.V2_1_0, 'UltraHonk V5_0'); // Throws on older runtimes
-```
-
-- `isVersionAtLeast(runtimeSpec, version)`, `isVersionBetween(runtimeSpec, min, max)` and `isVersionExactly(runtimeSpec, version)` return booleans.
-- `requireVersionAtLeast(runtimeSpec, version, featureName)` throws if the runtime is older than `version`.
-- `fetchRuntimeVersion(api)` reads the runtime spec from an `ApiPromise`.
 
 ## Testing
 
