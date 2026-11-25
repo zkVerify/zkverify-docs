@@ -1,0 +1,138 @@
+.container {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  float: right;
+  margin: 0.15rem 0 0.75rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  font-size: 0.875rem;
+}
+
+/* On narrow screens, drop the float so it sits full-width above the title. */
+@media (max-width: 768px) {
+  .container {
+    float: none;
+    margin: 0 0 1rem;
+  }
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ifm-font-color-base);
+  font-weight: 500;
+  font-size: inherit;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.copyBtn:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.caretIcon {
+  display: inline-flex;
+  color: var(--ifm-color-emphasis-700);
+  transition: transform 0.15s ease;
+}
+
+.copyBtn[aria-expanded='true'] .caretIcon {
+  transform: rotate(180deg);
+}
+
+/* Dropdown menu */
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 260px;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+  padding: 0.35rem;
+  z-index: 50;
+  animation: fadeIn 0.12s ease-out;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--ifm-font-color-base);
+  transition: background 0.12s ease;
+}
+
+.menuItem:hover {
+  background: var(--ifm-color-emphasis-100);
+  text-decoration: none;
+  color: var(--ifm-font-color-base);
+}
+
+.menuItem:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.menuIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  flex-shrink: 0;
+}
+
+.menuText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.menuTitle {
+  font-weight: 500;
+}
+
+.menuSub {
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.divider {
+  height: 1px;
+  background: var(--ifm-color-emphasis-200);
+  margin: 0.35rem 0.25rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .menu {
+    min-width: 220px;
+  }
+}
