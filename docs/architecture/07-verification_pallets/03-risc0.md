@@ -34,6 +34,8 @@ the proof of execution through a receipt which contains the raw proof and the pu
   The format for these components is:
 
   - `Proof`: The risc0's `InnerProof` serialized by `ciborium::into_writer` and wrapped in the version's `Proof` variant: if the risc0 proof is generated with the `2.x` version use the `Proof::V2_x` variant.
+
+    > **Runtime `v2.1.0+`:** `Proof::V2_1` is no longer verified on-chain. Submissions using the `V2_1` variant are rejected; generate proofs with risc0 `2.2` or later and use `V2_2`/`V2_3`/`V3_0`.
   - `Pubs` Public inputs: The risc0's `Journal::bytes`.
   - `Vk` Verification key: a bytes array of length 32; the conversion from a risc0 `image_id` (an integer array of length 8) must be big-endian.
 
